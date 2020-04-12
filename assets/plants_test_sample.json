@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "name": "Monstera",
+        "humidity": 2,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020"
+    },
+    {
+        "id": 2,
+        "name": "Plante 2",
+        "humidity": 4,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020"
+    },
+    {
+        "id": 3,
+        "name": "Plante 3",
+        "humidity": 3,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020"
+    },
+    {
+        "id": 4,
+        "name": "Plante 4",
+        "humidity": 5,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020"
+    },
+    {
+        "id": 5,
+        "name": "Plante 5",
+        "humidity": 5,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020"
+    }
+]
