@@ -9,7 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:leafer/main.dart';
+import 'package:leafer/plants/collection.dart';
 
 void main() {
-  
+  test('Empty test', () async {
+    expect(1, 1);
+  });
 }
