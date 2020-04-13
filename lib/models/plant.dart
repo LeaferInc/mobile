@@ -7,9 +7,18 @@ class Plant {
   String toxicity;
   String potting;
   String creationDate;
+  String image;
 
-  Plant(String name, int humidity, String watering, int difficulty,
-      String exposure, String toxicity, String potting, String creationDate) {
+  Plant(
+      String name,
+      int humidity,
+      String watering,
+      int difficulty,
+      String exposure,
+      String toxicity,
+      String potting,
+      String creationDate,
+      String image) {
     this.name = name;
     this.humidity = humidity;
     this.watering = watering;
@@ -18,5 +27,6 @@ class Plant {
     this.toxicity = toxicity;
     this.potting = potting;
     this.creationDate = creationDate;
+    this.image = image;
   }
 }

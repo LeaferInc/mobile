@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './plants/collection.dart';
+import './widgets/collection.dart';
 
 void main() => runApp(LeaferApp());
 

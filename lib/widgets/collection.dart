@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import './plant.dart';
+import '../models/plant.dart';
 
 class Collection extends StatefulWidget {
   @override
@@ -34,7 +36,8 @@ class CollectionState extends State<Collection> {
                         newData[index]["exposure"],
                         newData[index]["toxicity"],
                         newData[index]["potting"],
-                        newData[index]["creationDate"])));
+                        newData[index]["creationDate"],
+                        newData[index]["image"])));
               }
 
               return _buildRow(_collection[index]);
@@ -45,16 +48,49 @@ class CollectionState extends State<Collection> {
   }
 
   Widget _buildRow(Plant plant) {
-    return ListTile(
-      title: Text(plant.name, style: TextStyle(fontSize: 18.0)),
-      subtitle: Text("Humidity level needed : " + plant.humidity.toString()),
-    );
+    return Card(
+        child: Stack(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Column(children: <Widget>[
+              Image(image: NetworkImage(plant.image), height: 150),
+            ]),
+            Column(
+              children: <Widget>[
+                SizedBox(
+                  child: Text(
+                    plant.name,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.black, fontSize: 35),
+                  ),
+                ),
+                SizedBox(
+                  child: Text(
+                    "Besoin en humidité : " + plant.humidity.toString(),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+
+        // ListTile(
+        //   leading: Image.network(plant.image),
+        //   title: Text(plant.name, style: TextStyle(fontSize: 18.0)),
+        //   subtitle:
+        //       Text("Niveau d'humidité requis : " + plant.humidity.toString()),
+        // ),
+      ],
+    ));
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Leafer'),
+        title: Text('Mes plantes'),
       ),
       body: _buildList(context),
     );
