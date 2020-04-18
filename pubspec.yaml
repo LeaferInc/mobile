@@ -14,14 +14,20 @@ description: A Flutter application to manage plants.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  random_words: ^1.0.2
+  flutter_localizations:
+    sdk: flutter
+  datetime_picker_formfield: ^1.0.0
   http: ^0.12.0+4
-  
+  random_words: ^1.0.2
+
+dependency_overrides:
+  intl: ^0.16.1
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -50,6 +56,7 @@ flutter:
 
   assets:
     - assets/plants_test_sample.json
+    - assets/images/event.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
