@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:leafer/models/event.dart';
+import 'package:leafer/models/location.dart';
 import 'package:leafer/services/event-service.dart';
 import 'package:leafer/services/utils.dart';
 
@@ -13,8 +17,10 @@ class _EventFormState extends State<EventForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  TextEditingController _locationController = TextEditingController();
   Event _createdEvent;
   bool _isSending;
+  Timer _timer;
 
   @override
   void initState() {
@@ -31,8 +37,11 @@ class _EventFormState extends State<EventForm> {
         endDate: tomorrow.add(Duration(hours: 4)),
         price: 0,
         maxPeople: 10,
-        latitude: 48,
-        longitude: 6);
+        latitude: 0,
+        longitude: 0);
+
+    // Initial value
+    _locationController = TextEditingController(text: _createdEvent.location);
   }
 
   @override
@@ -108,23 +117,24 @@ class _EventFormState extends State<EventForm> {
                 ),
               ),
               TextFormField(
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
+                controller: _locationController,
                 decoration: InputDecoration(
                   hintText: '17, rue ...',
                   hintStyle: TextStyle(
                     fontStyle: FontStyle.italic,
                   ),
                 ),
-                initialValue: _createdEvent.location,
                 onChanged: (value) {
-                  // TODO: query locations
-                  //print(value);
-                  _createdEvent.location = value;
+                  if (_timer != null) _timer.cancel();
+                  _timer =
+                      Timer(Duration(seconds: 2), () => _locationTimer(value));
                 },
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Entrez un lieu';
-                  }
+                  if (value.isEmpty ||
+                      (Utils.equalsZero(_createdEvent.latitude) &&
+                          Utils.equalsZero(_createdEvent.longitude)))
+                    return 'Aucune ville associée';
                   return null;
                 },
                 onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -186,11 +196,11 @@ class _EventFormState extends State<EventForm> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
-                          hintText: '5',
+                          hintText: '10',
                           hintStyle: TextStyle(
                             fontStyle: FontStyle.italic,
                           ),
@@ -200,9 +210,9 @@ class _EventFormState extends State<EventForm> {
                         validator: (value) {
                           try {
                             double nb = double.parse(value);
-                            if (nb < 0) return 'Nombre incorrect';
+                            if (nb < 0) return 'Prix incorrect';
                           } on FormatException {
-                            return 'Nombre incorrect';
+                            return 'Prix incorrect';
                           }
                           return null;
                         },
@@ -215,23 +225,23 @@ class _EventFormState extends State<EventForm> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
                       child: TextFormField(
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
-                          hintText: '20',
+                          hintText: '5',
                           hintStyle: TextStyle(
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        initialValue: _createdEvent.price.toString(),
+                        initialValue: _createdEvent.maxPeople.toString(),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           try {
                             int nb = int.parse(value);
-                            if (nb < 0) return 'Prix incorrect';
+                            if (nb < 0) return 'Nombre incorrect';
                           } on FormatException {
-                            return 'Prix incorrect';
+                            return 'Nombre incorrect';
                           }
                           return null;
                         },
@@ -255,9 +265,16 @@ class _EventFormState extends State<EventForm> {
 
                         _formKey.currentState.save();
 
-                        Event created = await EventService.saveEvent(_createdEvent);
-                        Navigator.pop(context, created);
+                        Event created =
+                            await EventService.saveEvent(_createdEvent);
+
                         _isSending = false;
+                        if (created != null) {
+                          Navigator.pop(context, created);
+                        } else {
+                          _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(content: Text('Création impossible')));
+                        }
                       }
                     },
                     elevation: 0.0,
@@ -270,7 +287,50 @@ class _EventFormState extends State<EventForm> {
     );
   }
 
-  /// Return a Row containing an input for the Date and another for the Time
+  /// Callback executed to get the coordinates of an input address
+  _locationTimer(String value) async {
+    FocusScope.of(context).unfocus();
+
+    _scaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text('Recherche en cours...')));
+
+    List<Location> locations = await Utils.searchLocations(value);
+    if (locations.length == 0) {
+      _createdEvent.latitude = 0;
+      _createdEvent.longitude = 0;
+
+      _scaffoldKey.currentState.showSnackBar(
+          SnackBar(content: Text('Aucun résultat pour cette adresse')));
+    } else if (locations.length == 1) {
+      _setLocation(locations[0]);
+    } else {
+      // Display Pick List choice
+      new Picker(
+              title: Text('Ville'),
+              adapter: PickerDataAdapter<String>(
+                  pickerdata: locations.map((l) => l.city).toList()),
+              changeToFirst: true,
+              hideHeader: true,
+              itemExtent: 35.0,
+              onConfirm: (Picker picker, List value) {
+                _setLocation(locations[value[0]]);
+              })
+          .showDialog(context,
+              barrierDismissible: false); //_scaffoldKey.currentState);
+    }
+  }
+
+  /// Sets the Location data to the created Event
+  _setLocation(Location location) {
+    setState(() {
+      _createdEvent.latitude = location.latitude;
+      _createdEvent.longitude = location.longitude;
+      _createdEvent.location = location.label;
+      _locationController.text = location.label;
+    });
+  }
+
+  /// Returns a Row containing an input for the Date and another for the Time
   /// `isStart` true if the field relates to the start date of the event,
   /// otherwise it relates to the end date
   Row _buildDateInput(
@@ -286,7 +346,6 @@ class _EventFormState extends State<EventForm> {
             child: DateTimeField(
               format: Utils.dateFormat,
               initialValue: initialDate,
-              textInputAction: TextInputAction.next,
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
                   context: context,
@@ -321,7 +380,6 @@ class _EventFormState extends State<EventForm> {
             child: DateTimeField(
               initialValue: initialDate,
               format: Utils.timeFormat,
-              textInputAction: TextInputAction.next,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                     context: context,

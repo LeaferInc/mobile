@@ -7,9 +7,6 @@ import './widgets/collection.dart';
 void main() => runApp(LeaferApp());
 
 class LeaferApp extends StatelessWidget {
-  // TODO: change
-  static const SERVER_URL = 'http://192.168.43.200:3000';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

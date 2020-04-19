@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:leafer/main.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/pages/event-form.dart';
 import 'package:leafer/services/event-service.dart';
@@ -31,9 +27,6 @@ class _EventsState extends State<Events> {
 
   @override
   Widget build(BuildContext context) {
-    print('build events list');
-    print(_events);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Événements'),
@@ -68,8 +61,6 @@ class _EventsState extends State<Events> {
           final Event result = await Navigator.push(
               context, MaterialPageRoute(builder: (context) => EventForm()));
 
-          print("Result: ");
-          print(result);
           if (result != null) {
             _events.add(result);
           }

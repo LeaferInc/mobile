@@ -1,3 +1,4 @@
+/// This class represents an Event
 class Event {
   String name;
   String description;
@@ -27,13 +28,24 @@ class Event {
       location: json['location'] as String,
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      // Cast as double because it casts itself as int
       price: json['price'].toDouble(),
       maxPeople: json['maxPeople'] as int,
       latitude: json['latitude'] as double,
       longitude: json['longitude'] as double,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'description': description,
+        'location': location,
+        'startDate': startDate.toIso8601String(),
+        'endDate': endDate.toIso8601String(),
+        'price': price,
+        'maxPeople': maxPeople,
+        'latitude': latitude,
+        'longitude': longitude,
+      };
 
   @override
   String toString() {
