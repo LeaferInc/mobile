@@ -19,30 +19,27 @@ class CollectionState extends State<Collection> {
         builder: (context, snapshot) {
           List newData = json.decode(snapshot.data.toString());
           return ListView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemBuilder: (context, item) {
-              if (item.isOdd) return Divider();
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: (context, item) {
+                final index = item;
+                if (index >= _collection.length) {
+                  _collection.addAll(List.generate(
+                      newData.length,
+                      (int index) => new Plant(
+                          newData[index]["name"],
+                          newData[index]["humidity"],
+                          newData[index]["watering"],
+                          newData[index]["difficulty"],
+                          newData[index]["exposure"],
+                          newData[index]["toxicity"],
+                          newData[index]["potting"],
+                          newData[index]["creationDate"],
+                          newData[index]["image"])));
+                }
 
-              final index = item ~/ 2;
-              if (index >= _collection.length) {
-                _collection.addAll(List.generate(
-                    newData.length,
-                    (int index) => new Plant(
-                        newData[index]["name"],
-                        newData[index]["humidity"],
-                        newData[index]["watering"],
-                        newData[index]["difficulty"],
-                        newData[index]["exposure"],
-                        newData[index]["toxicity"],
-                        newData[index]["potting"],
-                        newData[index]["creationDate"],
-                        newData[index]["image"])));
-              }
-
-              return _buildRow(_collection[index]);
-            },
-            itemCount: newData.length * 2, //size of list + dividers
-          );
+                return _buildRow(_collection[index]);
+              },
+              itemCount: newData.length);
         });
   }
 
@@ -75,13 +72,6 @@ class CollectionState extends State<Collection> {
             )
           ],
         ),
-
-        // ListTile(
-        //   leading: Image.network(plant.image),
-        //   title: Text(plant.name, style: TextStyle(fontSize: 18.0)),
-        //   subtitle:
-        //       Text("Niveau d'humidité requis : " + plant.humidity.toString()),
-        // ),
       ],
     ));
   }
