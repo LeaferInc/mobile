@@ -17,7 +17,8 @@ void main() {
           price: 0,
           maxPeople: 10,
           latitude: 48.2121,
-          longitude: 2.0654);
+          longitude: 2.0654,
+      );
     });
 
     test('should map Event to json', () {

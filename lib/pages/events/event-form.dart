@@ -8,6 +8,7 @@ import 'package:leafer/models/location.dart';
 import 'package:leafer/services/event-service.dart';
 import 'package:leafer/services/utils.dart';
 
+/// This class shows a form to add an new event
 class EventForm extends StatefulWidget {
   @override
   _EventFormState createState() => _EventFormState();

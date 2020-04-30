@@ -1,5 +1,6 @@
 /// This class represents an Event
 class Event {
+  int id;
   String name;
   String description;
   String location;
@@ -11,7 +12,8 @@ class Event {
   double longitude;
 
   Event(
-      {this.name,
+      {this.id,
+      this.name,
       this.description,
       this.location,
       this.startDate,
@@ -23,6 +25,7 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
+      id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
       location: json['location'] as String,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:leafer/pages/events.dart';
-import 'package:leafer/pages/event-form.dart';
+import 'package:leafer/pages/events/events-list.dart';
+import 'package:leafer/pages/events/event-form.dart';
 import './widgets/collection.dart';
 
 void main() => runApp(LeaferApp());
@@ -14,7 +14,7 @@ class LeaferApp extends StatelessWidget {
       initialRoute: '/events',
       routes: {
         '/collection': (context) => Collection(),
-        '/events': (context) => Events(),
+        '/events': (context) => EventsList(),
         '/events/create': (context) => EventForm(),
       },
       localizationsDelegates: [
