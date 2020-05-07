@@ -11,17 +11,35 @@ class EventService {
   /// Parses an array of Event from json
   static List<Event> _parseEvents(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Event>((json) => Event.fromJson(json)).toList();
+    return parsed.map<Event>((json) => Event.fromMap(json)).toList();
   }
 
   /// Parses a single Event from json
   static Event _parseEvent(String responseBody) {
-    return Event.fromJson(jsonDecode(responseBody));
+    return Event.fromMap(jsonDecode(responseBody));
   }
 
   /// Get all Events
   static Future<List<Event>> getEvents() async {
     final response = await get(_BASE_URL, headers: Utils.headers);
+    if (response.statusCode == 200) {
+      return compute(_parseEvents, response.body);
+    }
+    return [];
+  }
+
+  /// Get incoming events
+  static Future<List<Event>> getIncomingEvents() async {
+    final response = await get(_BASE_URL + 'incoming', headers: Utils.headers);
+    if (response.statusCode == 200) {
+      return compute(_parseEvents, response.body);
+    }
+    return [];
+  }
+
+  /// Get joined events
+  static Future<List<Event>> getJoinedEvents() async {
+    final response = await get(_BASE_URL + 'joined', headers: Utils.headers);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }

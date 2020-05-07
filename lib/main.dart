@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:leafer/pages/events/events-list.dart';
 import 'package:leafer/pages/events/event-form.dart';
+import 'package:leafer/pages/events/events-list.dart';
+
 import './widgets/collection.dart';
 
-void main() => runApp(LeaferApp());
+/// Locks the screen to portrait orientation
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) => runApp(LeaferApp()));
+}
 
 class LeaferApp extends StatelessWidget {
   @override

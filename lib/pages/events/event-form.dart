@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/models/location.dart';
 import 'package:leafer/services/event-service.dart';
+import 'package:leafer/services/location-service.dart';
 import 'package:leafer/services/utils.dart';
 
 /// This class shows a form to add an new event
@@ -295,7 +296,7 @@ class _EventFormState extends State<EventForm> {
     _scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('Recherche en cours...')));
 
-    List<Location> locations = await Utils.searchLocations(value);
+    List<Location> locations = await LocationService.searchLocations(value);
     if (locations.length == 0) {
       _createdEvent.latitude = 0;
       _createdEvent.longitude = 0;

@@ -12,4 +12,10 @@ void main() {
     expect(updated.hour, 14);
     expect(updated.minute, 0);
   });
+
+  test('should test double nullity', () {
+    expect(Utils.equalsZero(0.0000000001), true);
+    expect(Utils.equalsZero(-0.000000009), true);
+    expect(Utils.equalsZero(-0.000005), false);
+  });
 }

@@ -24,6 +24,7 @@ void main() {
     await tester.pumpWidget(makeTestableWidget(
         child: EventInfo(
       event: event,
+      joined: false,
     )));
     expect(find.text('Événements'), findsOneWidget);
   });
