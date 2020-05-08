@@ -5,8 +5,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/models/location.dart';
-import 'package:leafer/services/event-service.dart';
-import 'package:leafer/services/utils.dart';
+import 'package:leafer/services/event_service.dart';
+import 'package:leafer/utils/utils.dart';
 
 class EventForm extends StatefulWidget {
   @override

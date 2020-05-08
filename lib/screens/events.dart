@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/models/event.dart';
-import 'package:leafer/pages/event-form.dart';
-import 'package:leafer/services/event-service.dart';
+import 'package:leafer/screens/event_form.dart';
+import 'package:leafer/services/event_service.dart';
 
 class Events extends StatefulWidget {
   @override

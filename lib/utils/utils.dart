@@ -8,13 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:leafer/models/location.dart';
 
 class Utils {
-  static const SERVER_URL = 'http://192.168.43.200:3000';
+  static const SERVER_URL = 'http://10.0.2.2:3000';
   static const String _ADDRESS_API_URL =
       'https://api-adresse.data.gouv.fr/search/?q=';
 
   static const Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    HttpHeaders.acceptHeader: 'application/json',
+    'Content-Type': 'application/json; charset=UTF-8'
   };
 
   static final dateFormat = DateFormat('dd/MM/yyyy');

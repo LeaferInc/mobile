@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:leafer/models/event.dart';
-import 'package:leafer/services/utils.dart';
+import 'package:leafer/utils/utils.dart';
 
 class EventService {
   static const _BASE_URL = Utils.SERVER_URL + '/events/';
