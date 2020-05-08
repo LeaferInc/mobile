@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leafer/models/event.dart';
-import 'package:leafer/services/entry-service.dart';
+import 'package:leafer/services/entry_service.dart';
 
 /// This class shows the details of a single Event
 class EventInfo extends StatefulWidget {

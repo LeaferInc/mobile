@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/models/location.dart';
-import 'package:leafer/services/event-service.dart';
-import 'package:leafer/services/location-service.dart';
-import 'package:leafer/services/utils.dart';
+import 'package:leafer/services/event_service.dart';
+import 'package:leafer/services/location_service.dart';
+import 'package:leafer/utils/utils.dart';
 
 /// This class shows a form to add an new event
 class EventForm extends StatefulWidget {

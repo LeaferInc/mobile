@@ -1,5 +1,5 @@
 import 'package:http/http.dart';
-import 'package:leafer/services/utils.dart';
+import 'package:leafer/utils/utils.dart';
 
 class EntryService {
   static const _BASE_URL = Utils.SERVER_URL + '/entry/';

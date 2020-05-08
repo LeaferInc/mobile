@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:leafer/models/event.dart';
-import 'package:leafer/pages/events/event-form.dart';
-import 'package:leafer/services/event-service.dart';
-import 'package:leafer/widgets/event-card.dart';
+import 'package:leafer/screens/events/event_form.dart';
+import 'package:leafer/services/event_service.dart';
+import 'package:leafer/widgets/event_card.dart';
 import 'package:random_string/random_string.dart';
 
-import 'event-info.dart';
+import 'event_info.dart';
 
 /// This class shows the list of all events
 class EventsList extends StatefulWidget {

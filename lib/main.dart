@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:leafer/pages/events/event-form.dart';
-import 'package:leafer/pages/events/events-list.dart';
-
-import './widgets/collection.dart';
+import 'package:leafer/screens/events/event_form.dart';
+import 'package:leafer/screens/events/events_list.dart';
+import 'package:leafer/screens/collection.dart';
+import 'package:leafer/screens/login_screen.dart';
 
 /// Locks the screen to portrait orientation
 void main() {
@@ -18,11 +18,12 @@ class LeaferApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.green[400]),
-      initialRoute: '/events',
+      initialRoute: '/login',
       routes: {
         '/collection': (context) => Collection(),
         '/events': (context) => EventsList(),
         '/events/create': (context) => EventForm(),
+        '/login': (context) => LoginScreen()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

@@ -4,14 +4,12 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 
 class Utils {
-  static const SERVER_URL = 'http://192.168.43.200:3000';
+  static const SERVER_URL = 'http://10.0.2.2:3000';
+  static const String _ADDRESS_API_URL =
+      'https://api-adresse.data.gouv.fr/search/?q=';
 
   static const Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    HttpHeaders.acceptHeader: 'application/json',
-    // TODO: remove
-    HttpHeaders.authorizationHeader: 'Bearer ' +
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJzdWIiOjEsImlhdCI6MTU4ODg1NjkwMH0.yGgf_IrUyjOaGn0RfjCU82uBo7rjMiEjBF6tlAAmkwk',
+    'Content-Type': 'application/json; charset=UTF-8'
   };
 
   static final dateFormat = DateFormat('dd/MM/yyyy');

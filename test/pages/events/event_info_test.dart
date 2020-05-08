@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leafer/models/event.dart';
-import 'package:leafer/pages/events/event-info.dart';
+import 'package:leafer/screens/events/event_info.dart';
 
-import '../../testable-widget.dart';
+import '../../testable_widget.dart';
 
 void main() {
   Event event;
