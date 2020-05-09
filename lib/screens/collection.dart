@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/services/plant_service.dart';
 import 'package:random_string/random_string.dart';
 import '../models/plant.dart';
@@ -92,9 +93,14 @@ class CollectionState extends State<Collection> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Mes plantes'),
-        ),
-        body: _buildList(context, _collection));
+      appBar: AppBar(
+        title: Text('Mes plantes'),
+      ),
+      body: _buildList(context, _collection),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        RestDatasource.storage.deleteAll();
+        Navigator.of(context).pushReplacementNamed("/login");
+      }),
+    );
   }
 }

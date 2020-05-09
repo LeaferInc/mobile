@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class NetworkUtil {
@@ -21,9 +20,6 @@ class NetworkUtil {
   }
 
   Future<dynamic> post(String url, {Map headers, body, encoding}) {
-    log(url);
-    log(body);
-    log(headers.toString());
     return http
         .post(url, body: body, headers: headers)
         .then((http.Response response) {

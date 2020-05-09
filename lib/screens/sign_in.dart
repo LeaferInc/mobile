@@ -1,43 +1,31 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:leafer/auth.dart';
 import 'package:leafer/models/user.dart';
-import 'package:leafer/screens/login_screen_presenter.dart';
+import 'package:leafer/screens/sign_in_presenter.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignIn extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LoginScreenState();
+    return new _SignInState();
   }
 }
 
-class LoginScreenState extends State<LoginScreen>
-    implements LoginScreenContract, AuthStateListener {
+class _SignInState extends State<SignIn> implements SignInContract {
   BuildContext _ctx;
 
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  LoginScreenPresenter _presenter;
-  String _username, _password;
+  SignInPresenter _presenter;
+  String _username, _password, _email, _firstname, _lastname;
 
-  LoginScreenState() {
-    _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
-  }
-
-  @override
-  onAuthStateChanged(AuthState state) {
-    if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushNamed("/collection");
+  _SignInState() {
+    _presenter = new SignInPresenter(this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connexion'),
+        title: Text('Sign In'),
       ),
       key: scaffoldKey,
       body: Stack(
@@ -48,10 +36,9 @@ class LoginScreenState extends State<LoginScreen>
 
   void _submit() {
     final form = _formKey.currentState;
-
     if (form.validate()) {
       form.save();
-      _presenter.doLogin(_username, _password);
+      _presenter.doSignIn(_username, _password, _email, _firstname, _lastname);
     }
   }
 
@@ -62,6 +49,7 @@ class LoginScreenState extends State<LoginScreen>
 
   Widget _buildFormFields(BuildContext context) {
     _ctx = context;
+
     return Center(
       child: Container(
         width: 250,
@@ -96,6 +84,42 @@ class LoginScreenState extends State<LoginScreen>
                   return null;
                 },
               ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'Enter your email',
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  _email = value;
+                  return null;
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'Enter your first name',
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  _firstname = value;
+                  return null;
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'Enter your last name',
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  _lastname = value;
+                  return null;
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
@@ -109,17 +133,6 @@ class LoginScreenState extends State<LoginScreen>
                   child: Text('Submit'),
                 ),
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: GestureDetector(
-                    child: Text("Sign In",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue)),
-                    onTap: () {
-                      Navigator.pushNamed(_ctx, "/signIn");
-                    },
-                  ))
             ],
           ),
         ),
@@ -128,14 +141,13 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   @override
-  void onLoginError(String errorTxt) {
-    _showSnackBar(errorTxt);
+  void onSignInError(String error) {
+    _showSnackBar(error);
   }
 
   @override
-  void onLoginSuccess(User user) async {
+  void onSignInSuccess(User user) async {
     _showSnackBar(user.toString());
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);
+    Navigator.of(_ctx).pushNamed("/login");
   }
 }
