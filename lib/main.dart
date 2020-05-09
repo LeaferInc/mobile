@@ -5,6 +5,7 @@ import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/events/events_list.dart';
 import 'package:leafer/screens/collection.dart';
 import 'package:leafer/screens/login_screen.dart';
+import 'package:leafer/screens/sign_in.dart';
 
 /// Locks the screen to portrait orientation
 void main() {
@@ -17,21 +18,21 @@ class LeaferApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.green[400]),
-      initialRoute: '/login',
-      routes: {
-        '/collection': (context) => Collection(),
-        '/events': (context) => EventsList(),
-        '/events/create': (context) => EventForm(),
-        '/login': (context) => LoginScreen()
-      },
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('fr'),
-      ],
-    );
+        initialRoute: '/login',
+        routes: {
+          '/collection': (context) => Collection(),
+          '/events': (context) => EventsList(),
+          '/events/create': (context) => EventForm(),
+          '/login': (context) => LoginScreen(),
+          '/signIn': (context) => SignIn()
+        },
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('fr'),
+        ],
+        theme: ThemeData(primaryColor: Colors.green[400]));
   }
 }
