@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/services/plant_service.dart';
+import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:random_string/random_string.dart';
 import '../models/plant.dart';
 
@@ -14,6 +15,7 @@ class Collection extends StatefulWidget {
 }
 
 class CollectionState extends State<Collection> {
+  int _currentIndex = 0;
   List<Plant> _collection = new List<Plant>();
 
   @override
@@ -97,6 +99,7 @@ class CollectionState extends State<Collection> {
         title: Text('Mes plantes'),
       ),
       body: _buildList(context, _collection),
+      bottomNavigationBar: CustomNavBar(index: _currentIndex),
       floatingActionButton: FloatingActionButton(onPressed: () {
         RestDatasource.storage.deleteAll();
         Navigator.of(context).pushReplacementNamed("/login");

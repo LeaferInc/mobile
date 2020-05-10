@@ -33,6 +33,7 @@ class LeaferApp extends StatelessWidget {
         supportedLocales: [
           const Locale('fr'),
         ],
-        theme: ThemeData(primaryColor: Colors.green[400]));
+        theme: ThemeData(primaryColor: Colors.green[400]),
+        home: LoginScreen());
   }
 }

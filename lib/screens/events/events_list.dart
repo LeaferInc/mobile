@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/services/event_service.dart';
+import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:leafer/widgets/event_card.dart';
 import 'package:random_string/random_string.dart';
 
@@ -15,6 +16,7 @@ class EventsList extends StatefulWidget {
 }
 
 class _EventsListState extends State<EventsList> {
+  int _currentIndex = 1;
   List<Event> _events;
   List<Event> _incomingEvents;
   List<Event> _joinedEvents;
@@ -80,6 +82,7 @@ class _EventsListState extends State<EventsList> {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: CustomNavBar(index: _currentIndex),
     );
   }
 
