@@ -4,8 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/events/events_list.dart';
 import 'package:leafer/screens/collection.dart';
-import 'package:leafer/screens/login_screen.dart';
-import 'package:leafer/screens/sign_in.dart';
+import 'package:leafer/screens/login/login_screen.dart';
+import 'package:leafer/screens/signin/sign_in.dart';
 
 /// Locks the screen to portrait orientation
 void main() {
