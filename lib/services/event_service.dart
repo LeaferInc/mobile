@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/utils/utils.dart';
 
 class EventService {
-  static const _BASE_URL = Utils.SERVER_URL + '/events/';
+  static const _BASE_URL = RestDatasource.HOST + '/events/';
 
   /// Parses an array of Event from json
   static List<Event> _parseEvents(String responseBody) {
@@ -39,7 +40,8 @@ class EventService {
 
   /// Get joined events
   static Future<List<Event>> getJoinedEvents() async {
-    final response = await get(_BASE_URL + 'joined', headers: Utils.headers);
+    final response = await get(_BASE_URL + 'joined',
+        headers: await Utils.getAuthorizationHeaders());
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }
@@ -48,7 +50,8 @@ class EventService {
 
   /// Get a single event by its id
   static Future<Event> getEventById(int id) async {
-    final response = await get(_BASE_URL + id.toString());
+    final response = await get(_BASE_URL + id.toString(),
+        headers: await Utils.getAuthorizationHeaders());
     if (response.statusCode == 200) {
       return compute(_parseEvent, response.body);
     }
@@ -57,8 +60,9 @@ class EventService {
 
   /// Post an Event to save it
   static Future<Event> saveEvent(Event event) async {
-    final response =
-        await post(_BASE_URL, headers: Utils.headers, body: jsonEncode(event));
+    final response = await post(_BASE_URL,
+        headers: await Utils.getAuthorizationHeaders(),
+        body: jsonEncode(event));
     if (response.statusCode == 201) {
       return compute(_parseEvent, response.body);
     }

@@ -7,7 +7,7 @@ import 'package:leafer/models/plant.dart';
 import 'package:leafer/utils/utils.dart';
 
 class PlantService {
-  static const _BASE_URL = Utils.SERVER_URL + '/plant/';
+  static const _BASE_URL = RestDatasource.HOST + '/plant/';
 
   /// Parses an array of Plant from json
   static List<Plant> _parsePlants(String responseBody) {
