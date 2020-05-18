@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:intl/intl.dart';
 
 class Utils {
   static const SERVER_URL = 'http://10.0.2.2:3000';
-  static const String _ADDRESS_API_URL =
-      'https://api-adresse.data.gouv.fr/search/?q=';
 
   static const Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'

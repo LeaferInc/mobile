@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:leafer/data/rest_ds.dart';
 
 enum AuthState { LOGGED_IN, LOGGED_OUT }

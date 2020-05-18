@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:leafer/auth.dart';
 import 'package:leafer/models/user.dart';
@@ -73,11 +71,11 @@ class LoginScreenState extends State<LoginScreen>
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your username',
+                  hintText: 'Entrez votre login',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _username = value;
                   return null;
@@ -85,12 +83,12 @@ class LoginScreenState extends State<LoginScreen>
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your password',
+                  hintText: 'Entrez votre mot de passe',
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _password = value;
                   return null;
@@ -106,13 +104,13 @@ class LoginScreenState extends State<LoginScreen>
                       _submit();
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Se connecter'),
                 ),
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: GestureDetector(
-                    child: Text("Sign In",
+                    child: Text("Créer un compte",
                         style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.blue)),

@@ -61,11 +61,11 @@ class _SignInState extends State<SignIn> implements SignInContract {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your username',
+                  hintText: 'Entrez un nom d\'utilisateur',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _username = value;
                   return null;
@@ -73,12 +73,12 @@ class _SignInState extends State<SignIn> implements SignInContract {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your password',
+                  hintText: 'Entrez un mot de passe',
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _password = value;
                   return null;
@@ -86,11 +86,11 @@ class _SignInState extends State<SignIn> implements SignInContract {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your email',
+                  hintText: 'Entrez votre email',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _email = value;
                   return null;
@@ -98,11 +98,11 @@ class _SignInState extends State<SignIn> implements SignInContract {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your first name',
+                  hintText: 'Entrez vore prénom',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _firstname = value;
                   return null;
@@ -110,11 +110,11 @@ class _SignInState extends State<SignIn> implements SignInContract {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter your last name',
+                  hintText: 'Entrez votre nom de famille',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Ne peut être vide';
                   }
                   _lastname = value;
                   return null;
@@ -130,7 +130,7 @@ class _SignInState extends State<SignIn> implements SignInContract {
                       _submit();
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Créer'),
                 ),
               ),
             ],
@@ -148,6 +148,6 @@ class _SignInState extends State<SignIn> implements SignInContract {
   @override
   void onSignInSuccess(User user) async {
     _showSnackBar(user.toString());
-    Navigator.of(_ctx).pushNamed("/login");
+    Navigator.of(_ctx).pop();
   }
 }

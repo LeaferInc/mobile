@@ -1,22 +1,16 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/user.dart';
-// import 'package:leafer/utils/network_util.dart';
-import 'package:http/http.dart';
 import 'package:leafer/utils/network_util.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
-  HttpClient _client = new HttpClient();
-  static final HOST = "http://10.0.2.2:3000";
-  static final LOGIN_ROUTE = "/auth/login";
-  static final SIGN_IN_ROUTE = "/user";
-  static final COLLECTION_ROUTE = "/plant/search";
-  static final LOGIN_URL = HOST + LOGIN_ROUTE;
+  static const HOST = "http://10.0.2.2:3000";
+  static const LOGIN_ROUTE = "/auth/login";
+  static const SIGN_IN_ROUTE = "/user";
+  static const COLLECTION_ROUTE = "/plant/search";
+  static const LOGIN_URL = HOST + LOGIN_ROUTE;
   static final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<User> login(String username, String password) {

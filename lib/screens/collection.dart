@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,6 +5,7 @@ import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/services/plant_service.dart';
 import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:random_string/random_string.dart';
+
 import '../models/plant.dart';
 
 class Collection extends StatefulWidget {
