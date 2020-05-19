@@ -1,6 +1,4 @@
-import 'dart:developer';
-
-import 'package:leafer/data/rest_ds.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthState { LOGGED_IN, LOGGED_OUT }
 
@@ -20,7 +18,8 @@ class AuthStateProvider {
   }
 
   void initState() async {
-    var isLoggedIn = await RestDatasource.storage.read(key: "jwt");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var isLoggedIn = prefs.getString("jwt");
     if (isLoggedIn != null)
       notify(AuthState.LOGGED_IN);
     else

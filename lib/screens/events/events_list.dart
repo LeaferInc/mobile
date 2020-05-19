@@ -3,7 +3,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/services/event_service.dart';
-import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:leafer/widgets/event_card.dart';
 import 'package:random_string/random_string.dart';
 
@@ -11,12 +10,13 @@ import 'event_info.dart';
 
 /// This class shows the list of all events
 class EventsList extends StatefulWidget {
+  static const String TITLE = 'Événements';
+
   @override
   _EventsListState createState() => _EventsListState();
 }
 
 class _EventsListState extends State<EventsList> {
-  int _currentIndex = 1;
   List<Event> _events;
   List<Event> _incomingEvents;
   List<Event> _joinedEvents;
@@ -32,7 +32,6 @@ class _EventsListState extends State<EventsList> {
   /// Get all events
   void _getEvents() async {
     List<Event> data = await EventService.getEvents();
-    print('Get events');
     setState(() {
       _events = data;
     });
@@ -41,7 +40,6 @@ class _EventsListState extends State<EventsList> {
   /// Get incoming events
   void _getIncomingEvents() async {
     List<Event> data = await EventService.getIncomingEvents();
-    print('Get incoming');
     setState(() {
       _incomingEvents = data;
     });
@@ -50,7 +48,6 @@ class _EventsListState extends State<EventsList> {
   /// Get joined events
   void _getJoinedEvents() async {
     List<Event> data = await EventService.getJoinedEvents();
-    print('Get joined');
     setState(() {
       _joinedEvents = data;
     });
@@ -65,24 +62,26 @@ class _EventsListState extends State<EventsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Événements'),
+        title: Text(EventsList.TITLE),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _buildScreen(),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: randomString(20),
         onPressed: () async {
           final Event result = await Navigator.push(
               context, MaterialPageRoute(builder: (context) => EventForm()));
 
           if (result != null) {
             _events.add(result);
+            _incomingEvents.add(result);
           }
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomNavBar(index: _currentIndex),
+      //bottomNavigationBar: CustomNavBar(index: _currentIndex),
     );
   }
 
@@ -133,7 +132,7 @@ class _EventsListState extends State<EventsList> {
                 ),
               )
             : Container(
-                height: MediaQuery.of(context).size.width * 0.3 + 40.0,
+                height: MediaQuery.of(context).size.width * 0.3 + 42.0,
                 child: ListView.builder(
                   key: Key(randomString(20)),
                   scrollDirection: Axis.horizontal,

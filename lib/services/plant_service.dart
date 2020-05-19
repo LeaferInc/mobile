@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:leafer/data/rest_ds.dart';
@@ -7,7 +7,7 @@ import 'package:leafer/models/plant.dart';
 import 'package:leafer/utils/utils.dart';
 
 class PlantService {
-  static const _BASE_URL = Utils.SERVER_URL + '/plant/';
+  static const _BASE_URL = RestDatasource.HOST + '/plant/';
 
   /// Parses an array of Plant from json
   static List<Plant> _parsePlants(String responseBody) {
@@ -22,13 +22,8 @@ class PlantService {
 
   /// Get all Plants of the user from userId
   static Future<List<Plant>> getPlants() async {
-    Map<String, String> headers = new Map<String, String>();
-
-    headers.addAll(Utils.headers);
-    headers.addAll(<String, String>{
-      'Authorization': 'Bearer ' + await RestDatasource.storage.read(key: 'jwt')
-    });
-    final response = await get(_BASE_URL + 'my', headers: headers);
+    final response = await get(_BASE_URL + 'my',
+        headers: await Utils.getAuthorizationHeaders());
     if (response.statusCode == 200) {
       return compute(_parsePlants, response.body);
     }

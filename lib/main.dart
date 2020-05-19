@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leafer/screens/events/event_form.dart';
-import 'package:leafer/screens/events/events_list.dart';
-import 'package:leafer/screens/collection.dart';
+import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen.dart';
 import 'package:leafer/screens/signin/sign_in.dart';
 
@@ -18,22 +17,23 @@ class LeaferApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/login',
-        routes: {
-          '/collection': (context) => Collection(),
-          '/events': (context) => EventsList(),
-          '/events/create': (context) => EventForm(),
-          '/login': (context) => LoginScreen(),
-          '/signIn': (context) => SignIn()
-        },
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('fr'),
-        ],
-        theme: ThemeData(primaryColor: Colors.green[400]),
-        home: LoginScreen());
+      initialRoute: '/login',
+      routes: {
+        '/home': (context) => Home(),
+        '/collection': (context) => Home(initialIndex: 0),
+        '/events': (context) => Home(initialIndex: 1),
+        '/events/create': (context) => EventForm(),
+        '/login': (context) => LoginScreen(),
+        '/signIn': (context) => SignIn()
+      },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('fr'),
+      ],
+      theme: ThemeData(primaryColor: Colors.green[400]),
+    );
   }
 }

@@ -1,21 +1,20 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/services/plant_service.dart';
-import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/plant.dart';
 
 class Collection extends StatefulWidget {
+  static const String TITLE = 'Mes Plantes';
+
   @override
   CollectionState createState() => CollectionState();
 }
 
 class CollectionState extends State<Collection> {
-  int _currentIndex = 0;
   List<Plant> _collection = new List<Plant>();
 
   @override
@@ -96,14 +95,16 @@ class CollectionState extends State<Collection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mes plantes'),
+        title: Text(Collection.TITLE),
       ),
       body: _buildList(context, _collection),
-      bottomNavigationBar: CustomNavBar(index: _currentIndex),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        RestDatasource.storage.deleteAll();
-        Navigator.of(context).pushReplacementNamed("/login");
-      }),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'CollectionTag',
+        onPressed: () async {
+          (await SharedPreferences.getInstance()).remove('jwt');
+          Navigator.of(context).pushReplacementNamed("/login");
+        },
+      ),
     );
   }
 }

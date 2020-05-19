@@ -39,7 +39,7 @@ class User {
       'userName': userName,
       'firstName': firstName,
       'lastName': lastName,
-      'birthDate': birthDate?.millisecondsSinceEpoch,
+      'birthDate': birthDate?.toIso8601String(),
       'biography': biography,
       'pictureId': pictureId,
     };
@@ -49,14 +49,14 @@ class User {
     if (map == null) return null;
 
     return User(
-      id: map['id'],
-      email: map['email'],
-      userName: map['userName'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      birthDate: DateTime.fromMillisecondsSinceEpoch(map['birthDate']),
-      biography: map['biography'],
-      pictureId: map['pictureId'],
+      id: map['id'] as int,
+      email: map['email'] as String,
+      userName: map['userName'] as String,
+      firstName: map['firstName'] as String,
+      lastName: map['lastName'] as String,
+      birthDate: DateTime.parse(map['birthDate']),
+      biography: map['biography'] as String,
+      pictureId: map['pictureId'] as int,
     );
   }
 
