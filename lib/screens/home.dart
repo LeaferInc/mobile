@@ -28,21 +28,21 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_getTabTitle(_currentIndex)),
+      body: IndexedStack(
+        children: _children,
+        index: _currentIndex,
       ),
-      body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onTabTapped,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.collections),
-            title: Text(_getTabTitle(0)),
+            title: Text(Collection.TITLE),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
-            title: Text(_getTabTitle(1)),
+            title: Text(EventsList.TITLE),
           ),
         ],
       ),
@@ -54,16 +54,5 @@ class _HomeState extends State<Home> {
     setState(() {
       _currentIndex = index;
     });
-  }
-
-  String _getTabTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'Mes Plantes';
-      case 1:
-        return 'Événements';
-      default:
-        return 'Leafer';
-    }
   }
 }

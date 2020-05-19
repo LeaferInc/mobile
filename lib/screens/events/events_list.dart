@@ -10,6 +10,8 @@ import 'event_info.dart';
 
 /// This class shows the list of all events
 class EventsList extends StatefulWidget {
+  static const String TITLE = 'Événements';
+
   @override
   _EventsListState createState() => _EventsListState();
 }
@@ -30,7 +32,6 @@ class _EventsListState extends State<EventsList> {
   /// Get all events
   void _getEvents() async {
     List<Event> data = await EventService.getEvents();
-    print('Get events');
     setState(() {
       _events = data;
     });
@@ -39,7 +40,6 @@ class _EventsListState extends State<EventsList> {
   /// Get incoming events
   void _getIncomingEvents() async {
     List<Event> data = await EventService.getIncomingEvents();
-    print('Get incoming');
     setState(() {
       _incomingEvents = data;
     });
@@ -48,7 +48,6 @@ class _EventsListState extends State<EventsList> {
   /// Get joined events
   void _getJoinedEvents() async {
     List<Event> data = await EventService.getJoinedEvents();
-    print('Get joined');
     setState(() {
       _joinedEvents = data;
     });
@@ -62,17 +61,22 @@ class _EventsListState extends State<EventsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(EventsList.TITLE),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _buildScreen(),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: randomString(20),
         onPressed: () async {
           final Event result = await Navigator.push(
               context, MaterialPageRoute(builder: (context) => EventForm()));
 
           if (result != null) {
             _events.add(result);
+            _incomingEvents.add(result);
           }
         },
         child: Icon(Icons.add),

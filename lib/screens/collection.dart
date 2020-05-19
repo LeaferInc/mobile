@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/plant.dart';
 
 class Collection extends StatefulWidget {
+  static const String TITLE = 'Mes Plantes';
+
   @override
   CollectionState createState() => CollectionState();
 }
@@ -92,11 +94,17 @@ class CollectionState extends State<Collection> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(Collection.TITLE),
+      ),
       body: _buildList(context, _collection),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        (await SharedPreferences.getInstance()).remove('jwt');
-        Navigator.of(context).pushReplacementNamed("/login");
-      }),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'CollectionTag',
+        onPressed: () async {
+          (await SharedPreferences.getInstance()).remove('jwt');
+          Navigator.of(context).pushReplacementNamed("/login");
+        },
+      ),
     );
   }
 }
