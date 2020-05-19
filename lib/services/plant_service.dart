@@ -22,13 +22,8 @@ class PlantService {
 
   /// Get all Plants of the user from userId
   static Future<List<Plant>> getPlants() async {
-    Map<String, String> headers = new Map<String, String>();
-
-    headers.addAll(Utils.headers);
-    headers.addAll(<String, String>{
-      'Authorization': 'Bearer ' + await RestDatasource.storage.read(key: 'jwt')
-    });
-    final response = await get(_BASE_URL + 'my', headers: headers);
+    final response = await get(_BASE_URL + 'my',
+        headers: await Utils.getAuthorizationHeaders());
     if (response.statusCode == 200) {
       return compute(_parsePlants, response.body);
     }

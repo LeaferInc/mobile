@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:intl/intl.dart';
-import 'package:leafer/data/rest_ds.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
   static Map<String, String> headers = {
@@ -21,7 +21,7 @@ class Utils {
 
   /// Returns headers with Bearer token
   static Future<Map<String, String>> getAuthorizationHeaders() async {
-    String token = await RestDatasource.storage.read(key: 'jwt');
+    String token = (await SharedPreferences.getInstance()).getString("jwt");
     headers.putIfAbsent('Authorization', () => 'Bearer $token');
     return headers;
   }

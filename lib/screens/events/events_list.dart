@@ -3,7 +3,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/services/event_service.dart';
-import 'package:leafer/widgets/custom_nav_bar.dart';
 import 'package:leafer/widgets/event_card.dart';
 import 'package:random_string/random_string.dart';
 
@@ -16,7 +15,6 @@ class EventsList extends StatefulWidget {
 }
 
 class _EventsListState extends State<EventsList> {
-  int _currentIndex = 1;
   List<Event> _events;
   List<Event> _incomingEvents;
   List<Event> _joinedEvents;
@@ -64,9 +62,6 @@ class _EventsListState extends State<EventsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Événements'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _buildScreen(),
@@ -82,7 +77,7 @@ class _EventsListState extends State<EventsList> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomNavBar(index: _currentIndex),
+      //bottomNavigationBar: CustomNavBar(index: _currentIndex),
     );
   }
 
@@ -133,7 +128,7 @@ class _EventsListState extends State<EventsList> {
                 ),
               )
             : Container(
-                height: MediaQuery.of(context).size.width * 0.3 + 40.0,
+                height: MediaQuery.of(context).size.width * 0.3 + 42.0,
                 child: ListView.builder(
                   key: Key(randomString(20)),
                   scrollDirection: Axis.horizontal,
