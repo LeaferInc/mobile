@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
+import 'package:leafer/screens/events/events-search.dart';
 import 'package:leafer/services/event_service.dart';
 import 'package:leafer/widgets/event_card.dart';
+import 'package:leafer/widgets/loading.dart';
+import 'package:popup_menu/popup_menu.dart';
 import 'package:random_string/random_string.dart';
 
 import 'event_info.dart';
@@ -17,9 +19,18 @@ class EventsList extends StatefulWidget {
 }
 
 class _EventsListState extends State<EventsList> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _searchKey = GlobalKey();
+
   List<Event> _events;
   List<Event> _incomingEvents;
   List<Event> _joinedEvents;
+
+  final List<String> _searchMenuItems = const <String>[
+    'Par date',
+    'Par mots-clés',
+    'Proches de moi',
+  ];
 
   @override
   void initState() {
@@ -33,6 +44,7 @@ class _EventsListState extends State<EventsList> {
   void _getEvents() async {
     List<Event> data = await EventService.getEvents();
     setState(() {
+      // TODO: get favorites
       _events = data;
     });
   }
@@ -61,8 +73,16 @@ class _EventsListState extends State<EventsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(EventsList.TITLE),
+        title: const Text(EventsList.TITLE),
+        actions: <Widget>[
+          IconButton(
+            key: _searchKey,
+            icon: Icon(Icons.search),
+            onPressed: () => _showSearchMenu(context),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -81,7 +101,6 @@ class _EventsListState extends State<EventsList> {
         },
         child: Icon(Icons.add),
       ),
-      //bottomNavigationBar: CustomNavBar(index: _currentIndex),
     );
   }
 
@@ -89,9 +108,7 @@ class _EventsListState extends State<EventsList> {
   /// Displays a loading widget if all events have not been loaded
   Widget _buildScreen() {
     if (!_isLoaded()) {
-      return Center(
-        child: SpinKitFadingCube(color: Colors.green[400]),
-      );
+      return Loading();
     } else
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -145,12 +162,14 @@ class _EventsListState extends State<EventsList> {
                         size: MediaQuery.of(context).size.width * 0.25,
                         onTap: () async {
                           final EntryAction action = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EventInfo(
-                                        event: events[index],
-                                        joined: joined,
-                                      )));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EventInfo(
+                                event: events[index],
+                                joined: joined,
+                              ),
+                            ),
+                          );
 
                           // No action done, no need to update screen
                           if (action == EntryAction.NONE) return;
@@ -177,5 +196,50 @@ class _EventsListState extends State<EventsList> {
               ),
       ],
     );
+  }
+
+  /// Displays a search dialog to start a Search-for-Events-Activity
+  void _showSearchMenu(BuildContext context) {
+    PopupMenu(
+        context: context,
+        items: _searchMenuItems
+            .map((String title) => MenuItem(
+                  title: title,
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                ))
+            .toList(),
+        onClickMenu: (MenuItemProvider item) {
+          int index = _searchMenuItems.indexOf(item.menuTitle);
+
+          SearchType searchType;
+          switch (index) {
+            case 0:
+              searchType = SearchType.DATE;
+              break;
+            case 1:
+              searchType = SearchType.KEY_WORDS;
+              break;
+            case 2:
+              searchType = SearchType.LOCATION;
+              break;
+            default:
+              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                content: Text('Invalid action menu'),
+              ));
+              return;
+          }
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventsSearch(
+                searchType: searchType,
+              ),
+            ),
+          );
+        }).show(widgetKey: _searchKey);
   }
 }
