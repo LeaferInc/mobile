@@ -21,11 +21,6 @@ class _HomeState extends State<Home> {
   _HomeState(this._currentIndex);
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(

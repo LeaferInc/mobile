@@ -336,15 +336,16 @@ class _EventFormState extends State<EventForm> {
   /// `isStart` true if the field relates to the start date of the event,
   /// otherwise it relates to the end date
   Row _buildDateInput(
-      {BuildContext context, DateTime initialDate, bool isStart = true}) {
+      {@required BuildContext context,
+      @required DateTime initialDate,
+      bool isStart = true}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Expanded(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                isStart ? 0.0 : 8.0, 0.0, isStart ? 8.0 : 0.0, 0.0),
+            padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
             child: DateTimeField(
               format: Utils.dateFormat,
               initialValue: initialDate,
@@ -386,6 +387,7 @@ class _EventFormState extends State<EventForm> {
                 final time = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.fromDateTime(initialDate));
+                if (time == null) return currentValue;
                 return DateTimeField.convert(time);
               },
               onSaved: (value) {

@@ -82,24 +82,23 @@ class _EventsListState extends State<EventsList> {
             icon: Icon(Icons.search),
             onPressed: () => _showSearchMenu(context),
           ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () async {
+              final Event result = await Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventForm()));
+
+              if (result != null) {
+                _events.add(result);
+                _incomingEvents.add(result);
+              }
+            },
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _buildScreen(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: randomString(20),
-        onPressed: () async {
-          final Event result = await Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EventForm()));
-
-          if (result != null) {
-            _events.add(result);
-            _incomingEvents.add(result);
-          }
-        },
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -113,15 +112,19 @@ class _EventsListState extends State<EventsList> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          _buildList('À venir', _incomingEvents),
-          _buildList('Je participe', _joinedEvents, joined: true),
-          _buildList('Ça m\'intéresse', _events),
+          _buildList(title: 'À venir', events: _incomingEvents),
+          _buildList(
+              title: 'Je participe', events: _joinedEvents, joined: true),
+          _buildList(title: 'Ça m\'intéresse', events: _events),
         ],
       );
   }
 
   /// Builds a title and a list view for the given title and events
-  Column _buildList(String title, List<Event> events, {bool joined = false}) {
+  Column _buildList(
+      {@required String title,
+      @required List<Event> events,
+      bool joined = false}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
