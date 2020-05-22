@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_info.dart';
+import 'package:leafer/services/event_service.dart';
 import 'package:leafer/utils/utils.dart';
 import 'package:leafer/widgets/loading.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -27,8 +27,8 @@ class _EventsSearchState extends State<EventsSearch> {
   final _searchController = TextEditingController();
   final SearchType _searchType;
 
-  bool _searched = false;
-  List<Event> _foundEvents;
+  bool _searched = true;
+  List<Event> _foundEvents = [];
   DateTime _searchDate;
 
   _EventsSearchState(this._searchType);
@@ -47,24 +47,6 @@ class _EventsSearchState extends State<EventsSearch> {
     } else if (_searchType == SearchType.LOCATION) {
       searchByLocation();
     }
-
-    //TODO: remove
-    //Timer(Duration(seconds: 4), () => _searched = true);
-    _searched = true;
-    DateTime startDate = new DateTime(2020, 10, 25);
-    _foundEvents = [
-      Event(
-        name: 'Nom Test Flutter',
-        description: 'Description de l\'évènement',
-        location: '18 rue de la Tamise',
-        startDate: startDate,
-        endDate: startDate.add(Duration(hours: 4)),
-        price: 0,
-        maxPeople: 10,
-        latitude: 48.2121,
-        longitude: 2.0654,
-      )
-    ];
   }
 
   /// Gets the current location
@@ -85,12 +67,12 @@ class _EventsSearchState extends State<EventsSearch> {
       await _showErrorDialog(text: 'Géolocalisation désactivée');
       Navigator.pop(context);
     } else {
-      print("Working maybe");
       Position position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
       print('long: ${position.longitude}, lat: ${position.latitude}');
-      // TODO: Search by location
-      //_searchEvents(url: '');
+      _searchEvents(
+          params:
+              'latitude=${position.latitude}&longitude=${position.longitude}');
     }
   }
 
@@ -100,7 +82,7 @@ class _EventsSearchState extends State<EventsSearch> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: Text('Recherche impossible'),
+        title: const Text('Recherche impossible'),
         content: Text(text),
         actions: <Widget>[
           FlatButton(
@@ -117,7 +99,7 @@ class _EventsSearchState extends State<EventsSearch> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Recherche'),
+        title: const Text('Recherche'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -125,7 +107,7 @@ class _EventsSearchState extends State<EventsSearch> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             ..._buildSearchHeader(),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             ..._buildResultArea(),
           ],
         ),
@@ -140,16 +122,16 @@ class _EventsSearchState extends State<EventsSearch> {
         return [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
+            child: const Text(
               'Débutant après le :',
-              style: TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 18.0),
             ),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Expanded(
                 flex: 5,
                 child: Padding(
@@ -166,7 +148,7 @@ class _EventsSearchState extends State<EventsSearch> {
                         locale: Locale('fr'),
                       );
                     },
-                    onSaved: (value) {
+                    onChanged: (value) {
                       _searchDate = Utils.updateDate(_searchDate,
                           year: value.year, month: value.month, day: value.day);
                     },
@@ -187,7 +169,7 @@ class _EventsSearchState extends State<EventsSearch> {
                       if (time == null) return currentValue;
                       return DateTimeField.convert(time);
                     },
-                    onSaved: (value) {
+                    onChanged: (value) {
                       _searchDate = Utils.updateDate(_searchDate,
                           hour: value.hour, minute: value.minute);
                     },
@@ -195,11 +177,12 @@ class _EventsSearchState extends State<EventsSearch> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
-                  // TODO: submit
-                  print(
-                      jsonEncode({'startDate': _searchDate.toIso8601String()}));
+                  if (_searched) {
+                    _searchEvents(
+                        params: 'startDate=${_searchDate.toIso8601String()}');
+                  }
                 },
               ),
             ],
@@ -209,9 +192,9 @@ class _EventsSearchState extends State<EventsSearch> {
         return [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
+            child: const Text(
               'Contenant :',
-              style: TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 18.0),
             ),
           ),
           Row(
@@ -220,26 +203,31 @@ class _EventsSearchState extends State<EventsSearch> {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                   child: TextField(
+                    textInputAction: TextInputAction.search,
                     textCapitalization: TextCapitalization.sentences,
                     controller: _searchController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Nom/Description',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontStyle: FontStyle.italic,
                       ),
                     ),
                     maxLines: 1,
+                    onSubmitted: (String value) {
+                      if (value.length > 0 && _searched) {
+                        _searchEvents(params: 'keywords=$value');
+                      }
+                    },
                   ),
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
-                  // TODO: submit
-                  if (_searchController.text.length > 0) {
-                    print(jsonEncode({'keywords': _searchController.text}));
+                  if (_searchController.text.length > 0 && _searched) {
+                    _searchEvents(params: 'keywords=${_searchController.text}');
                   }
                 },
               ),
@@ -248,7 +236,7 @@ class _EventsSearchState extends State<EventsSearch> {
         ];
       case SearchType.LOCATION:
         return [
-          Padding(
+          const Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Proches de moi',
@@ -266,8 +254,10 @@ class _EventsSearchState extends State<EventsSearch> {
   List<Widget> _buildResultArea() {
     if (!this._searched)
       return [
-        Center(
-          child: Loading(),
+        Expanded(
+          child: Center(
+            child: Loading(),
+          ),
         ),
       ];
     else {
@@ -279,7 +269,20 @@ class _EventsSearchState extends State<EventsSearch> {
             style: TextStyle(fontSize: 18.0),
           ),
         ),
-        Expanded(child: _buildList()),
+        Expanded(
+          child: _foundEvents.length > 0
+              ? _buildList()
+              : Center(
+                  child: Text(
+                    'Aucun événement !',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 16.0,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+        ),
       ];
     }
   }
@@ -313,12 +316,21 @@ class _EventsSearchState extends State<EventsSearch> {
   }
 
   /// Search for events
-  // TODO: search
-  void _searchEvents({String url}) {
+  void _searchEvents({@required String params}) async {
+    // Hide keyboard
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    setState(() {
+      _searched = false;
+    });
+
     _scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('Recherche en cours...')));
 
-    //_foundEvents = await
-    setState(() {});
+    List<Event> data = await EventService.searchEvent(params);
+    setState(() {
+      _foundEvents = data;
+      _searched = true;
+    });
   }
 }

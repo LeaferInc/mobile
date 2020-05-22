@@ -58,6 +58,17 @@ class EventService {
     return null;
   }
 
+  /// Search for events
+  static Future<List<Event>> searchEvent(String queryParams) async {
+    final response = await get(
+        _BASE_URL + 'search?${Uri.encodeFull(queryParams)}',
+        headers: Utils.headers);
+    if (response.statusCode == 200) {
+      return compute(_parseEvents, response.body);
+    }
+    return [];
+  }
+
   /// Post an Event to save it
   static Future<Event> saveEvent(Event event) async {
     final response = await post(_BASE_URL,
