@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen.dart';
@@ -24,7 +25,8 @@ class LeaferApp extends StatelessWidget {
         '/events': (context) => Home(initialIndex: 1),
         '/events/create': (context) => EventForm(),
         '/login': (context) => LoginScreen(),
-        '/signIn': (context) => SignIn()
+        '/signIn': (context) => SignIn(),
+        '/cuttings/create': (context) => CuttingForm()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

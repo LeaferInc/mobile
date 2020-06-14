@@ -51,10 +51,10 @@ class User {
     return User(
       id: map['id'] as int,
       email: map['email'] as String,
-      userName: map['userName'] as String,
-      firstName: map['firstName'] as String,
-      lastName: map['lastName'] as String,
-      birthDate: DateTime.parse(map['birthDate']),
+      userName: map['username'] as String,
+      firstName: map['firstname'] as String,
+      lastName: map['lastname'] as String,
+      birthDate: DateTime.parse(map['birthdate']),
       biography: map['biography'] as String,
       pictureId: map['pictureId'] as int,
     );

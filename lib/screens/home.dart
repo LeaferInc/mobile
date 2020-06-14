@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/screens/collection/collection.dart';
+import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/events/events_list.dart';
 
 class Home extends StatefulWidget {
@@ -12,10 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Widget> _children = [
-    Collection(),
-    EventsList(),
-  ];
+  final List<Widget> _children = [Collection(), EventsList(), CuttingForm()];
   int _currentIndex = 0;
 
   _HomeState(this._currentIndex);
@@ -44,6 +42,10 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.event),
             title: Text(EventsList.TITLE),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store),
+            title: Text(CuttingForm.TITLE),
+          )
         ],
       ),
     );
