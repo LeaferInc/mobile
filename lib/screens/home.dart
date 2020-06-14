@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafer/screens/collection.dart';
+import 'package:leafer/screens/collection/collection.dart';
 import 'package:leafer/screens/events/events_list.dart';
 
 class Home extends StatefulWidget {
