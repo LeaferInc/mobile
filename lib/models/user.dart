@@ -3,20 +3,22 @@ import 'dart:convert';
 class User {
   int id;
   String email;
-  String userName;
-  String firstName;
-  String lastName;
-  DateTime birthDate;
+  String username;
+  String firstname;
+  String lastname;
+  String location;
+  DateTime birthdate;
   String biography;
   int pictureId;
 
   User({
     this.id,
     this.email,
-    this.userName,
-    this.firstName,
-    this.lastName,
-    this.birthDate,
+    this.username,
+    this.firstname,
+    this.lastname,
+    this.location,
+    this.birthdate,
     this.biography,
     this.pictureId,
   });
@@ -24,10 +26,11 @@ class User {
   User.map(dynamic obj) {
     this.id = obj["id"];
     this.email = obj["email"];
-    this.userName = obj["username"];
-    this.firstName = obj["firstname"];
-    this.lastName = obj["lastname"];
-    this.birthDate = obj["birthdate"];
+    this.username = obj["username"];
+    this.firstname = obj["firstname"];
+    this.lastname = obj["lastname"];
+    this.location = obj["location"];
+    this.birthdate = obj["birthdate"];
     this.biography = obj["biography"];
     this.pictureId = obj["pictureId"];
   }
@@ -36,10 +39,11 @@ class User {
     return {
       'id': id,
       'email': email,
-      'userName': userName,
-      'firstName': firstName,
-      'lastName': lastName,
-      'birthDate': birthDate?.toIso8601String(),
+      'username': username,
+      'firstname': firstname,
+      'lastname': lastname,
+      'location': location,
+      'birthdate': birthdate?.toIso8601String(),
       'biography': biography,
       'pictureId': pictureId,
     };
@@ -51,10 +55,12 @@ class User {
     return User(
       id: map['id'] as int,
       email: map['email'] as String,
-      userName: map['userName'] as String,
-      firstName: map['firstName'] as String,
-      lastName: map['lastName'] as String,
-      birthDate: DateTime.parse(map['birthDate']),
+      username: map['username'] as String,
+      firstname: map['firstname'] as String,
+      lastname: map['lastname'] as String,
+      location: map['location'] as String,
+      birthdate:
+          (map['birthdate'] != null ? DateTime.parse(map['birthdate']) : null),
       biography: map['biography'] as String,
       pictureId: map['pictureId'] as int,
     );

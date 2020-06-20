@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/screens/collection.dart';
 import 'package:leafer/screens/events/events_list.dart';
+import 'package:leafer/screens/profile/profile.dart';
 
 class Home extends StatefulWidget {
   final int initialIndex;
@@ -15,6 +16,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     Collection(),
     EventsList(),
+    Profile(),
   ];
   int _currentIndex = 0;
 
@@ -38,6 +40,10 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
             title: Text(EventsList.TITLE),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text(Profile.TITLE),
           ),
         ],
       ),

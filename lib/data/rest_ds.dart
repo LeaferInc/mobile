@@ -7,11 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
-  static const HOST = "http://10.0.2.2:3000";
+  static const HOST = "http://192.168.43.200:3000";
   static const LOGIN_ROUTE = "/auth/login";
   static const SIGN_IN_ROUTE = "/user";
   static const COLLECTION_ROUTE = "/plant/search";
   static const LOGIN_URL = HOST + LOGIN_ROUTE;
+
+  static User user; // Store user data
 
   Future<User> login(String username, String password) {
     return _netUtil
@@ -22,26 +24,29 @@ class RestDatasource {
         .then((dynamic res) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt', res["token"]);
-      return new User.map(res["user"]);
+      return User.fromMap(res["user"]);
     }).catchError((dynamic res) {
-      throw new Exception("Error");
+      print(res);
+      throw new Exception(res);
     });
   }
 
   Future<User> signIn(String username, String password, String email,
       String firstname, String lastname) {
     return _netUtil
-        .post(HOST + SIGN_IN_ROUTE,
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8'
-            },
-            body: jsonEncode(<String, String>{
-              "username": username,
-              "email": email,
-              "password": password,
-              "firstname": firstname,
-              "lastname": lastname
-            }))
+        .post(
+      HOST + SIGN_IN_ROUTE,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        "username": username,
+        "email": email,
+        "password": password,
+        "firstname": firstname,
+        "lastname": lastname
+      }),
+    )
         .then((dynamic res) {
       return new User.map(res);
     }).catchError((dynamic res) {

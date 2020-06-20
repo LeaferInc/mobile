@@ -26,6 +26,7 @@ class LeaferApp extends StatelessWidget {
         '/events/create': (context) => EventForm(),
         '/events/search': (context) => EventsSearch(),
         '/login': (context) => LoginScreen(),
+        '/profile': (context) => Home(initialIndex: 2),
         '/signIn': (context) => SignIn()
       },
       localizationsDelegates: [
