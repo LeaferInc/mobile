@@ -27,7 +27,7 @@ class _CuttingFormState extends State<CuttingForm> {
         createdAt: DateTime.now(),
         description: 'Cutting desctiption',
         name: 'Cutting name',
-        owner: new User(),
+        ownerId: 0,
         tradeWith: "",
         viewCount: 0);
   }
@@ -97,8 +97,8 @@ class _CuttingFormState extends State<CuttingForm> {
                   child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate() && !_isSending) {
-                          _createdCutting.owner =
-                              await UserService.getCurrentUser();
+                          _createdCutting.ownerId =
+                              (await UserService.getCurrentUser()).id;
                           _isSending = true;
                           _scaffoldKey.currentState.showSnackBar(
                               SnackBar(content: Text('Ajout en cours...')));

@@ -7,19 +7,33 @@ import 'package:leafer/models/cutting.dart';
 import 'package:leafer/utils/utils.dart';
 
 class CuttingService {
-  static const _BASE_URL = RestDatasource.HOST + '/cuttings/';
+  static const _BASE_URL = RestDatasource.HOST + '/cuttings';
 
   static List<Cutting> _parseCuttings(String responseBody) {
-    final parsed = jsonDecode(responseBody)[0].cast<Map<String, dynamic>>();
-    return parsed.map<Cutting>((json) => Cutting.fromMap(json)).toList();
+    if (jsonDecode(responseBody)["items"] != null) {
+      final parsed =
+          jsonDecode(responseBody)["items"].cast<Map<String, dynamic>>();
+      return parsed.map<Cutting>((json) => Cutting.fromMap(json)).toList();
+    } else {
+      return [];
+    }
   }
 
   static Cutting _parseCutting(String reponseBody) {
     return Cutting.fromMap(jsonDecode(reponseBody));
   }
 
-  static Future<List<Cutting>> getCuttings() async {
-    final response = await get(_BASE_URL + 'my',
+  static Future<List<Cutting>> getAllCuttings() async {
+    final response = await get(_BASE_URL + '/exchange',
+        headers: await Utils.getAuthorizationHeaders());
+    if (response.statusCode == 200) {
+      return compute(_parseCuttings, response.body);
+    }
+    return [];
+  }
+
+  static Future<List<Cutting>> getMyCuttings() async {
+    final response = await get(_BASE_URL + '/my',
         headers: await Utils.getAuthorizationHeaders());
     if (response.statusCode == 200) {
       return compute(_parseCuttings, response.body);
@@ -28,7 +42,7 @@ class CuttingService {
   }
 
   static Future<Cutting> getCuttingById(int id) async {
-    final response = await get(_BASE_URL + id.toString());
+    final response = await get(_BASE_URL + "/" + id.toString());
     if (response.statusCode == 200) {
       return compute(_parseCutting, response.body);
     }

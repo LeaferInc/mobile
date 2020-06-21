@@ -8,7 +8,7 @@ class Plant {
   String exposure;
   String toxicity;
   String potting;
-  String creationDate;
+  DateTime creationDate;
   String image;
 
   Plant({
@@ -31,7 +31,7 @@ class Plant {
     String exposure,
     String toxicity,
     String potting,
-    String creationDate,
+    DateTime creationDate,
     String image,
   }) {
     return Plant(
@@ -56,7 +56,7 @@ class Plant {
       'exposure': exposure,
       'toxicity': toxicity,
       'potting': potting,
-      'creationDate': creationDate,
+      'creationDate': creationDate.toString(),
       'image': image,
     };
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:leafer/models/user.dart';
+import 'package:leafer/services/user_service.dart';
 
 class Cutting {
   DateTime createdAt;
@@ -9,16 +10,14 @@ class Cutting {
   int ownerId;
   int viewCount;
   String tradeWith;
-  User owner;
 
-  Cutting({
-    this.createdAt,
-    this.name,
-    this.description,
-    this.viewCount,
-    this.tradeWith,
-    this.owner,
-  });
+  Cutting(
+      {this.createdAt,
+      this.name,
+      this.description,
+      this.viewCount,
+      this.tradeWith,
+      this.ownerId});
 
   Cutting copyWith({
     DateTime createdAt,
@@ -27,41 +26,35 @@ class Cutting {
     int ownerId,
     int viewCount,
     String tradeWith,
-    User owner,
   }) {
     return Cutting(
-      createdAt: createdAt ?? this.createdAt,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      viewCount: viewCount ?? this.viewCount,
-      tradeWith: tradeWith ?? this.tradeWith,
-      owner: owner ?? this.owner,
-    );
+        createdAt: createdAt ?? this.createdAt,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        viewCount: viewCount ?? this.viewCount,
+        tradeWith: tradeWith ?? this.tradeWith,
+        ownerId: ownerId ?? this.ownerId);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'createdAt': createdAt?.millisecondsSinceEpoch,
-      'name': name,
-      'description': description,
-      'ownerId': ownerId,
-      'viewCount': viewCount,
-      'tradeWith': tradeWith,
-      'owner': owner?.toMap(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'createdAt': createdAt.toString(),
+        'name': name,
+        'description': description,
+        'ownerId': ownerId,
+        'viewsCount': viewCount,
+        'tradeWith': tradeWith,
+      };
 
   static Cutting fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
 
     return Cutting(
-      createdAt: new DateTime(map['createdAt']),
-      name: map['name'],
-      description: map['description'],
-      viewCount: map['viewCount'],
-      tradeWith: map['tradeWith'],
-      owner: User.fromMap(map['owner']),
-    );
+        createdAt: DateTime.parse(map['createdAt'].toString()),
+        name: map['name'],
+        description: map['description'],
+        viewCount: map['viewsCount'],
+        tradeWith: map['tradeWith'],
+        ownerId: map['ownerId']);
   }
 
   // String toJson() => json.encode(toMap());
@@ -70,7 +63,7 @@ class Cutting {
 
   @override
   String toString() {
-    return 'Cutting(createdAt: $createdAt, name: $name, description: $description, ownerId: $ownerId, viewCount: $viewCount, tradeWith: $tradeWith, owner: $owner)';
+    return 'Cutting(createdAt: $createdAt, name: $name, description: $description, ownerId: $ownerId, viewCount: $viewCount, tradeWith: $tradeWith)';
   }
 
   @override
@@ -83,8 +76,7 @@ class Cutting {
         o.description == description &&
         o.ownerId == ownerId &&
         o.viewCount == viewCount &&
-        o.tradeWith == tradeWith &&
-        o.owner == owner;
+        o.tradeWith == tradeWith;
   }
 
   @override
@@ -94,7 +86,6 @@ class Cutting {
         description.hashCode ^
         ownerId.hashCode ^
         viewCount.hashCode ^
-        tradeWith.hashCode ^
-        owner.hashCode;
+        tradeWith.hashCode;
   }
 }

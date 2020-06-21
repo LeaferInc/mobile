@@ -21,25 +21,36 @@ class User {
     this.pictureId,
   });
 
-  User.map(dynamic obj) {
-    this.id = obj["id"];
-    this.email = obj["email"];
-    this.userName = obj["username"];
-    this.firstName = obj["firstname"];
-    this.lastName = obj["lastname"];
-    this.birthDate = obj["birthdate"];
-    this.biography = obj["biography"];
-    this.pictureId = obj["pictureId"];
+  User copyWith({
+    int id,
+    String email,
+    String userName,
+    String firstName,
+    String lastName,
+    DateTime birthDate,
+    String biography,
+    int pictureId,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      userName: userName ?? this.userName,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      birthDate: birthDate ?? this.birthDate,
+      biography: biography ?? this.biography,
+      pictureId: pictureId ?? this.pictureId,
+    );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'email': email,
       'userName': userName,
       'firstName': firstName,
       'lastName': lastName,
-      'birthDate': birthDate?.toIso8601String(),
+      'birthDate': birthDate?.millisecondsSinceEpoch,
       'biography': biography,
       'pictureId': pictureId,
     };
@@ -49,18 +60,50 @@ class User {
     if (map == null) return null;
 
     return User(
-      id: map['id'] as int,
-      email: map['email'] as String,
-      userName: map['username'] as String,
-      firstName: map['firstname'] as String,
-      lastName: map['lastname'] as String,
-      birthDate: DateTime.parse(map['birthdate']),
-      biography: map['biography'] as String,
-      pictureId: map['pictureId'] as int,
+      id: map['id'],
+      email: map['email'],
+      userName: map['username'],
+      firstName: map['firstname'],
+      lastName: map['lastname'],
+      birthDate: DateTime.parse(map['birthdate'].toString()),
+      biography: map['biography'],
+      pictureId: map['pictureId'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
   static User fromJson(String source) => fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'User(id: $id, email: $email, userName: $userName, firstName: $firstName, lastName: $lastName, birthDate: $birthDate, biography: $biography, pictureId: $pictureId)';
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is User &&
+        o.id == id &&
+        o.email == email &&
+        o.userName == userName &&
+        o.firstName == firstName &&
+        o.lastName == lastName &&
+        o.birthDate == birthDate &&
+        o.biography == biography &&
+        o.pictureId == pictureId;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        email.hashCode ^
+        userName.hashCode ^
+        firstName.hashCode ^
+        lastName.hashCode ^
+        birthDate.hashCode ^
+        biography.hashCode ^
+        pictureId.hashCode;
+  }
 }

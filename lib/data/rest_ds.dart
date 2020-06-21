@@ -22,7 +22,7 @@ class RestDatasource {
         .then((dynamic res) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt', res["token"]);
-      return new User.map(res["user"]);
+      return User.fromJson(res["user"]);
     }).catchError((dynamic res) {
       throw new Exception("Error");
     });
@@ -43,7 +43,7 @@ class RestDatasource {
               "lastname": lastname
             }))
         .then((dynamic res) {
-      return new User.map(res);
+      return User.fromJson(res);
     }).catchError((dynamic res) {
       throw new Exception(res["error_msg"]);
     });
