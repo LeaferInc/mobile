@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/screens/collection/collection.dart';
-import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/cuttings/cutting_home.dart';
-import 'package:leafer/screens/cuttings/my_cuttings.dart';
 import 'package:leafer/screens/events/events_list.dart';
 import 'package:leafer/screens/profile/profile.dart';
 
