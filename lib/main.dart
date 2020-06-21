@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/events/events-search.dart';
 import 'package:leafer/screens/home.dart';
@@ -20,14 +21,15 @@ class LeaferApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/login',
       routes: {
-        '/': (context) => Home(),
-        '/collection': (context) => Home(initialIndex: 0),
-        '/events': (context) => Home(initialIndex: 1),
-        '/events/create': (context) => EventForm(),
-        '/events/search': (context) => EventsSearch(),
-        '/login': (context) => LoginScreen(),
-        '/profile': (context) => Home(initialIndex: 2),
-        '/signIn': (context) => SignIn()
+        '/home': (BuildContext context) => Home(),
+        '/events/search': (BuildContext context) => EventsSearch(),
+        '/profile': (BuildContext context) => Home(initialIndex: 2),
+        '/collection': (BuildContext context) => Home(initialIndex: 0),
+        '/events': (BuildContext context) => Home(initialIndex: 1),
+        '/events/create': (BuildContext context) => new EventForm(),
+        '/login': (BuildContext context) => new LoginScreen(),
+        '/signIn': (BuildContext context) => new SignIn(),
+        '/cuttings/create': (BuildContext context) => new CuttingForm()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

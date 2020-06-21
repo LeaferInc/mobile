@@ -35,7 +35,7 @@ class User {
     this.pictureId = obj["pictureId"];
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'email': email,
@@ -66,7 +66,39 @@ class User {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
   static User fromJson(String source) => fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'User(id: $id, email: $email, userName: $username, firstName: $firstname, lastName: $lastname, birthDate: $birthdate, biography: $biography, pictureId: $pictureId)';
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is User &&
+        o.id == id &&
+        o.email == email &&
+        o.username == username &&
+        o.firstname == firstname &&
+        o.lastname == lastname &&
+        o.birthdate == birthdate &&
+        o.biography == biography &&
+        o.pictureId == pictureId;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        email.hashCode ^
+        username.hashCode ^
+        firstname.hashCode ^
+        lastname.hashCode ^
+        birthdate.hashCode ^
+        biography.hashCode ^
+        pictureId.hashCode;
+  }
 }

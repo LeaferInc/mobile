@@ -5,7 +5,7 @@ import 'package:leafer/services/plant_service.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/plant.dart';
+import '../../models/plant.dart';
 
 class Collection extends StatefulWidget {
   static const String TITLE = 'Mes Plantes';

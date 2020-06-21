@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:leafer/screens/collection.dart';
+import 'package:leafer/screens/collection/collection.dart';
+import 'package:leafer/screens/cuttings/cutting_form.dart';
+import 'package:leafer/screens/cuttings/cutting_home.dart';
+import 'package:leafer/screens/cuttings/my_cuttings.dart';
 import 'package:leafer/screens/events/events_list.dart';
 import 'package:leafer/screens/profile/profile.dart';
 
@@ -17,6 +20,7 @@ class _HomeState extends State<Home> {
     Collection(),
     EventsList(),
     Profile(),
+    CuttingHome()
   ];
   int _currentIndex = 0;
 
@@ -45,6 +49,10 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.person),
             title: Text(Profile.TITLE),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store),
+            title: Text(CuttingHome.TITLE),
+          )
         ],
       ),
     );

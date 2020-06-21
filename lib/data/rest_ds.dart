@@ -48,7 +48,7 @@ class RestDatasource {
       }),
     )
         .then((dynamic res) {
-      return new User.map(res);
+      return User.fromJson(res);
     }).catchError((dynamic res) {
       throw new Exception(res["error_msg"]);
     });
