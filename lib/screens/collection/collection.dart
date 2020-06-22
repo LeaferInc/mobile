@@ -16,6 +16,7 @@ class Collection extends StatefulWidget {
 
 class CollectionState extends State<Collection> {
   List<Plant> _collection = new List<Plant>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   initState() {
@@ -94,6 +95,7 @@ class CollectionState extends State<Collection> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(Collection.TITLE),
       ),
@@ -102,7 +104,7 @@ class CollectionState extends State<Collection> {
         heroTag: 'CollectionTag',
         onPressed: () async {
           (await SharedPreferences.getInstance()).remove('jwt');
-          Navigator.of(context).pushReplacementNamed("/login");
+          Navigator.of(context).pushNamed("/login");
         },
       ),
     );

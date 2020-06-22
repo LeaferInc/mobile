@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/models/user.dart';
 import 'package:leafer/screens/profile/edit_profile.dart';
+import 'package:leafer/services/user_service.dart';
 
 class Profile extends StatefulWidget {
   static const TITLE = "Profil";
@@ -17,10 +17,23 @@ class _ProfileState extends State<Profile> {
 
   final _editKey = GlobalKey();
 
+  User user = new User();
+
+  @override
+  initState() {
+    super.initState();
+    _getUser();
+  }
+
+  void _getUser() async {
+    User _user = await UserService.getCurrentUser();
+    setState(() {
+      user = _user;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    User user = RestDatasource.user;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(

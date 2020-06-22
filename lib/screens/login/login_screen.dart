@@ -28,7 +28,7 @@ class LoginScreenState extends State<LoginScreen>
   @override
   onAuthStateChanged(AuthState state) {
     if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).popAndPushNamed("/home");
+      Navigator.of(_ctx).pushReplacementNamed("/home");
   }
 
   @override
