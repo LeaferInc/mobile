@@ -25,7 +25,8 @@ class CuttingService {
 
   static Future<List<Cutting>> getAllCuttings() async {
     final response = await get(_BASE_URL + '/exchange',
-        headers: await Utils.getAuthorizationHeaders());
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseCuttings, response.body);
     }
@@ -34,7 +35,8 @@ class CuttingService {
 
   static Future<List<Cutting>> getMyCuttings() async {
     final response = await get(_BASE_URL + '/my',
-        headers: await Utils.getAuthorizationHeaders());
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseCuttings, response.body);
     }
@@ -42,7 +44,8 @@ class CuttingService {
   }
 
   static Future<Cutting> getCuttingById(int id) async {
-    final response = await get(_BASE_URL + "/" + id.toString());
+    final response = await get(_BASE_URL + "/" + id.toString())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseCutting, response.body);
     }
@@ -51,8 +54,9 @@ class CuttingService {
 
   static Future<Cutting> saveCutting(Cutting cutting) async {
     final response = await post(_BASE_URL,
-        headers: await Utils.getAuthorizationHeaders(),
-        body: jsonEncode(cutting));
+            headers: await Utils.getAuthorizationHeaders(),
+            body: jsonEncode(cutting))
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 201) {
       return compute(_parseCutting, response.body);
     }

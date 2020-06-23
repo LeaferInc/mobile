@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:leafer/data/rest_ds.dart';
-import 'package:leafer/models/cutting.dart';
 import 'package:leafer/models/user.dart';
 import 'package:leafer/utils/utils.dart';
 
@@ -16,7 +15,8 @@ class UserService {
   }
 
   static Future<User> getUserFromId(int id) async {
-    final response = await get(_BASE_URL_USER + id.toString());
+    final response = await get(_BASE_URL_USER + id.toString())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseUser, response.body);
     }
@@ -25,7 +25,8 @@ class UserService {
 
   static Future<User> getCurrentUser() async {
     final response = await get(_BASE_URL_AUTH + 'me',
-        headers: await Utils.getAuthorizationHeaders());
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseUser, response.body);
     }
