@@ -8,15 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
-  static const HOST = "http://10.0.2.2:3000";
+  static const HOST = "http://192.168.43.200:3000";
   static const LOGIN_ROUTE = "/auth/login";
   static const SIGN_IN_ROUTE = "/user";
   static const COLLECTION_ROUTE = "/plant/search";
   static const LOGIN_URL = HOST + LOGIN_ROUTE;
 
   static const TIMEOUT = Duration(seconds: 20); // Timeout for queries
-
-  static User user; // Store user data
 
   Future<User> login(String username, String password) {
     return _netUtil
@@ -57,5 +55,10 @@ class RestDatasource {
     }).catchError((dynamic res) {
       throw new Exception(res["error_msg"]);
     });
+  }
+
+  /// Removes token session of the user
+  static Future<void> logout() async {
+    return (await SharedPreferences.getInstance()).remove('jwt');
   }
 }

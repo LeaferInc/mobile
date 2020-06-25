@@ -32,4 +32,11 @@ class UserService {
     }
     return null;
   }
+
+  static Future<int> deleteUser() async {
+    final res = await delete(_BASE_URL_USER,
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    return res.statusCode;
+  }
 }
