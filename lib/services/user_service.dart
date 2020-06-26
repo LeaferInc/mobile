@@ -10,8 +10,8 @@ class UserService {
   static const _BASE_URL_AUTH = RestDatasource.HOST + '/auth/';
   static const _BASE_URL_USER = RestDatasource.HOST + '/user/';
 
-  static User _parseUser(String reponseBody) {
-    return User.fromMap(jsonDecode(reponseBody));
+  static User _parseUser(String responseBody) {
+    return User.fromMap(jsonDecode(responseBody));
   }
 
   static Future<User> getUserFromId(int id) async {
@@ -26,6 +26,17 @@ class UserService {
   static Future<User> getCurrentUser() async {
     final response = await get(_BASE_URL_AUTH + 'me',
             headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    if (response.statusCode == 200) {
+      return compute(_parseUser, response.body);
+    }
+    return null;
+  }
+
+  static Future<User> updateUser(Map<String, dynamic> changes) async {
+    final response = await put(_BASE_URL_USER,
+            headers: await Utils.getAuthorizationHeaders(),
+            body: jsonEncode(changes))
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseUser, response.body);
