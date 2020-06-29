@@ -22,7 +22,8 @@ class EventService {
 
   /// Get all Events
   static Future<List<Event>> getEvents() async {
-    final response = await get(_BASE_URL, headers: Utils.headers);
+    final response = await get(_BASE_URL, headers: Utils.headers)
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }
@@ -31,7 +32,8 @@ class EventService {
 
   /// Get incoming events
   static Future<List<Event>> getIncomingEvents() async {
-    final response = await get(_BASE_URL + 'incoming', headers: Utils.headers);
+    final response = await get(_BASE_URL + 'incoming', headers: Utils.headers)
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }
@@ -41,7 +43,8 @@ class EventService {
   /// Get joined events
   static Future<List<Event>> getJoinedEvents() async {
     final response = await get(_BASE_URL + 'joined',
-        headers: await Utils.getAuthorizationHeaders());
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }
@@ -51,7 +54,8 @@ class EventService {
   /// Get a single event by its id
   static Future<Event> getEventById(int id) async {
     final response = await get(_BASE_URL + id.toString(),
-        headers: await Utils.getAuthorizationHeaders());
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvent, response.body);
     }
@@ -61,8 +65,9 @@ class EventService {
   /// Search for events
   static Future<List<Event>> searchEvent(String queryParams) async {
     final response = await get(
-        _BASE_URL + 'search?${Uri.encodeFull(queryParams)}',
-        headers: Utils.headers);
+            _BASE_URL + 'search?${Uri.encodeFull(queryParams)}',
+            headers: Utils.headers)
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
     }
@@ -72,8 +77,9 @@ class EventService {
   /// Post an Event to save it
   static Future<Event> saveEvent(Event event) async {
     final response = await post(_BASE_URL,
-        headers: await Utils.getAuthorizationHeaders(),
-        body: jsonEncode(event));
+            headers: await Utils.getAuthorizationHeaders(),
+            body: jsonEncode(event))
+        .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 201) {
       return compute(_parseEvent, response.body);
     }

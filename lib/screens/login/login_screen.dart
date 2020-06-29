@@ -27,19 +27,19 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   onAuthStateChanged(AuthState state) {
-    if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed("/home");
+    if (state == AuthState.LOGGED_IN) Navigator.of(_ctx).pushNamed("/home");
   }
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     return Scaffold(
       appBar: AppBar(
         title: Text('Connexion'),
       ),
       key: scaffoldKey,
       body: Stack(
-        children: <Widget>[_buildFormFields(context)],
+        children: <Widget>[_buildFormFields()],
       ),
     );
   }
@@ -58,8 +58,7 @@ class LoginScreenState extends State<LoginScreen>
         .showSnackBar(new SnackBar(content: new Text(text)));
   }
 
-  Widget _buildFormFields(BuildContext context) {
-    _ctx = context;
+  Widget _buildFormFields() {
     return Center(
       child: Container(
         width: 250,

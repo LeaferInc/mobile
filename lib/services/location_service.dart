@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/models/location.dart';
 
 class LocationService {
@@ -17,7 +18,8 @@ class LocationService {
 
   /// Gets all matching locations
   static Future<List<Location>> searchLocations(String address) async {
-    final response = await get(_ADDRESS_API_URL + address);
+    final response =
+        await get(_ADDRESS_API_URL + address).timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseLocations, response.body);
     }

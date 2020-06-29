@@ -67,24 +67,27 @@ class _EventFormState extends State<EventForm> {
                   fontSize: 16,
                 ),
               ),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  hintText: 'Un nom original',
-                  hintStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+                child: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'Un nom original',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
+                  initialValue: _createdEvent.name,
+                  maxLines: 1,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Entrez un nom';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _createdEvent.name = value,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
-                initialValue: _createdEvent.name,
-                maxLines: 1,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Entrez un nom';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _createdEvent.name = value,
-                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(height: 10.0),
               Text(
@@ -93,23 +96,26 @@ class _EventFormState extends State<EventForm> {
                   fontSize: 16,
                 ),
               ),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  hintText: 'Une description',
-                  hintStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+                child: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'Une description',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
+                  initialValue: _createdEvent.description,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Entrez une description';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _createdEvent.description = value,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
-                initialValue: _createdEvent.description,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Entrez une description';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _createdEvent.description = value,
-                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(height: 10.0),
               Text(
@@ -118,28 +124,31 @@ class _EventFormState extends State<EventForm> {
                   fontSize: 16,
                 ),
               ),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                controller: _locationController,
-                decoration: InputDecoration(
-                  hintText: '17, rue ...',
-                  hintStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+                child: TextFormField(
+                  textInputAction: TextInputAction.done,
+                  controller: _locationController,
+                  decoration: InputDecoration(
+                    hintText: '17, rue ...',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
+                  onChanged: (value) {
+                    if (_timer != null) _timer.cancel();
+                    _timer = Timer(
+                        Duration(seconds: 2), () => _locationTimer(value));
+                  },
+                  validator: (value) {
+                    if (value.isEmpty ||
+                        (Utils.equalsZero(_createdEvent.latitude) &&
+                            Utils.equalsZero(_createdEvent.longitude)))
+                      return 'Aucune ville associée';
+                    return null;
+                  },
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
-                onChanged: (value) {
-                  if (_timer != null) _timer.cancel();
-                  _timer =
-                      Timer(Duration(seconds: 2), () => _locationTimer(value));
-                },
-                validator: (value) {
-                  if (value.isEmpty ||
-                      (Utils.equalsZero(_createdEvent.latitude) &&
-                          Utils.equalsZero(_createdEvent.longitude)))
-                    return 'Aucune ville associée';
-                  return null;
-                },
-                onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
               ),
               SizedBox(height: 10.0),
               Text(
@@ -170,7 +179,7 @@ class _EventFormState extends State<EventForm> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 0.0),
                       child: Text(
                         'Prix (€)',
                         style: TextStyle(
@@ -181,7 +190,7 @@ class _EventFormState extends State<EventForm> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                       child: Text(
                         'Max. Places',
                         style: TextStyle(
@@ -198,7 +207,7 @@ class _EventFormState extends State<EventForm> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -227,7 +236,7 @@ class _EventFormState extends State<EventForm> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(

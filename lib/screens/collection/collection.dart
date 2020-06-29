@@ -1,14 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/services/plant_service.dart';
 import 'package:random_string/random_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/plant.dart';
 
 class Collection extends StatefulWidget {
-  static const String TITLE = 'Mes Plantes';
+  static const String TITLE = 'Plantes';
 
   @override
   CollectionState createState() => CollectionState();
@@ -103,8 +103,8 @@ class CollectionState extends State<Collection> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'CollectionTag',
         onPressed: () async {
-          (await SharedPreferences.getInstance()).remove('jwt');
-          Navigator.of(context).pushNamed("/login");
+          await RestDatasource.logout();
+          Navigator.of(context).pushReplacementNamed("/login");
         },
       ),
     );

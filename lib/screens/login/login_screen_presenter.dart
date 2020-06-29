@@ -15,7 +15,6 @@ class LoginScreenPresenter {
 
   doLogin(String username, String password) {
     api.login(username, password).then((User user) {
-      RestDatasource.user = user; // Save user data
       _view.onLoginSuccess(user);
     }).catchError((Object error) {
       _view.onLoginError(error.toString());

@@ -18,4 +18,16 @@ void main() {
     expect(Utils.equalsZero(-0.000000009), true);
     expect(Utils.equalsZero(-0.000005), false);
   });
+
+  test('should test DateTime equality', () {
+    DateTime d1 = DateTime(2000, 1, 1, 23);
+    DateTime d2 = DateTime(2000, 1, 1, 10);
+    DateTime d3 = DateTime(2003, 1, 1);
+
+    expect(Utils.isSameDate(d1, d2), true);
+    expect(Utils.isSameDate(d1, d3), false);
+    expect(Utils.isSameDate(d1, null), false);
+    expect(Utils.isSameDate(null, d2), false);
+    expect(Utils.isSameDate(null, null), true);
+  });
 }

@@ -19,6 +19,17 @@ class Utils {
         hour ?? date.hour, minute ?? date.minute, second ?? date.second, 0, 0);
   }
 
+  /// Weither or not it the same date and true if both are null
+  /// Params can be null
+  static bool isSameDate(DateTime d1, DateTime d2) {
+    if ((d1 != null && d2 == null) || (d1 == null && d2 != null)) {
+      return false;
+    }
+
+    return (d1 == null && d2 == null) ||
+        (d1.year == d2.year && d1.month == d2.month && d1.day == d2.day);
+  }
+
   /// Returns headers with Bearer token
   static Future<Map<String, String>> getAuthorizationHeaders() async {
     String token = (await SharedPreferences.getInstance()).getString("jwt");
