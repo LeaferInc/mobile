@@ -64,7 +64,9 @@ class User {
       birthdate:
           (map['birthdate'] != null ? DateTime.parse(map['birthdate']) : null),
       biography: map['biography'] as String,
-      picture: base64Decode(map['picture'] as String),
+      picture: map['picture'] != null
+          ? base64Decode(map['picture'] as String)
+          : null,
     );
   }
 

@@ -7,6 +7,10 @@ void main() {
   group('Event Model tests', () {
     DateTime startDate;
     Event event;
+    String base64 =
+        "iVBORw0KGgoAAAANSUhEUgAAABkAAAAPCAYAAAARZmTlAAAAAXNSR0IArs4c6QAAAARnQU1BAAC"
+        "xjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABCSURBVDhPvc0xAQAwCMRAdNcaFqrmDVADGUOHW7Kk6txZh9GG0YbRhtG"
+        "G0YbRhtGG0YbRhtGG0dbds62SzLYPk8wDZHi4VEgXAv0AAAAASUVORK5CYII=";
 
     setUp(() {
       startDate = new DateTime(2020, 10, 25);
@@ -20,6 +24,7 @@ void main() {
         maxPeople: 10,
         latitude: 48.2121,
         longitude: 2.0654,
+        picture: base64Decode(base64),
       );
     });
 
@@ -49,6 +54,7 @@ void main() {
         'maxPeople': event.maxPeople,
         'latitude': event.latitude,
         'longitude': event.longitude,
+        'picture': base64,
       };
 
       Event result = Event.fromMap(map);
@@ -63,6 +69,7 @@ void main() {
       expect(result.maxPeople, 10);
       expect(result.latitude, 48.2121);
       expect(result.longitude, 2.0654);
+      expect(result.picture, base64Decode(base64));
     });
 
     test('it should json encode', () {
