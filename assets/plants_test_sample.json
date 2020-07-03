@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "Monstera",
+        "humidity": 2,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020",
+        "image": "https://www.jardinpourvous.com/media/catalog/product/cache/13/image/500x/9df78eab33525d08d6e5fb8d27136e95/F/D/FD19294WH_163.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Plante 2",
+        "humidity": 4,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020",
+        "image": "https://www.jardinpourvous.com/media/catalog/product/cache/13/image/500x/9df78eab33525d08d6e5fb8d27136e95/F/D/FD19294WH_163.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Plante 3",
+        "humidity": 3,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020",
+        "image": "https://www.jardinpourvous.com/media/catalog/product/cache/13/image/500x/9df78eab33525d08d6e5fb8d27136e95/F/D/FD19294WH_163.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Plante 4",
+        "humidity": 5,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020",
+        "image": "https://www.jardinpourvous.com/media/catalog/product/cache/13/image/500x/9df78eab33525d08d6e5fb8d27136e95/F/D/FD19294WH_163.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Plante 5",
+        "humidity": 5,
+        "watering": "Watering Can",
+        "difficulty": 3,
+        "exposure": "No direct sunlight",
+        "toxicity": "",
+        "potting": "",
+        "creationDate": "12 Apr 2020",
+        "image": "https://www.jardinpourvous.com/media/catalog/product/cache/13/image/500x/9df78eab33525d08d6e5fb8d27136e95/F/D/FD19294WH_163.jpg"
+    }
+]
