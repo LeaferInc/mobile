@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:leafer/models/cutting.dart';
 import 'package:leafer/screens/cuttings/cutting_form.dart';
@@ -8,7 +6,6 @@ import 'package:leafer/screens/events/event_info.dart';
 import 'package:leafer/services/cutting_service.dart';
 import 'package:leafer/widgets/cutting_card.dart';
 import 'package:random_string/random_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyCuttings extends StatefulWidget {
   static const String TITLE = 'Mes Boutures à échanger';

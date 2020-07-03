@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 /// This class represents an Event
 /// @author ddaninthe
 class Event {
@@ -11,6 +14,7 @@ class Event {
   int maxPeople;
   double latitude;
   double longitude;
+  Uint8List picture;
 
   Event({
     this.id,
@@ -23,6 +27,7 @@ class Event {
     this.maxPeople,
     this.latitude,
     this.longitude,
+    this.picture,
   });
 
   /// Used to create a new Event
@@ -37,6 +42,7 @@ class Event {
       'maxPeople': this.maxPeople,
       'latitude': this.latitude,
       'longitude': this.longitude,
+      'picture': this.picture, // TODO:
     };
   }
 
@@ -52,6 +58,7 @@ class Event {
       maxPeople: map['maxPeople'] as int,
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
+      picture: base64Decode(map['picture']),
     );
   }
 
@@ -61,6 +68,6 @@ class Event {
         '\tname: $name,\n\tdescription: $description,\n'
         '\tlocation: $location,\n\tstartDate: $startDate,\n'
         '\tendDate: $endDate,\n\tprice: $price,\n\tmaxPeople: $maxPeople,\n'
-        '\tcoordinates: ($latitude, $longitude)\n}';
+        '\tcoordinates: ($latitude, $longitude)\n\tpicture: $picture\n}';
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 class User {
   int id;
@@ -9,7 +10,7 @@ class User {
   String location;
   DateTime birthdate;
   String biography;
-  int pictureId;
+  Uint8List picture;
 
   User({
     this.id,
@@ -20,19 +21,20 @@ class User {
     this.location,
     this.birthdate,
     this.biography,
-    this.pictureId,
+    this.picture,
   });
 
   User.map(dynamic obj) {
-    this.id = obj["id"];
-    this.email = obj["email"];
-    this.username = obj["username"];
-    this.firstname = obj["firstname"];
-    this.lastname = obj["lastname"];
-    this.location = obj["location"];
-    this.birthdate = obj["birthdate"];
-    this.biography = obj["biography"];
-    this.pictureId = obj["pictureId"];
+    this.id = obj["id"] as int;
+    this.email = obj["email"] as String;
+    this.username = obj["username"] as String;
+    this.firstname = obj["firstname"] as String;
+    this.lastname = obj["lastname"] as String;
+    this.location = obj["location"] as String;
+    this.birthdate =
+        (obj['birthdate'] != null ? DateTime.parse(obj['birthdate']) : null);
+    this.biography = obj["biography"] as String;
+    this.picture = base64Decode(obj["picture"] as String);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,7 +47,7 @@ class User {
       'location': location,
       'birthdate': birthdate?.toIso8601String(),
       'biography': biography,
-      'pictureId': pictureId,
+      'picture': '', // TODO: picture,
     };
   }
 
@@ -62,7 +64,7 @@ class User {
       birthdate:
           (map['birthdate'] != null ? DateTime.parse(map['birthdate']) : null),
       biography: map['biography'] as String,
-      pictureId: map['pictureId'] as int,
+      picture: base64Decode(map['picture'] as String),
     );
   }
 
@@ -72,7 +74,8 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, userName: $username, firstName: $firstname, lastName: $lastname, birthDate: $birthdate, biography: $biography, pictureId: $pictureId)';
+    return 'User(id: $id, email: $email, userName: $username, firstName: $firstname, '
+        'lastName: $lastname, birthDate: $birthdate, biography: $biography, picture: $picture)';
   }
 
   @override
@@ -87,7 +90,7 @@ class User {
         o.lastname == lastname &&
         o.birthdate == birthdate &&
         o.biography == biography &&
-        o.pictureId == pictureId;
+        o.picture == picture;
   }
 
   @override
@@ -99,6 +102,6 @@ class User {
         lastname.hashCode ^
         birthdate.hashCode ^
         biography.hashCode ^
-        pictureId.hashCode;
+        picture.hashCode;
   }
 }

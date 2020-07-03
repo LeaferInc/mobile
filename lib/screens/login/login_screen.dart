@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/auth.dart';
-import 'package:leafer/models/user.dart';
+import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen_presenter.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,16 +18,21 @@ class LoginScreenState extends State<LoginScreen>
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   LoginScreenPresenter _presenter;
   String _username, _password;
+  AuthStateProvider _provider;
 
-  LoginScreenState() {
+  @override
+  void initState() {
+    super.initState();
     _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
+    _provider = new AuthStateProvider();
+    _provider.subscribe(this);
   }
 
   @override
   onAuthStateChanged(AuthState state) {
-    if (state == AuthState.LOGGED_IN) Navigator.of(_ctx).pushNamed("/home");
+    if (state == AuthState.LOGGED_IN)
+      Navigator.pushReplacement(
+          _ctx, MaterialPageRoute(builder: (context) => Home()));
   }
 
   @override
@@ -56,6 +61,12 @@ class LoginScreenState extends State<LoginScreen>
   void _showSnackBar(String text) {
     scaffoldKey.currentState
         .showSnackBar(new SnackBar(content: new Text(text)));
+  }
+
+  @override
+  void dispose() {
+    _provider.dispose(this);
+    super.dispose();
   }
 
   Widget _buildFormFields() {
@@ -130,9 +141,7 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   @override
-  void onLoginSuccess(User user) async {
-    _showSnackBar(user.toString());
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);
+  void onLoginSuccess() async {
+    _provider.notify(AuthState.LOGGED_IN);
   }
 }

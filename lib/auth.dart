@@ -12,6 +12,7 @@ class AuthStateProvider {
   List<AuthStateListener> _subscribers;
 
   factory AuthStateProvider() => _instance;
+
   AuthStateProvider.internal() {
     _subscribers = new List<AuthStateListener>();
     initState();
@@ -31,9 +32,7 @@ class AuthStateProvider {
   }
 
   void dispose(AuthStateListener listener) {
-    for (var l in _subscribers) {
-      if (l == listener) _subscribers.remove(l);
-    }
+    _subscribers.remove(listener);
   }
 
   void notify(AuthState state) {

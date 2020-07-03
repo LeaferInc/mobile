@@ -110,7 +110,7 @@ class _ProfileState extends State<Profile> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
         child: _buildScreen(),
       ),
     );
@@ -135,9 +135,13 @@ class _ProfileState extends State<Profile> {
         );
       } else {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            CircleAvatar(
+              backgroundImage: MemoryImage(_user.picture),
+              minRadius: 35.0,
+              maxRadius: 50.0,
+            ),
             _displayData(title: 'Nom utilisateur', data: _user.username),
             _displayData(title: 'Email', data: _user.email),
             _displayData(title: 'Prénom', data: _user.firstname),

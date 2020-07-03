@@ -21,15 +21,15 @@ class LeaferApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/login',
       routes: {
-        '/home': (BuildContext context) => new Home(),
-        '/events/search': (BuildContext context) => new EventsSearch(),
-        '/profile': (BuildContext context) => new Home(initialIndex: 2),
         '/collection': (BuildContext context) => new Home(initialIndex: 0),
+        '/cuttings/create': (BuildContext context) => new CuttingForm(),
         '/events': (BuildContext context) => new Home(initialIndex: 1),
         '/events/create': (BuildContext context) => new EventForm(),
+        '/events/search': (BuildContext context) => new EventsSearch(),
+        '/home': (BuildContext context) => new Home(),
         '/login': (BuildContext context) => new LoginScreen(),
+        '/profile': (BuildContext context) => new Home(initialIndex: 2),
         '/signIn': (BuildContext context) => new SignIn(),
-        '/cuttings/create': (BuildContext context) => new CuttingForm()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
