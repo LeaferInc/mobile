@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/events/event_form.dart';
-import 'package:leafer/screens/events/events-search.dart';
+import 'package:leafer/screens/events/events_search.dart';
 import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen.dart';
 import 'package:leafer/screens/signin/sign_in.dart';

@@ -295,7 +295,7 @@ class _EventsSearchState extends State<EventsSearch> {
         return Card(
           child: ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/event.jpg'),
+              backgroundImage: _foundEvents[index].getPicture(),
             ),
             title: Text(_foundEvents[index].name),
             subtitle: Text(_foundEvents[index].location),

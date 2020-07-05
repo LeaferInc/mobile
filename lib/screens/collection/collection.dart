@@ -2,10 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:leafer/data/rest_ds.dart';
+import 'package:leafer/models/plant.dart';
 import 'package:leafer/services/plant_service.dart';
 import 'package:random_string/random_string.dart';
-
-import '../../models/plant.dart';
 
 class Collection extends StatefulWidget {
   static const String TITLE = 'Plantes';
@@ -37,22 +36,6 @@ class CollectionState extends State<Collection> {
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, item) {
           final index = item;
-          // if (index >= _collection.length) {
-          //   _collection.addAll(
-          //     // List.generate(
-          //     //   newData.length,
-          //     //   (int index) => new Plant(
-          //     //       name: newData[index]["name"],
-          //     //       humidity: newData[index]["humidity"],
-          //     //       watering: newData[index]["watering"],
-          //     //       difficulty: newData[index]["difficulty"],
-          //     //       exposure: newData[index]["exposure"],
-          //     //       toxicity: newData[index]["toxicity"],
-          //     //       potting: newData[index]["potting"],
-          //     //       creationDate: newData[index]["creationDate"],
-          //     //       image: newData[index]["image"])));
-          // }
-
           return _buildRow(plants.elementAt(index));
         },
         itemCount: plants.length);
@@ -64,28 +47,35 @@ class CollectionState extends State<Collection> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Column(children: <Widget>[
-              Image(
-                  image: NetworkImage("https://picsum.photos/200"),
-                  height: 150),
-            ]),
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  child: Text(
-                    plant.name,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.black, fontSize: 35),
-                  ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image(
+                  image: plant.getPicture(),
                 ),
-                SizedBox(
-                  child: Text(
-                    "Besoin en humidité : " + plant.humidity.toString(),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    child: Text(
+                      plant.name,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.black, fontSize: 35),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    child: Text(
+                      "Besoin en humidité : " + plant.humidity.toString(),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),

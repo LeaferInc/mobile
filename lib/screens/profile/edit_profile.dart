@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leafer/models/user.dart';
 import 'package:leafer/screens/profile/profile.dart';
 import 'package:leafer/services/user_service.dart';
@@ -18,11 +22,13 @@ class _EditProfileState extends State<EditProfile> {
   static const _BIRTHDATE_KEY = 'birthdate';
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ImagePicker _picker = ImagePicker();
   final User _user;
 
   final Map<String, dynamic> _changes = {};
 
   bool _isSending = false;
+  File _image;
 
   _EditProfileState(this._user);
 
@@ -41,6 +47,34 @@ class _EditProfileState extends State<EditProfile> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Avatar:',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.image,
+                        color: Colors.green,
+                      ),
+                      onPressed: () async {
+                        final pickedFile =
+                            await _picker.getImage(source: ImageSource.gallery);
+                        _image = File(pickedFile.path);
+                      },
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 10.0),
               Text(
                 'Prénom',
                 style: TextStyle(
@@ -177,6 +211,12 @@ class _EditProfileState extends State<EditProfile> {
                         if (Utils.isSameDate(
                             _user.birthdate, _changes[_BIRTHDATE_KEY])) {
                           _changes.remove(_BIRTHDATE_KEY);
+                        }
+
+                        // Check avatar update
+                        if (_image != null) {
+                          _changes['picture'] =
+                              base64Encode(_image.readAsBytesSync());
                         }
 
                         if (_changes.keys.length == 0) {

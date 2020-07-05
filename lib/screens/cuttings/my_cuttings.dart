@@ -33,7 +33,7 @@ class MyCuttingsState extends State<MyCuttings> {
   Widget _buildList(BuildContext context, List<Cutting> cuttings) {
     return ListView.builder(
         key: Key(randomString(20)),
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         itemBuilder: (context, item) {
           final index = item;
           return _buildRow(cuttings.elementAt(index));
@@ -44,22 +44,19 @@ class MyCuttingsState extends State<MyCuttings> {
   Widget _buildRow(Cutting cutting) {
     return Card(
         child: Stack(children: <Widget>[
-      Row(
-        children: <Widget>[
-          CuttingCard(
-            cutting: cutting,
-            onTap: () async {
-              final EntryAction action = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CuttingInfo(cutting: cutting)));
-            },
-          )
-        ],
+      CuttingCard(
+        cutting: cutting,
+        onTap: () async {
+          final EntryAction action = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CuttingInfo(cutting: cutting)));
+        },
       )
     ]));
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

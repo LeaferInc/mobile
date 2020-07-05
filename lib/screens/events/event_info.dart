@@ -65,7 +65,7 @@ class _EventInfoState extends State<EventInfo> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image(
-                  image: AssetImage('assets/images/event.jpg'),
+                  image: _event.getPicture(),
                   fit: BoxFit.contain,
                 ),
               ),

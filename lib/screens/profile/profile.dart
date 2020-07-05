@@ -138,7 +138,7 @@ class _ProfileState extends State<Profile> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CircleAvatar(
-              backgroundImage: MemoryImage(_user.picture),
+              backgroundImage: _user.getPicture(),
               minRadius: 35.0,
               maxRadius: 50.0,
             ),

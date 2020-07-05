@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-class Plant {
+import 'package:flutter/material.dart';
+import 'package:leafer/models/image_model.dart';
+
+class Plant implements IImageModel {
   String name;
   int height;
   String humidity;
@@ -58,7 +61,7 @@ class Plant {
       'exposure': exposure,
       'toxicity': toxicity,
       'potting': potting,
-      'picture': '' // TODO: picture,
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -81,6 +84,15 @@ class Plant {
   // String toJson() => json.encode(toMap());
 
   static Plant fromJson(String source) => fromMap(json.decode(source));
+
+  @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/plant.png');
+    } else {
+      return MemoryImage(this.picture);
+    }
+  }
 
   @override
   String toString() {

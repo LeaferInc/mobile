@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
+import 'package:leafer/models/image_model.dart';
+
 /// This class represents an Event
 /// @author ddaninthe
-class Event {
+class Event implements IImageModel {
   int id;
   String name;
   String description;
@@ -42,7 +45,7 @@ class Event {
       'maxPeople': this.maxPeople,
       'latitude': this.latitude,
       'longitude': this.longitude,
-      'picture': this.picture, // TODO:
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -58,8 +61,17 @@ class Event {
       maxPeople: map['maxPeople'] as int,
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
-      picture: base64Decode(map['picture']),
+      picture: map['picture'] != null ? base64Decode(map['picture']) : null,
     );
+  }
+
+  @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/event.jpg');
+    } else {
+      return MemoryImage(this.picture);
+    }
   }
 
   @override

@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-class User {
+import 'package:flutter/material.dart';
+import 'package:leafer/models/image_model.dart';
+
+class User implements IImageModel {
   int id;
   String email;
   String username;
@@ -47,7 +50,7 @@ class User {
       'location': location,
       'birthdate': birthdate?.toIso8601String(),
       'biography': biography,
-      'picture': '', // TODO: picture,
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -73,6 +76,15 @@ class User {
   // String toJson() => json.encode(toMap());
 
   static User fromJson(String source) => fromMap(json.decode(source));
+
+  @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/plant.png');
+    } else {
+      return MemoryImage(this.picture);
+    }
+  }
 
   @override
   String toString() {
