@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/services/plant_service.dart';
+import 'package:leafer/widgets/loading_list.dart';
 import 'package:random_string/random_string.dart';
 
 class Collection extends StatefulWidget {
@@ -14,7 +15,7 @@ class Collection extends StatefulWidget {
 }
 
 class CollectionState extends State<Collection> {
-  List<Plant> _collection = new List<Plant>();
+  List<Plant> _collection;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -30,7 +31,7 @@ class CollectionState extends State<Collection> {
     });
   }
 
-  Widget _buildList(BuildContext context, List<Plant> plants) {
+  ListView _buildList(BuildContext context, List<Plant> plants) {
     return ListView.builder(
         key: Key(randomString(20)),
         padding: const EdgeInsets.all(16.0),
@@ -58,23 +59,23 @@ class CollectionState extends State<Collection> {
             ),
             Expanded(
               flex: 3,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    child: Text(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text(
                       plant.name,
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black, fontSize: 35),
+                      style: TextStyle(color: Colors.black, fontSize: 30),
                     ),
-                  ),
-                  SizedBox(
-                    child: Text(
+                    Text(
                       "Besoin en humidité : " + plant.humidity.toString(),
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.grey, fontSize: 15),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],
@@ -83,13 +84,18 @@ class CollectionState extends State<Collection> {
     ));
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(Collection.TITLE),
       ),
-      body: _buildList(context, _collection),
+      body: LoadingList(
+        emptyText: 'Aucune liste trouvée',
+        list: _collection,
+        child: _buildList(context, _collection),
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'CollectionTag',
         onPressed: () async {

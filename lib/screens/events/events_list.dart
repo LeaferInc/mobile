@@ -229,9 +229,7 @@ class _EventsListState extends State<EventsList> {
               searchType = SearchType.LOCATION;
               break;
             default:
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text('Invalid action menu'),
-              ));
+              print('Invalid action menu');
               return;
           }
 

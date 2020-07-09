@@ -5,17 +5,16 @@ import 'package:leafer/screens/cuttings/cutting_info.dart';
 import 'package:leafer/screens/events/event_info.dart';
 import 'package:leafer/services/cutting_service.dart';
 import 'package:leafer/widgets/cutting_card.dart';
+import 'package:leafer/widgets/loading_list.dart';
 import 'package:random_string/random_string.dart';
 
 class MyCuttings extends StatefulWidget {
-  static const String TITLE = 'Mes Boutures à échanger';
-
   @override
   MyCuttingsState createState() => MyCuttingsState();
 }
 
 class MyCuttingsState extends State<MyCuttings> {
-  List<Cutting> _myCuttings = new List<Cutting>();
+  List<Cutting> _myCuttings;
 
   @override
   initState() {
@@ -30,7 +29,7 @@ class MyCuttingsState extends State<MyCuttings> {
     });
   }
 
-  Widget _buildList(BuildContext context, List<Cutting> cuttings) {
+  ListView _buildList(BuildContext context, List<Cutting> cuttings) {
     return ListView.builder(
         key: Key(randomString(20)),
         padding: const EdgeInsets.all(8.0),
@@ -38,7 +37,7 @@ class MyCuttingsState extends State<MyCuttings> {
           final index = item;
           return _buildRow(cuttings.elementAt(index));
         },
-        itemCount: cuttings.length);
+        itemCount: cuttings != null ? cuttings.length : 0);
   }
 
   Widget _buildRow(Cutting cutting) {
@@ -52,17 +51,19 @@ class MyCuttingsState extends State<MyCuttings> {
               MaterialPageRoute(
                   builder: (context) => CuttingInfo(cutting: cutting)));
         },
-      )
+      ),
     ]));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(MyCuttings.TITLE),
+      //body: _buildList(context, _myCuttings),
+      body: LoadingList(
+        emptyText: 'Aucune bouture trouvée',
+        child: _buildList(context, _myCuttings),
+        list: _myCuttings,
       ),
-      body: _buildList(context, _myCuttings),
       floatingActionButton: FloatingActionButton(
         heroTag: 'MyCuttingsTag',
         child: Icon(Icons.add),

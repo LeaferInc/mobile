@@ -38,12 +38,13 @@ class _CuttingCardState extends State<CuttingCard> {
             Expanded(
               flex: 3,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   SizedBox(
                     child: Text(
                       _cutting.name,
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black, fontSize: 25),
+                      style: TextStyle(color: Colors.black, fontSize: 22),
                     ),
                   ),
                   SizedBox(
