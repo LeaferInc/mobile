@@ -39,7 +39,7 @@ class CollectionState extends State<Collection> {
           final index = item;
           return _buildRow(plants.elementAt(index));
         },
-        itemCount: plants.length);
+        itemCount: plants != null ? plants.length : 0);
   }
 
   Widget _buildRow(Plant plant) {
