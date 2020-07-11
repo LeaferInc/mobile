@@ -22,31 +22,43 @@ class _CuttingCardState extends State<CuttingCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: _onTap,
-      child: Row(
-        children: <Widget>[
-          Column(children: <Widget>[
-            Image(
-                image: NetworkImage("https://picsum.photos/200"), height: 150),
-          ]),
-          Column(
-            children: <Widget>[
-              SizedBox(
-                child: Text(
-                  _cutting.name,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.black, fontSize: 35),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image(
+                  image: _cutting.getPicture(),
                 ),
               ),
-              SizedBox(
-                child: Text(
-                  "Description : " + _cutting.description,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    child: Text(
+                      _cutting.name,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.black, fontSize: 22),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      "Description : " + _cutting.description,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

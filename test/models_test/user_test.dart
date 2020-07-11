@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leafer/models/user.dart';
 
@@ -5,6 +7,10 @@ void main() {
   group('User Model tests', () {
     DateTime birthdate = new DateTime(2020, 10, 10);
     User user;
+    String base64 =
+        "iVBORw0KGgoAAAANSUhEUgAAABkAAAAPCAYAAAARZmTlAAAAAXNSR0IArs4c6QAAAARnQU1BAAC"
+        "xjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABCSURBVDhPvc0xAQAwCMRAdNcaFqrmDVADGUOHW7Kk6txZh9GG0YbRhtG"
+        "G0YbRhtGG0YbRhtGG0dbds62SzLYPk8wDZHi4VEgXAv0AAAAASUVORK5CYII=";
 
     setUp(() {
       user = User(
@@ -16,6 +22,7 @@ void main() {
         location: 'Paris',
         biography: null,
         birthdate: birthdate,
+        picture: base64Decode(base64),
       );
     });
 
@@ -29,7 +36,7 @@ void main() {
         'birthdate': user.birthdate.toIso8601String(),
         'biography': user.biography,
         'location': user.location,
-        'pictureId': null,
+        'picture': base64,
       };
 
       User result = User.fromMap(map);
@@ -42,6 +49,7 @@ void main() {
       expect(result.location, 'Paris');
       expect(result.biography, null);
       expect(result.birthdate, birthdate);
+      expect(result.picture, base64Decode(base64));
     });
   });
 }

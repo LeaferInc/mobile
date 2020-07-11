@@ -7,11 +7,12 @@ import 'package:leafer/models/plant.dart';
 import 'package:leafer/utils/utils.dart';
 
 class PlantService {
-  static const _BASE_URL = RestDatasource.HOST + '/plant/';
+  static const _BASE_URL = RestDatasource.HOST + '/plants/';
 
   /// Parses an array of Plant from json
   static List<Plant> _parsePlants(String responseBody) {
-    final parsed = jsonDecode(responseBody)[0].cast<Map<String, dynamic>>();
+    final parsed =
+        jsonDecode(responseBody)['items'].cast<Map<String, dynamic>>();
     return parsed.map<Plant>((json) => Plant.fromMap(json)).toList();
   }
 

@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leafer/models/cutting.dart';
-import 'package:leafer/models/user.dart';
 import 'package:leafer/services/cutting_service.dart';
 import 'package:leafer/services/user_service.dart';
 
@@ -14,7 +16,9 @@ class CuttingForm extends StatefulWidget {
 class _CuttingFormState extends State<CuttingForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ImagePicker _picker = new ImagePicker();
 
+  File _image;
   Cutting _createdCutting;
   bool _isSending;
 
@@ -24,7 +28,6 @@ class _CuttingFormState extends State<CuttingForm> {
     _isSending = false;
 
     _createdCutting = Cutting(
-        createdAt: DateTime.now(),
         description: 'Cutting desctiption',
         name: 'Cutting name',
         ownerId: 0,
@@ -47,6 +50,33 @@ class _CuttingFormState extends State<CuttingForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Image:',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          color: Colors.green,
+                        ),
+                        onPressed: () async {
+                          final pickedFile = await _picker.getImage(
+                              source: ImageSource.gallery);
+                          _image = File(pickedFile.path);
+                        },
+                      ),
+                    )
+                  ],
+                ),
                 Text(
                   'Nom',
                   style: TextStyle(
@@ -104,6 +134,7 @@ class _CuttingFormState extends State<CuttingForm> {
                               SnackBar(content: Text('Ajout en cours...')));
 
                           _formKey.currentState.save();
+                          _createdCutting.picture = _image.readAsBytesSync();
 
                           Cutting created =
                               await CuttingService.saveCutting(_createdCutting);

@@ -38,7 +38,7 @@ class _EventCardState extends State<EventCard> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image(
-                image: AssetImage('assets/images/event.jpg'),
+                image: _event.getPicture(),
                 width: _size,
                 height: _size - 10.0,
                 fit: BoxFit.cover,

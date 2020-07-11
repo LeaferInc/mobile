@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:leafer/data/rest_ds.dart';
+import 'package:leafer/models/plant.dart';
 import 'package:leafer/services/plant_service.dart';
+import 'package:leafer/widgets/loading_list.dart';
 import 'package:random_string/random_string.dart';
-
-import '../../models/plant.dart';
 
 class Collection extends StatefulWidget {
   static const String TITLE = 'Plantes';
@@ -15,7 +15,7 @@ class Collection extends StatefulWidget {
 }
 
 class CollectionState extends State<Collection> {
-  List<Plant> _collection = new List<Plant>();
+  List<Plant> _collection;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -31,31 +31,15 @@ class CollectionState extends State<Collection> {
     });
   }
 
-  Widget _buildList(BuildContext context, List<Plant> plants) {
+  ListView _buildList(BuildContext context, List<Plant> plants) {
     return ListView.builder(
         key: Key(randomString(20)),
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, item) {
           final index = item;
-          // if (index >= _collection.length) {
-          //   _collection.addAll(
-          //     // List.generate(
-          //     //   newData.length,
-          //     //   (int index) => new Plant(
-          //     //       name: newData[index]["name"],
-          //     //       humidity: newData[index]["humidity"],
-          //     //       watering: newData[index]["watering"],
-          //     //       difficulty: newData[index]["difficulty"],
-          //     //       exposure: newData[index]["exposure"],
-          //     //       toxicity: newData[index]["toxicity"],
-          //     //       potting: newData[index]["potting"],
-          //     //       creationDate: newData[index]["creationDate"],
-          //     //       image: newData[index]["image"])));
-          // }
-
           return _buildRow(plants.elementAt(index));
         },
-        itemCount: plants.length);
+        itemCount: plants != null ? plants.length : 0);
   }
 
   Widget _buildRow(Plant plant) {
@@ -64,28 +48,35 @@ class CollectionState extends State<Collection> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Column(children: <Widget>[
-              Image(
-                  image: NetworkImage("https://picsum.photos/200"),
-                  height: 150),
-            ]),
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  child: Text(
-                    plant.name,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.black, fontSize: 35),
-                  ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image(
+                  image: plant.getPicture(),
                 ),
-                SizedBox(
-                  child: Text(
-                    "Besoin en humidité : " + plant.humidity.toString(),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
-                  ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text(
+                      plant.name,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ),
+                    Text(
+                      "Besoin en humidité : " + plant.humidity.toString(),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             )
           ],
         ),
@@ -93,13 +84,18 @@ class CollectionState extends State<Collection> {
     ));
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(Collection.TITLE),
       ),
-      body: _buildList(context, _collection),
+      body: LoadingList(
+        emptyText: 'Aucune liste trouvée',
+        list: _collection,
+        child: _buildList(context, _collection),
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'CollectionTag',
         onPressed: () async {

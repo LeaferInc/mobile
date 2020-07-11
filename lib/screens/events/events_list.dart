@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
-import 'package:leafer/screens/events/events-search.dart';
+import 'package:leafer/screens/events/events_search.dart';
 import 'package:leafer/services/event_service.dart';
 import 'package:leafer/widgets/event_card.dart';
 import 'package:leafer/widgets/loading.dart';
@@ -229,9 +229,7 @@ class _EventsListState extends State<EventsList> {
               searchType = SearchType.LOCATION;
               break;
             default:
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text('Invalid action menu'),
-              ));
+              print('Invalid action menu');
               return;
           }
 

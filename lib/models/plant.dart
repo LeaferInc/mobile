@@ -1,63 +1,67 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
-class Plant {
+import 'package:flutter/material.dart';
+import 'package:leafer/models/image_model.dart';
+
+class Plant implements IImageModel {
   String name;
-  int humidity;
+  int height;
+  String humidity;
   String watering;
-  int difficulty;
+  String difficulty;
   String exposure;
-  String toxicity;
+  bool toxicity;
   String potting;
-  DateTime creationDate;
-  String image;
+  Uint8List picture;
 
   Plant({
     this.name,
+    this.height,
     this.humidity,
     this.watering,
     this.difficulty,
     this.exposure,
     this.toxicity,
     this.potting,
-    this.creationDate,
-    this.image,
+    this.picture,
   });
 
   Plant copyWith({
     String name,
-    int humidity,
+    int height,
+    String humidity,
     String watering,
-    int difficulty,
+    String difficulty,
     String exposure,
-    String toxicity,
+    bool toxicity,
     String potting,
-    DateTime creationDate,
-    String image,
+    Uint8List picture,
   }) {
     return Plant(
       name: name ?? this.name,
+      height: height ?? this.height,
       humidity: humidity ?? this.humidity,
       watering: watering ?? this.watering,
       difficulty: difficulty ?? this.difficulty,
       exposure: exposure ?? this.exposure,
       toxicity: toxicity ?? this.toxicity,
       potting: potting ?? this.potting,
-      creationDate: creationDate ?? this.creationDate,
-      image: image ?? this.image,
+      picture: picture ?? this.picture,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'height': height,
       'humidity': humidity,
       'watering': watering,
       'difficulty': difficulty,
       'exposure': exposure,
       'toxicity': toxicity,
       'potting': potting,
-      'creationDate': creationDate.toString(),
-      'image': image,
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -65,15 +69,15 @@ class Plant {
     if (map == null) return null;
 
     return Plant(
-      name: map['name'],
-      humidity: map['humidity'],
-      watering: map['watering'],
-      difficulty: map['difficulty'],
-      exposure: map['exposure'],
-      toxicity: map['toxicity'],
-      potting: map['potting'],
-      creationDate: map['creationDate'],
-      image: map['image'],
+      name: map['name'] as String,
+      height: map['height'] as int,
+      humidity: map['humidity'] as String,
+      watering: map['watering'] as String,
+      difficulty: map['difficulty'] as String,
+      exposure: map['exposure'] as String,
+      toxicity: map['toxicity'] as bool,
+      potting: map['potting'] as String,
+      picture: map['picture'] == null ? null : base64Decode(map['picture']),
     );
   }
 
@@ -82,8 +86,18 @@ class Plant {
   static Plant fromJson(String source) => fromMap(json.decode(source));
 
   @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/plant.png');
+    } else {
+      return MemoryImage(this.picture);
+    }
+  }
+
+  @override
   String toString() {
-    return 'Plant(name: $name, humidity: $humidity, watering: $watering, difficulty: $difficulty, exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, image: $image)';
+    return 'Plant(name: $name, humidity: $humidity, watering: $watering, height: $height, '
+        'difficulty: $difficulty, exposure: $exposure, toxicity: $toxicity, potting: $potting, picture: $picture)';
   }
 
   @override
@@ -92,26 +106,26 @@ class Plant {
 
     return o is Plant &&
         o.name == name &&
+        o.height == height &&
         o.humidity == humidity &&
         o.watering == watering &&
         o.difficulty == difficulty &&
         o.exposure == exposure &&
         o.toxicity == toxicity &&
         o.potting == potting &&
-        o.creationDate == creationDate &&
-        o.image == image;
+        o.picture == picture;
   }
 
   @override
   int get hashCode {
     return name.hashCode ^
+        height.hashCode ^
         humidity.hashCode ^
         watering.hashCode ^
         difficulty.hashCode ^
         exposure.hashCode ^
         toxicity.hashCode ^
         potting.hashCode ^
-        creationDate.hashCode ^
-        image.hashCode;
+        picture.hashCode;
   }
 }
