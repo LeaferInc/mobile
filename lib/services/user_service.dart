@@ -7,7 +7,6 @@ import 'package:leafer/models/user.dart';
 import 'package:leafer/utils/utils.dart';
 
 class UserService {
-  static const _BASE_URL_AUTH = RestDatasource.HOST + '/auth/';
   static const _BASE_URL_USER = RestDatasource.HOST + '/user/';
 
   static User _parseUser(String responseBody) {
@@ -24,7 +23,7 @@ class UserService {
   }
 
   static Future<User> getCurrentUser() async {
-    final response = await get(_BASE_URL_AUTH + 'me',
+    final response = await get(_BASE_URL_USER + 'me',
             headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {

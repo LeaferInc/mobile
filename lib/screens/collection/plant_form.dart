@@ -34,8 +34,7 @@ class _PlantFormState extends State<PlantForm> {
         wateringFrequencySpringToSummerNumber: 0,
         wateringFrequencyAutumnToWinterNumber: 0,
         wateringFrequencyAutumnToWinter: "hour",
-        wateringFrequencySpringToSummer: "hour",
-        image: "");
+        wateringFrequencySpringToSummer: "hour");
   }
 
   @override

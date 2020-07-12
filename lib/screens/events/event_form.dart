@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/models/location.dart';
 import 'package:leafer/services/event_service.dart';
@@ -18,6 +20,9 @@ class EventForm extends StatefulWidget {
 class _EventFormState extends State<EventForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final ImagePicker _picker = new ImagePicker();
+  File _image;
 
   TextEditingController _locationController = TextEditingController();
   Event _createdEvent;
@@ -61,6 +66,33 @@ class _EventFormState extends State<EventForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Image:',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.image,
+                        color: Colors.green,
+                      ),
+                      onPressed: () async {
+                        final pickedFile =
+                            await _picker.getImage(source: ImageSource.gallery);
+                        _image = File(pickedFile.path);
+                      },
+                    ),
+                  )
+                ],
+              ),
               Text(
                 'Nom',
                 style: TextStyle(
@@ -275,6 +307,7 @@ class _EventFormState extends State<EventForm> {
                             SnackBar(content: Text('Ajout en cours...')));
 
                         _formKey.currentState.save();
+                        _createdEvent.picture = _image.readAsBytesSync();
 
                         Event created =
                             await EventService.saveEvent(_createdEvent);

@@ -1,20 +1,25 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
+import 'package:leafer/models/image_model.dart';
 
-class Cutting {
-  DateTime createdAt;
+class Cutting implements IImageModel {
   String name;
+  DateTime createdAt;
   String description;
   int ownerId;
   int viewCount;
   String tradeWith;
+  Uint8List picture;
 
-  Cutting(
-      {this.createdAt,
-      this.name,
-      this.description,
-      this.viewCount,
-      this.tradeWith,
-      this.ownerId});
+  Cutting({
+    this.name,
+    this.description,
+    this.viewCount,
+    this.tradeWith,
+    this.ownerId,
+    this.picture,
+  });
 
   Cutting copyWith({
     DateTime createdAt,
@@ -23,35 +28,38 @@ class Cutting {
     int ownerId,
     int viewCount,
     String tradeWith,
+    Uint8List picture,
   }) {
     return Cutting(
-        createdAt: createdAt ?? this.createdAt,
-        name: name ?? this.name,
-        description: description ?? this.description,
-        viewCount: viewCount ?? this.viewCount,
-        tradeWith: tradeWith ?? this.tradeWith,
-        ownerId: ownerId ?? this.ownerId);
+      name: name ?? this.name,
+      description: description ?? this.description,
+      viewCount: viewCount ?? this.viewCount,
+      tradeWith: tradeWith ?? this.tradeWith,
+      ownerId: ownerId ?? this.ownerId,
+      picture: picture ?? this.picture,
+    );
   }
 
   Map<String, dynamic> toJson() => {
-        'createdAt': createdAt.toString(),
         'name': name,
         'description': description,
         'ownerId': ownerId,
         'viewsCount': viewCount,
         'tradeWith': tradeWith,
+        'picture': this.picture == null ? base64Encode(this.picture) : null,
       };
 
   static Cutting fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
 
     return Cutting(
-        createdAt: DateTime.parse(map['createdAt'].toString()),
-        name: map['name'],
-        description: map['description'],
-        viewCount: map['viewsCount'],
-        tradeWith: map['tradeWith'],
-        ownerId: map['ownerId']);
+      name: map['name'],
+      description: map['description'],
+      viewCount: map['viewsCount'],
+      tradeWith: map['tradeWith'],
+      ownerId: map['ownerId'],
+      picture: map['picture'] != null ? base64Decode(map['picture']) : null,
+    );
   }
 
   // String toJson() => json.encode(toMap());
@@ -59,8 +67,17 @@ class Cutting {
   static Cutting fromJson(String source) => fromMap(json.decode(source));
 
   @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/cutting.png');
+    } else {
+      return MemoryImage(this.picture);
+    }
+  }
+
+  @override
   String toString() {
-    return 'Cutting(createdAt: $createdAt, name: $name, description: $description, ownerId: $ownerId, viewCount: $viewCount, tradeWith: $tradeWith)';
+    return 'Cutting(name: $name, description: $description, ownerId: $ownerId, viewCount: $viewCount, tradeWith: $tradeWith)';
   }
 
   @override
@@ -68,7 +85,6 @@ class Cutting {
     if (identical(this, o)) return true;
 
     return o is Cutting &&
-        o.createdAt == createdAt &&
         o.name == name &&
         o.description == description &&
         o.ownerId == ownerId &&
@@ -78,8 +94,7 @@ class Cutting {
 
   @override
   int get hashCode {
-    return createdAt.hashCode ^
-        name.hashCode ^
+    return name.hashCode ^
         description.hashCode ^
         ownerId.hashCode ^
         viewCount.hashCode ^

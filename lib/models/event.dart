@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:leafer/models/image_model.dart';
+
 /// This class represents an Event
 /// @author ddaninthe
-class Event {
+class Event implements IImageModel {
   int id;
   String name;
   String description;
@@ -11,6 +17,7 @@ class Event {
   int maxPeople;
   double latitude;
   double longitude;
+  Uint8List picture;
 
   Event({
     this.id,
@@ -23,6 +30,7 @@ class Event {
     this.maxPeople,
     this.latitude,
     this.longitude,
+    this.picture,
   });
 
   /// Used to create a new Event
@@ -37,6 +45,7 @@ class Event {
       'maxPeople': this.maxPeople,
       'latitude': this.latitude,
       'longitude': this.longitude,
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -52,7 +61,17 @@ class Event {
       maxPeople: map['maxPeople'] as int,
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
+      picture: map['picture'] != null ? base64Decode(map['picture']) : null,
     );
+  }
+
+  @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/event.jpg');
+    } else {
+      return MemoryImage(this.picture);
+    }
   }
 
   @override
@@ -61,6 +80,6 @@ class Event {
         '\tname: $name,\n\tdescription: $description,\n'
         '\tlocation: $location,\n\tstartDate: $startDate,\n'
         '\tendDate: $endDate,\n\tprice: $price,\n\tmaxPeople: $maxPeople,\n'
-        '\tcoordinates: ($latitude, $longitude)\n}';
+        '\tcoordinates: ($latitude, $longitude)\n\tpicture: $picture\n}';
   }
 }

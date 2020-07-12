@@ -21,9 +21,6 @@ class PlantInfo extends StatefulWidget {
 
 class _PlantInfoState extends State<PlantInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var refreshKey = GlobalKey<Material.RefreshIndicatorState>();
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
 
   Plant _plant;
   String _sensorData;

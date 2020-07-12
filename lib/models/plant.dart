@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 
 class Plant {
   int id;
@@ -15,7 +18,7 @@ class Plant {
   String potting;
   DateTime creationDate;
   int ownerId;
-  String image;
+  Uint8List picture;
 
   Plant(
       {this.id,
@@ -32,7 +35,7 @@ class Plant {
       this.potting,
       this.creationDate,
       this.ownerId,
-      this.image});
+      this.picture});
 
   Plant copyWith(
       {int id,
@@ -49,7 +52,7 @@ class Plant {
       String potting,
       DateTime creationDate,
       int ownerId,
-      String image,
+      Uint8List picture,
       int humiditySensor}) {
     return Plant(
         id: id ?? this.id,
@@ -72,7 +75,7 @@ class Plant {
         potting: potting ?? this.potting,
         creationDate: creationDate ?? this.creationDate,
         ownerId: ownerId ?? this.ownerId,
-        image: image ?? this.image);
+        picture: picture ?? this.picture);
   }
 
   Map<String, dynamic> toJson() {
@@ -93,7 +96,7 @@ class Plant {
       'potting': potting,
       'creationDate': creationDate.toString(),
       'ownerId': ownerId,
-      'image': image,
+      'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -117,7 +120,7 @@ class Plant {
       potting: map['potting'],
       creationDate: map['creationDate'],
       ownerId: map['ownerId'],
-      image: map['image'],
+      picture: map['picture'] == null ? null : base64Decode(map['picture']),
     );
   }
 
@@ -126,8 +129,17 @@ class Plant {
   static Plant fromJson(String source) => fromMap(json.decode(source));
 
   @override
+  ImageProvider getPicture() {
+    if (this.picture == null) {
+      return AssetImage('assets/images/plant.png');
+    } else {
+      return MemoryImage(this.picture);
+    }
+  }
+
+  @override
   String toString() {
-    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId, image: $image)';
+    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId, picture: $picture)';
   }
 
   @override
@@ -151,7 +163,7 @@ class Plant {
         o.potting == potting &&
         o.creationDate == creationDate &&
         o.ownerId == ownerId &&
-        o.image == image;
+        o.picture == picture;
   }
 
   @override
@@ -170,6 +182,6 @@ class Plant {
         potting.hashCode ^
         creationDate.hashCode ^
         ownerId.hashCode ^
-        image.hashCode;
+        picture.hashCode;
   }
 }
