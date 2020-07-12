@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
-  static const HOST = "http://192.168.1.29:3000";
+  static const HOST = "https://leafer-rest-api-prod.herokuapp.com";
+  // static const HOST = "http://192.168.1.29:3000";
   //static const HOST = "http://10.0.2.2:3000";
   //static const HOST = "http://192.168.43.200:3000";
   static const LOGIN_ROUTE = "/auth/login";
@@ -52,7 +53,7 @@ class RestDatasource {
         )
         .timeout(TIMEOUT)
         .then((dynamic res) {
-      return User.fromJson(res);
+      return User.fromMap(res);
     }).catchError((dynamic res) {
       throw new Exception(res["error_msg"]);
     });
