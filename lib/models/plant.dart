@@ -96,7 +96,7 @@ class Plant {
       'potting': potting,
       'creationDate': creationDate.toString(),
       'ownerId': ownerId,
-      'picture': this.picture == null ? base64Encode(this.picture) : null,
+      'picture': this.picture != null ? base64Encode(this.picture) : null,
     };
   }
 
@@ -139,7 +139,7 @@ class Plant {
 
   @override
   String toString() {
-    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId, picture: $picture)';
+    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId)';
   }
 
   @override

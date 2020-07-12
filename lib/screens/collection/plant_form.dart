@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/services/plant_service.dart';
 import 'package:leafer/services/user_service.dart';
@@ -13,7 +16,12 @@ class PlantForm extends StatefulWidget {
 class _PlantFormState extends State<PlantForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ImagePicker _picker = new ImagePicker();
+  final _difficulty = ["easy", "medium", "hard"];
+  final _wateringFrequencySpringToSummer = ["hour", "day", "week", "month"];
+  final _wateringFrequencyAutumnToWinter = ["hour", "day", "week", "month"];
 
+  File _image;
   Plant _createdPlant;
   bool _isSending;
 
@@ -52,6 +60,33 @@ class _PlantFormState extends State<PlantForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Image:',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          color: Colors.green,
+                        ),
+                        onPressed: () async {
+                          final pickedFile = await _picker.getImage(
+                              source: ImageSource.gallery);
+                          _image = File(pickedFile.path);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   'Nom',
                   style: TextStyle(
@@ -112,13 +147,188 @@ class _PlantFormState extends State<PlantForm> {
                       _createdPlant.difficulty = newValue;
                     });
                   },
-                  items: <String>["easy", "medium", "hard"]
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items:
+                      _difficulty.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value.toString()),
                     );
                   }).toList(),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Fréquence d\'arrosage',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  'Printemps - été',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Tous les',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) => _createdPlant
+                                .wateringFrequencySpringToSummerNumber =
+                            int.parse(value),
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).nextFocus(),
+                      ),
+                    ),
+                    Expanded(
+                      child: DropdownButton<String>(
+                        value: _createdPlant.wateringFrequencySpringToSummer
+                            .toString(),
+                        underline: Container(
+                          height: 2,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _createdPlant.wateringFrequencySpringToSummer =
+                                newValue;
+                          });
+                        },
+                        items: _wateringFrequencySpringToSummer
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value.toString()),
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  ],
+                ),
+                Text(
+                  'Automne - hiver',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Tous les',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) => _createdPlant
+                                .wateringFrequencyAutumnToWinterNumber =
+                            int.parse(value),
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).nextFocus(),
+                      ),
+                    ),
+                    Expanded(
+                      child: DropdownButton<String>(
+                        value: _createdPlant.wateringFrequencyAutumnToWinter
+                            .toString(),
+                        underline: Container(
+                          height: 2,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _createdPlant.wateringFrequencyAutumnToWinter =
+                                newValue;
+                          });
+                        },
+                        items: _wateringFrequencyAutumnToWinter
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value.toString()),
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'Exposition',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  maxLines: 1,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Décrire l\'exposition';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _createdPlant.exposure = value,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'Rempotage',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  maxLines: 1,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Instruction de rempotage';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _createdPlant.potting = value,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Toxique',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Switch(
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        value: _createdPlant.toxicity,
+                        onChanged: (value) => setState(() {
+                              _createdPlant.toxicity = value;
+                            })),
+                  ],
                 ),
                 SizedBox(height: 10.0),
                 Padding(
@@ -133,6 +343,7 @@ class _PlantFormState extends State<PlantForm> {
                               SnackBar(content: Text('Ajout en cours...')));
 
                           _formKey.currentState.save();
+                          _createdPlant.picture = _image.readAsBytesSync();
 
                           Plant created =
                               await PlantService.savePlant(_createdPlant);

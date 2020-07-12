@@ -46,7 +46,7 @@ class Cutting implements IImageModel {
         'ownerId': ownerId,
         'viewsCount': viewCount,
         'tradeWith': tradeWith,
-        'picture': this.picture == null ? base64Encode(this.picture) : null,
+        'picture': this.picture != null ? base64Encode(this.picture) : null,
       };
 
   static Cutting fromMap(Map<String, dynamic> map) {

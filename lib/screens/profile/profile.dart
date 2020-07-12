@@ -6,6 +6,7 @@ import 'package:leafer/models/user.dart';
 import 'package:leafer/screens/profile/edit_profile.dart';
 import 'package:leafer/services/user_service.dart';
 import 'package:leafer/widgets/loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   static const TITLE = "Profil";
@@ -92,6 +93,13 @@ class _ProfileState extends State<Profile> {
                         }
                       },
                     ),
+                    FlatButton(
+                      child: Text('Déconnecter'),
+                      onPressed: () async {
+                        await RestDatasource.logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                    )
                   ],
                 ),
               );
