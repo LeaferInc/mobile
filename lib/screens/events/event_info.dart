@@ -269,7 +269,6 @@ class _EventInfoState extends State<EventInfo> {
 
   /// Give back data to update joined events list
   Future<bool> _onBackPressed() {
-    print("Popped");
     Navigator.pop(context, _action);
     return Future.value(false);
   }

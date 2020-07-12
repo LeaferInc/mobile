@@ -6,7 +6,7 @@ import 'package:leafer/screens/collection/plant_form.dart';
 import 'package:leafer/screens/collection/plant_tab.dart';
 
 const List<PlantTab> tabs = const <PlantTab>[
-  const PlantTab(title: 'Mon jardins', icon: Icons.collections_bookmark),
+  const PlantTab(title: 'Mon jardin', icon: Icons.collections_bookmark),
   const PlantTab(title: 'Trouver des plantes', icon: Icons.shop),
 ];
 

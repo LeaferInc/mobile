@@ -108,14 +108,17 @@ class _EventsListState extends State<EventsList> {
     if (!_isLoaded()) {
       return Loading();
     } else
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _buildList(title: 'À venir', events: _incomingEvents),
-          _buildList(
-              title: 'Je participe', events: _joinedEvents, joined: true),
-          _buildList(title: 'Ça m\'intéresse', events: _events),
-        ],
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _buildList(title: 'À venir', events: _incomingEvents),
+            _buildList(
+                title: 'Je participe', events: _joinedEvents, joined: true),
+            _buildList(title: 'Tous les évènements', events: _events),
+          ],
+        ),
       );
   }
 
@@ -161,7 +164,8 @@ class _EventsListState extends State<EventsList> {
                       padding: const EdgeInsets.all(2.0),
                       child: EventCard(
                         event: events[index],
-                        size: MediaQuery.of(context).size.width * 0.25,
+                        //size: MediaQuery.of(context).size.width * 0.25,
+                        size: 60.0,
                         onTap: () async {
                           final EventAction action = await Navigator.push(
                             context,

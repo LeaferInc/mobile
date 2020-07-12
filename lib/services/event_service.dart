@@ -11,9 +11,8 @@ class EventService {
 
   /// Parses an array of Event from json
   static List<Event> _parseEvents(String responseBody) {
-    if (jsonDecode(responseBody)["items"] != null) {
-      final parsed =
-          jsonDecode(responseBody)["items"].cast<Map<String, dynamic>>();
+    if (jsonDecode(responseBody) != null) {
+      final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
       return parsed.map<Event>((json) => Event.fromMap(json)).toList();
     } else {
       return [];
@@ -95,9 +94,6 @@ class EventService {
     final response = await delete(_BASE_URL + id.toString(),
             headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
-    print(response.statusCode);
-    print(response.body);
-    print(response.reasonPhrase);
     return response.statusCode;
   }
 }
