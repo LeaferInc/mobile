@@ -48,7 +48,7 @@ class _PlantInfoState extends State<PlantInfo> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image(
-                      image: NetworkImage("https://picsum.photos/200"),
+                      image: _plant.getPicture(),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -98,10 +98,23 @@ class _PlantInfoState extends State<PlantInfo> {
                           } else if (value.hasData) {
                             _sensorData = value.data;
                             if (_sensorData == "") {
-                              return Text(
-                                _sensorData,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RaisedButton(
+                                    onPressed: () async {
+                                      PlantCollection _plantCollection =
+                                          await PlantCollectionService
+                                              .findByPlantAndUser(_plant.id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SensorAssociation(_plant,
+                                                      _plantCollection)));
+                                    },
+                                    elevation: 0.0,
+                                    child: Text(
+                                        'Associer un capteur d\'humidité')),
                               );
                             } else {
                               return Text(
@@ -117,23 +130,6 @@ class _PlantInfoState extends State<PlantInfo> {
                             return CircularProgressIndicator();
                           }
                         }),
-                  ),
-                  SizedBox(height: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                        onPressed: () async {
-                          PlantCollection _plantCollection =
-                              await PlantCollectionService.findByPlantAndUser(
-                                  _plant.id);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SensorAssociation(
-                                      _plant, _plantCollection)));
-                        },
-                        elevation: 0.0,
-                        child: Text('Associer un capteur d\'humidité')),
                   ),
                   SizedBox(height: 10.0),
                   Padding(

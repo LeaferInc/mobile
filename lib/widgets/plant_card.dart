@@ -39,7 +39,10 @@ class _PlantCardState extends State<PlantCard> {
         children: <Widget>[
           Column(children: <Widget>[
             Image(
-                image: NetworkImage("https://picsum.photos/200"), height: 150),
+              image: _plant.getPicture(),
+              height: 150,
+              fit: BoxFit.cover,
+            ),
           ]),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

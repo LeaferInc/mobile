@@ -52,9 +52,10 @@ class PlantService {
 
   /// Post a Plant to save it
   static Future<Plant> savePlant(Plant plant) async {
-    final response =
-        await post(_BASE_URL, headers: Utils.headers, body: jsonEncode(plant))
-            .timeout(RestDatasource.TIMEOUT);
+    final response = await post(_BASE_URL,
+            headers: await Utils.getAuthorizationHeaders(),
+            body: jsonEncode(plant))
+        .timeout(RestDatasource.TIMEOUT);
     User currentUser = await UserService.getCurrentUser();
     if (response.statusCode == 201) {
       Plant res = await compute(_parsePlant, response.body);
