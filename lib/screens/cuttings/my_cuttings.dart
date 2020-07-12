@@ -46,7 +46,7 @@ class MyCuttingsState extends State<MyCuttings> {
       CuttingCard(
         cutting: cutting,
         onTap: () async {
-          final EntryAction action = await Navigator.push(
+          final EventAction action = await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => CuttingInfo(cutting: cutting)));

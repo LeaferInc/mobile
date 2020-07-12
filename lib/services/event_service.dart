@@ -89,4 +89,11 @@ class EventService {
     }
     return null;
   }
+
+  static Future<int> deleteEvent(int id) async {
+    final response = await delete(_BASE_URL + id.toString(),
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    return response.statusCode;
+  }
 }
