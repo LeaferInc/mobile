@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:leafer/models/user.dart';
-import 'package:leafer/services/user_service.dart';
-
 class Cutting {
   DateTime createdAt;
   String name;

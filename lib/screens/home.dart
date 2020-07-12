@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafer/screens/collection/collection.dart';
+import 'package:leafer/screens/collection/plants_home.dart';
 import 'package:leafer/screens/cuttings/cutting_home.dart';
 import 'package:leafer/screens/events/events_list.dart';
 import 'package:leafer/screens/profile/profile.dart';
@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<Widget> _children = [
-    Collection(),
+    PlantsHome(),
     EventsList(),
     Profile(),
     CuttingHome()
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.collections),
-            title: Text(Collection.TITLE),
+            title: Text(PlantsHome.TITLE),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.event),

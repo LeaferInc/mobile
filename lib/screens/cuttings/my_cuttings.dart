@@ -1,14 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:leafer/models/cutting.dart';
 import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/cuttings/cutting_info.dart';
-import 'package:leafer/screens/events/event_info.dart';
 import 'package:leafer/services/cutting_service.dart';
 import 'package:leafer/widgets/cutting_card.dart';
 import 'package:random_string/random_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyCuttings extends StatefulWidget {
   static const String TITLE = 'Mes Boutures à échanger';
@@ -52,7 +48,7 @@ class MyCuttingsState extends State<MyCuttings> {
           CuttingCard(
             cutting: cutting,
             onTap: () async {
-              final EntryAction action = await Navigator.push(
+              await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => CuttingInfo(cutting: cutting)));
@@ -65,9 +61,6 @@ class MyCuttingsState extends State<MyCuttings> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(MyCuttings.TITLE),
-      ),
       body: _buildList(context, _myCuttings),
       floatingActionButton: FloatingActionButton(
         heroTag: 'MyCuttingsTag',

@@ -1,14 +1,8 @@
-import 'dart:ui';
-
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:leafer/models/cutting.dart';
-import 'package:leafer/screens/cuttings/cutting_tab.dart';
-import 'package:leafer/screens/events/event_info.dart';
 import 'package:leafer/services/cutting_service.dart';
 import 'package:leafer/widgets/cutting_card.dart';
 import 'package:random_string/random_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cutting_info.dart';
 
@@ -55,7 +49,7 @@ class CuttingExchangeState extends State<CuttingExchange> {
             CuttingCard(
               cutting: cutting,
               onTap: () async {
-                final EntryAction action = await Navigator.push(
+                await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CuttingInfo(cutting: cutting)));
@@ -69,9 +63,6 @@ class CuttingExchangeState extends State<CuttingExchange> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(CuttingExchange.TITLE),
-      ),
       body: _buildList(context, _myCuttings),
     );
   }
