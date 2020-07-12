@@ -1,8 +1,7 @@
 import 'package:leafer/data/rest_ds.dart';
-import 'package:leafer/models/user.dart';
 
 abstract class LoginScreenContract {
-  void onLoginSuccess(User user);
+  void onLoginSuccess();
 
   void onLoginError(String errorTxt);
 }
@@ -14,11 +13,11 @@ class LoginScreenPresenter {
   LoginScreenPresenter(this._view);
 
   doLogin(String username, String password) {
-    api.login(username, password).then((User user) {
-      _view.onLoginSuccess(user);
+    api.login(username, password).then((_) {
+      _view.onLoginSuccess();
     }).catchError((Object error) {
       _view.onLoginError(error.toString());
-      print(error);
+      print('doLogin(), error: $error');
     });
   }
 }

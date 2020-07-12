@@ -38,7 +38,7 @@ class _CuttingInfoState extends State<CuttingInfo> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image(
-                    image: NetworkImage("https://picsum.photos/200"),
+                    image: _cutting.getPicture(),
                     fit: BoxFit.contain,
                   ),
                 ),

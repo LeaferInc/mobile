@@ -21,11 +21,14 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
   datetime_picker_formfield: ^1.0.0
   flutter_picker: ^1.1.3
   flutter_spinkit: ^4.1.2
   geolocator: ^5.3.1
   http: ^0.12.0+4
+  image_picker: ^0.6.7+3
   path_provider: ^1.6.7
   permission_handler: ^5.0.0+hotfix.6
   popup_menu: ^1.0.5
@@ -34,10 +37,16 @@ dependencies:
   random_words: ^1.0.2
   shared_preferences: ^0.5.7+2
   flappy_search_bar: ^1.7.2
+  pull_to_refresh: ^1.6.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 dependency_overrides:
   intl: ^0.16.1
@@ -59,8 +68,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/plants_test_sample.json
     - assets/images/event.jpg
+    - assets/images/cutting.png
+    - assets/images/plant.png
+    - assets/images/user.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

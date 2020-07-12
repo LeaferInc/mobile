@@ -6,6 +6,7 @@ import 'package:leafer/models/user.dart';
 import 'package:leafer/screens/profile/edit_profile.dart';
 import 'package:leafer/services/user_service.dart';
 import 'package:leafer/widgets/loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   static const TITLE = "Profil";
@@ -92,6 +93,13 @@ class _ProfileState extends State<Profile> {
                         }
                       },
                     ),
+                    FlatButton(
+                      child: Text('Déconnecter'),
+                      onPressed: () async {
+                        await RestDatasource.logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                    )
                   ],
                 ),
               );
@@ -110,7 +118,7 @@ class _ProfileState extends State<Profile> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
         child: _buildScreen(),
       ),
     );
@@ -135,9 +143,13 @@ class _ProfileState extends State<Profile> {
         );
       } else {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            CircleAvatar(
+              backgroundImage: _user.getPicture(),
+              minRadius: 35.0,
+              maxRadius: 50.0,
+            ),
             _displayData(title: 'Nom utilisateur', data: _user.username),
             _displayData(title: 'Email', data: _user.email),
             _displayData(title: 'Prénom', data: _user.firstname),

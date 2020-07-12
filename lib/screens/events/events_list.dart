@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/screens/events/event_form.dart';
-import 'package:leafer/screens/events/events-search.dart';
+import 'package:leafer/screens/events/events_search.dart';
 import 'package:leafer/services/event_service.dart';
 import 'package:leafer/widgets/event_card.dart';
 import 'package:leafer/widgets/loading.dart';
@@ -44,7 +44,6 @@ class _EventsListState extends State<EventsList> {
   void _getEvents() async {
     List<Event> data = await EventService.getEvents();
     setState(() {
-      // TODO: get favorites
       _events = data;
     });
   }
@@ -109,14 +108,17 @@ class _EventsListState extends State<EventsList> {
     if (!_isLoaded()) {
       return Loading();
     } else
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _buildList(title: 'À venir', events: _incomingEvents),
-          _buildList(
-              title: 'Je participe', events: _joinedEvents, joined: true),
-          _buildList(title: 'Ça m\'intéresse', events: _events),
-        ],
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _buildList(title: 'À venir', events: _incomingEvents),
+            _buildList(
+                title: 'Je participe', events: _joinedEvents, joined: true),
+            _buildList(title: 'Tous les évènements', events: _events),
+          ],
+        ),
       );
   }
 
@@ -162,9 +164,10 @@ class _EventsListState extends State<EventsList> {
                       padding: const EdgeInsets.all(2.0),
                       child: EventCard(
                         event: events[index],
-                        size: MediaQuery.of(context).size.width * 0.25,
+                        //size: MediaQuery.of(context).size.width * 0.25,
+                        size: 60.0,
                         onTap: () async {
-                          final EntryAction action = await Navigator.push(
+                          final EventAction action = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => EventInfo(
@@ -174,22 +177,44 @@ class _EventsListState extends State<EventsList> {
                             ),
                           );
 
-                          // No action done, no need to update screen
-                          if (action == EntryAction.NONE) return;
+                          switch (action) {
+                            case EventAction.JOINED:
+                              setState(() {
+                                _joinedEvents.add(events[index]);
+                              });
+                              break;
+                            case EventAction.LEFT:
+                              int deleteIndex = _indexOfEvent(
+                                  eventId: events[index].id,
+                                  list: _joinedEvents);
+                              setState(() {
+                                _joinedEvents.removeAt(deleteIndex);
+                              });
+                              break;
+                            case EventAction.DELETED:
+                              // Event deleted
+                              int deleteJoinedIndex = _indexOfEvent(
+                                  eventId: events[index].id,
+                                  list: _joinedEvents);
+                              int deleteIncomingIndex = _indexOfEvent(
+                                  eventId: events[index].id,
+                                  list: _incomingEvents);
+                              int deleteAllIndex = _indexOfEvent(
+                                  eventId: events[index].id, list: _events);
 
-                          if (action == EntryAction.JOINED) {
-                            setState(() {
-                              _joinedEvents.add(events[index]);
-                            });
-                          } else {
-                            int deleteIndex = -1;
-                            for (Event e in _joinedEvents) {
-                              deleteIndex++;
-                              if (e.id == events[index].id) break;
-                            }
-                            setState(() {
-                              _joinedEvents.removeAt(deleteIndex);
-                            });
+                              setState(() {
+                                if (deleteJoinedIndex >= 0)
+                                  _joinedEvents.removeAt(deleteJoinedIndex);
+                                if (deleteIncomingIndex >= 0)
+                                  _incomingEvents.removeAt(deleteIncomingIndex);
+                                if (deleteAllIndex >= 0)
+                                  _events.removeAt(deleteAllIndex);
+                              });
+                              break;
+                            case EventAction.NONE:
+                            // No action done, no need to update screen
+                            default:
+                              return;
                           }
                         },
                       ),
@@ -199,6 +224,23 @@ class _EventsListState extends State<EventsList> {
               ),
       ],
     );
+  }
+
+  /// Returns the index of the event in the list
+  /// Or -1 if not found
+  int _indexOfEvent({@required int eventId, @required List<Event> list}) {
+    bool found = false;
+    int index = -1;
+
+    for (Event e in list) {
+      index++;
+      if (e.id == eventId) {
+        found = true;
+        break;
+      }
+    }
+
+    return found ? index : -1;
   }
 
   /// Displays a search dialog to start a Search-for-Events-Activity
@@ -229,9 +271,7 @@ class _EventsListState extends State<EventsList> {
               searchType = SearchType.LOCATION;
               break;
             default:
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text('Invalid action menu'),
-              ));
+              print('Invalid action menu');
               return;
           }
 

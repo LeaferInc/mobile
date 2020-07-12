@@ -11,8 +11,12 @@ class EventService {
 
   /// Parses an array of Event from json
   static List<Event> _parseEvents(String responseBody) {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Event>((json) => Event.fromMap(json)).toList();
+    if (jsonDecode(responseBody) != null) {
+      final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+      return parsed.map<Event>((json) => Event.fromMap(json)).toList();
+    } else {
+      return [];
+    }
   }
 
   /// Parses a single Event from json
@@ -84,5 +88,12 @@ class EventService {
       return compute(_parseEvent, response.body);
     }
     return null;
+  }
+
+  static Future<int> deleteEvent(int id) async {
+    final response = await delete(_BASE_URL + id.toString(),
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    return response.statusCode;
   }
 }

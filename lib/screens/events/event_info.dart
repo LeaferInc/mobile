@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leafer/models/event.dart';
 import 'package:leafer/services/entry_service.dart';
+import 'package:leafer/services/event_service.dart';
 
 /// This class shows the details of a single Event
 class EventInfo extends StatefulWidget {
@@ -15,17 +16,18 @@ class EventInfo extends StatefulWidget {
 }
 
 /// User action on the event
-enum EntryAction {
+enum EventAction {
   JOINED,
   LEFT,
   NONE,
+  DELETED,
 }
 
 class _EventInfoState extends State<EventInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _timeFormat = DateFormat('EEE d MMMM y à HH:mm', 'fr-FR');
 
-  EntryAction _action;
+  EventAction _action;
   Event _event;
   bool _joined;
 
@@ -34,7 +36,7 @@ class _EventInfoState extends State<EventInfo> {
   @override
   void initState() {
     super.initState();
-    _action = EntryAction.NONE;
+    _action = EventAction.NONE;
 
     if (!_joined) {
       _getEventState();
@@ -50,12 +52,74 @@ class _EventInfoState extends State<EventInfo> {
 
   @override
   Widget build(BuildContext context) {
+    if (_action == EventAction.DELETED) {
+      Navigator.of(context).pop(_action);
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Événements'),
+        ),
+      );
+    }
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Événements'),
+          actions: <Widget>[
+            PopupMenuButton(
+              onSelected: (item) {
+                return showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Supprimmer'),
+                    content: Text(
+                        'Voulez-vous vraiment supprimer cet évènement ? Cette action est irréversible.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Annuler'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Supprimer'),
+                        onPressed: () async {
+                          int res = await EventService.deleteEvent(_event.id);
+                          Navigator.pop(context);
+                          if (res == 401) {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'Vous n\'êtes pas l\'organisateur de cet évènement'),
+                            ));
+                          } else if (res != 200) {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content:
+                                  Text('Impossible de supprimer l\'évènement'),
+                            ));
+                          } else {
+                            setState(() {
+                              this._action = EventAction.DELETED;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    value: 0,
+                    child: Text(
+                      'Supprimer',
+                    ),
+                  ),
+                ];
+              },
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -65,7 +129,7 @@ class _EventInfoState extends State<EventInfo> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image(
-                  image: AssetImage('assets/images/event.jpg'),
+                  image: _event.getPicture(),
                   fit: BoxFit.contain,
                 ),
               ),
@@ -178,7 +242,7 @@ class _EventInfoState extends State<EventInfo> {
             if (code == 200) {
               infoMessage = 'Événement quitté !';
               _joined = false;
-              _action = EntryAction.LEFT;
+              _action = EventAction.LEFT;
             } else {
               infoMessage = 'Erreur...';
             }
@@ -187,7 +251,7 @@ class _EventInfoState extends State<EventInfo> {
             if (code == 201) {
               infoMessage = 'Événement rejoint !';
               _joined = true;
-              _action = EntryAction.JOINED;
+              _action = EventAction.JOINED;
             } else if (code == 403) {
               infoMessage = 'Événement complet !';
             }
