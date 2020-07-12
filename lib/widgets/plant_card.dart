@@ -103,7 +103,7 @@ class _PlantCardState extends State<PlantCard> {
       String s = await SensorService.getSensorData(p.id);
       return s;
     } else {
-      return "Pas de capteur associé";
+      return "";
     }
   }
 }
