@@ -11,8 +11,13 @@ class EventService {
 
   /// Parses an array of Event from json
   static List<Event> _parseEvents(String responseBody) {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Event>((json) => Event.fromMap(json)).toList();
+    if (jsonDecode(responseBody)["items"] != null) {
+      final parsed =
+          jsonDecode(responseBody)["items"].cast<Map<String, dynamic>>();
+      return parsed.map<Event>((json) => Event.fromMap(json)).toList();
+    } else {
+      return [];
+    }
   }
 
   /// Parses a single Event from json

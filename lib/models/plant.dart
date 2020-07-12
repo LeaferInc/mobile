@@ -2,65 +2,100 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:leafer/models/image_model.dart';
 
-class Plant implements IImageModel {
+class Plant {
+  int id;
   String name;
   int height;
   String humidity;
-  String watering;
   String difficulty;
+  int wateringFrequencySpringToSummerNumber;
+  int wateringFrequencyAutumnToWinterNumber;
+  String wateringFrequencySpringToSummer;
+  String wateringFrequencyAutumnToWinter;
   String exposure;
   bool toxicity;
   String potting;
+  DateTime creationDate;
+  int ownerId;
   Uint8List picture;
 
-  Plant({
-    this.name,
-    this.height,
-    this.humidity,
-    this.watering,
-    this.difficulty,
-    this.exposure,
-    this.toxicity,
-    this.potting,
-    this.picture,
-  });
+  Plant(
+      {this.id,
+      this.name,
+      this.height,
+      this.humidity,
+      this.difficulty,
+      this.wateringFrequencySpringToSummerNumber,
+      this.wateringFrequencyAutumnToWinterNumber,
+      this.wateringFrequencySpringToSummer,
+      this.wateringFrequencyAutumnToWinter,
+      this.exposure,
+      this.toxicity,
+      this.potting,
+      this.creationDate,
+      this.ownerId,
+      this.picture});
 
-  Plant copyWith({
-    String name,
-    int height,
-    String humidity,
-    String watering,
-    String difficulty,
-    String exposure,
-    bool toxicity,
-    String potting,
-    Uint8List picture,
-  }) {
+  Plant copyWith(
+      {int id,
+      String name,
+      int height,
+      String humidity,
+      String difficulty,
+      int wateringFrequencySpringToSummerNumber,
+      int wateringFrequencyAutumnToWinterNumber,
+      String wateringFrequencySpringToSummer,
+      String wateringFrequencyAutumnToWinter,
+      String exposure,
+      String toxicity,
+      String potting,
+      DateTime creationDate,
+      int ownerId,
+      Uint8List picture,
+      int humiditySensor}) {
     return Plant(
-      name: name ?? this.name,
-      height: height ?? this.height,
-      humidity: humidity ?? this.humidity,
-      watering: watering ?? this.watering,
-      difficulty: difficulty ?? this.difficulty,
-      exposure: exposure ?? this.exposure,
-      toxicity: toxicity ?? this.toxicity,
-      potting: potting ?? this.potting,
-      picture: picture ?? this.picture,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        height: height ?? this.height,
+        humidity: humidity ?? this.humidity,
+        difficulty: difficulty ?? this.difficulty,
+        wateringFrequencySpringToSummerNumber:
+            wateringFrequencySpringToSummerNumber ??
+                this.wateringFrequencySpringToSummerNumber,
+        wateringFrequencyAutumnToWinterNumber:
+            wateringFrequencyAutumnToWinterNumber ??
+                this.wateringFrequencyAutumnToWinterNumber,
+        wateringFrequencySpringToSummer: wateringFrequencySpringToSummer ??
+            this.wateringFrequencySpringToSummer,
+        wateringFrequencyAutumnToWinter: wateringFrequencyAutumnToWinter ??
+            this.wateringFrequencyAutumnToWinter,
+        exposure: exposure ?? this.exposure,
+        toxicity: toxicity ?? this.toxicity,
+        potting: potting ?? this.potting,
+        creationDate: creationDate ?? this.creationDate,
+        ownerId: ownerId ?? this.ownerId,
+        picture: picture ?? this.picture);
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'height': height,
       'humidity': humidity,
-      'watering': watering,
       'difficulty': difficulty,
+      'wateringFrequencySpringToSummerNumber':
+          wateringFrequencySpringToSummerNumber,
+      'wateringFrequencyAutumnToWinterNumber':
+          wateringFrequencyAutumnToWinterNumber,
+      'wateringFrequencySpringToSummer': wateringFrequencySpringToSummer,
+      'wateringFrequencyAutumnToWinter': wateringFrequencyAutumnToWinter,
       'exposure': exposure,
       'toxicity': toxicity,
       'potting': potting,
+      'creationDate': creationDate.toString(),
+      'ownerId': ownerId,
       'picture': this.picture == null ? base64Encode(this.picture) : null,
     };
   }
@@ -69,14 +104,22 @@ class Plant implements IImageModel {
     if (map == null) return null;
 
     return Plant(
-      name: map['name'] as String,
-      height: map['height'] as int,
-      humidity: map['humidity'] as String,
-      watering: map['watering'] as String,
-      difficulty: map['difficulty'] as String,
-      exposure: map['exposure'] as String,
-      toxicity: map['toxicity'] as bool,
-      potting: map['potting'] as String,
+      id: map['id'],
+      name: map['name'],
+      height: map['height'],
+      humidity: map['humidity'],
+      difficulty: map['difficulty'],
+      wateringFrequencySpringToSummerNumber:
+          map['wateringFrequencySpringToSummerNumber'],
+      wateringFrequencyAutumnToWinterNumber:
+          map['wateringFrequencyAutumnToWinterNumber'],
+      wateringFrequencySpringToSummer: map['wateringFrequencySpringToSummer'],
+      wateringFrequencyAutumnToWinter: map['wateringFrequencyAutumnToWinter'],
+      exposure: map['exposure'],
+      toxicity: map['toxicity'],
+      potting: map['potting'],
+      creationDate: map['creationDate'],
+      ownerId: map['ownerId'],
       picture: map['picture'] == null ? null : base64Decode(map['picture']),
     );
   }
@@ -96,8 +139,7 @@ class Plant implements IImageModel {
 
   @override
   String toString() {
-    return 'Plant(name: $name, humidity: $humidity, watering: $watering, height: $height, '
-        'difficulty: $difficulty, exposure: $exposure, toxicity: $toxicity, potting: $potting, picture: $picture)';
+    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId, picture: $picture)';
   }
 
   @override
@@ -105,27 +147,41 @@ class Plant implements IImageModel {
     if (identical(this, o)) return true;
 
     return o is Plant &&
+        o.id == id &&
         o.name == name &&
         o.height == height &&
         o.humidity == humidity &&
-        o.watering == watering &&
         o.difficulty == difficulty &&
+        o.wateringFrequencySpringToSummerNumber ==
+            wateringFrequencySpringToSummerNumber &&
+        o.wateringFrequencyAutumnToWinterNumber ==
+            wateringFrequencyAutumnToWinterNumber &&
+        o.wateringFrequencySpringToSummer == wateringFrequencySpringToSummer &&
+        o.wateringFrequencyAutumnToWinter == wateringFrequencyAutumnToWinter &&
         o.exposure == exposure &&
         o.toxicity == toxicity &&
         o.potting == potting &&
+        o.creationDate == creationDate &&
+        o.ownerId == ownerId &&
         o.picture == picture;
   }
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return id.hashCode ^
+        name.hashCode ^
         height.hashCode ^
         humidity.hashCode ^
-        watering.hashCode ^
         difficulty.hashCode ^
+        wateringFrequencySpringToSummerNumber.hashCode ^
+        wateringFrequencyAutumnToWinterNumber.hashCode ^
+        wateringFrequencySpringToSummer.hashCode ^
+        wateringFrequencyAutumnToWinter.hashCode ^
         exposure.hashCode ^
         toxicity.hashCode ^
         potting.hashCode ^
+        creationDate.hashCode ^
+        ownerId.hashCode ^
         picture.hashCode;
   }
 }

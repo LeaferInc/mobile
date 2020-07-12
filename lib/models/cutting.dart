@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:leafer/models/image_model.dart';
 
 class Cutting implements IImageModel {
   String name;
+  DateTime createdAt;
   String description;
   int ownerId;
   int viewCount;

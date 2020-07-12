@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:leafer/models/plant.dart';
+import 'package:leafer/models/plant_collection.dart';
 import 'package:leafer/screens/cuttings/cutting_form.dart';
 import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/events/events_search.dart';
 import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen.dart';
+import 'package:leafer/screens/sensor/sensor_association.dart';
 import 'package:leafer/screens/signin/sign_in.dart';
 
 /// Locks the screen to portrait orientation
@@ -30,6 +33,9 @@ class LeaferApp extends StatelessWidget {
         '/login': (BuildContext context) => new LoginScreen(),
         '/profile': (BuildContext context) => new Home(initialIndex: 2),
         '/signIn': (BuildContext context) => new SignIn(),
+        '/cuttings/create': (BuildContext context) => new CuttingForm(),
+        '/sensorAssociation': (BuildContext context) =>
+            new SensorAssociation(new Plant(), new PlantCollection())
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
