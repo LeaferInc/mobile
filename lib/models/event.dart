@@ -45,7 +45,7 @@ class Event implements IImageModel {
       'maxPeople': this.maxPeople,
       'latitude': this.latitude,
       'longitude': this.longitude,
-      'picture': this.picture == null ? base64Encode(this.picture) : null,
+      'picture': this.picture != null ? base64Encode(this.picture) : null,
     };
   }
 

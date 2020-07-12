@@ -11,13 +11,13 @@ import 'package:leafer/services/user_service.dart';
 import 'package:leafer/utils/utils.dart';
 
 class PlantService {
-  static const _BASE_URL = RestDatasource.HOST + '/plant/';
+  static const _BASE_URL = RestDatasource.HOST + '/plants';
 
   /// Parses an array of Plant from json
   static List<Plant> _parsePlants(String responseBody) {
-    if (jsonDecode(responseBody)["items"] != null) {
+    if (jsonDecode(responseBody)['items'] != null) {
       final parsed =
-          jsonDecode(responseBody)["items"].cast<Map<String, dynamic>>();
+          jsonDecode(responseBody)['items'].cast<Map<String, dynamic>>();
       return parsed.map<Plant>((json) => Plant.fromMap(json)).toList();
     } else {
       return [];
@@ -31,7 +31,7 @@ class PlantService {
 
   /// Get all Plants of the user from userId
   static Future<List<Plant>> getPlants() async {
-    final response = await get(_BASE_URL + 'my',
+    final response = await get(_BASE_URL + '/my',
             headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
@@ -69,7 +69,7 @@ class PlantService {
 
   /// Get all the plants of my collection
   static Future<List<Plant>> getMyGarden() async {
-    final response = await get(_BASE_URL + 'my-garden',
+    final response = await get(_BASE_URL + '/my-garden',
             headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
@@ -80,7 +80,7 @@ class PlantService {
 
   /// Get all the plants of my collection
   static Future<List<Plant>> getAllExceptOwner() async {
-    final response = await get(_BASE_URL + 'findAllExceptOwner',
+    final response = await get(_BASE_URL + '/findAllExceptOwner',
             headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {

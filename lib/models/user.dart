@@ -50,7 +50,7 @@ class User implements IImageModel {
       'location': location,
       'birthdate': birthdate?.toIso8601String(),
       'biography': biography,
-      'picture': this.picture == null ? base64Encode(this.picture) : null,
+      'picture': this.picture != null ? base64Encode(this.picture) : null,
     };
   }
 

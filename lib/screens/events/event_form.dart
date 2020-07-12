@@ -37,9 +37,9 @@ class _EventFormState extends State<EventForm> {
     DateTime tomorrow = DateTime.now().add(Duration(days: 1));
     tomorrow = tomorrow.subtract(Duration(minutes: tomorrow.minute));
     _createdEvent = Event(
-        name: 'Nom Test Flutter',
-        description: 'Description de l\'évènement',
-        location: '18 rue de la Tamise',
+        name: '',
+        description: '',
+        location: '',
         startDate: tomorrow,
         endDate: tomorrow.add(Duration(hours: 4)),
         price: 0,

@@ -96,7 +96,7 @@ class Plant {
       'potting': potting,
       'creationDate': creationDate.toString(),
       'ownerId': ownerId,
-      'picture': this.picture == null ? base64Encode(this.picture) : null,
+      'picture': this.picture != null ? base64Encode(this.picture) : null,
     };
   }
 
