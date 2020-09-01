@@ -185,32 +185,20 @@ class _EventsListState extends State<EventsList> {
                               });
                               break;
                             case EventAction.LEFT:
-                              int deleteIndex = _indexOfEvent(
-                                  eventId: events[index].id,
-                                  list: _joinedEvents);
                               setState(() {
-                                _joinedEvents.removeAt(deleteIndex);
+                                _joinedEvents.removeWhere(
+                                    (e) => e.id == events[index].id);
                               });
                               break;
                             case EventAction.DELETED:
                               // Event deleted
-                              int deleteJoinedIndex = _indexOfEvent(
-                                  eventId: events[index].id,
-                                  list: _joinedEvents);
-                              int deleteIncomingIndex = _indexOfEvent(
-                                  eventId: events[index].id,
-                                  list: _incomingEvents);
-                              int deleteAllIndex = _indexOfEvent(
-                                  eventId: events[index].id,
-                                  list: _organizedEvents);
-
                               setState(() {
-                                if (deleteJoinedIndex >= 0)
-                                  _joinedEvents.removeAt(deleteJoinedIndex);
-                                if (deleteIncomingIndex >= 0)
-                                  _incomingEvents.removeAt(deleteIncomingIndex);
-                                if (deleteAllIndex >= 0)
-                                  _organizedEvents.removeAt(deleteAllIndex);
+                                _joinedEvents.removeWhere(
+                                    (e) => e.id == events[index].id);
+                                _incomingEvents.removeWhere(
+                                    (e) => e.id == events[index].id);
+                                _organizedEvents.removeWhere(
+                                    (e) => e.id == events[index].id);
                               });
                               break;
                             case EventAction.NONE:
@@ -226,23 +214,6 @@ class _EventsListState extends State<EventsList> {
               ),
       ],
     );
-  }
-
-  /// Returns the index of the event in the list
-  /// Or -1 if not found
-  int _indexOfEvent({@required int eventId, @required List<Event> list}) {
-    bool found = false;
-    int index = -1;
-
-    for (Event e in list) {
-      index++;
-      if (e.id == eventId) {
-        found = true;
-        break;
-      }
-    }
-
-    return found ? index : -1;
   }
 
   /// Displays a search dialog to start a Search-for-Events-Activity

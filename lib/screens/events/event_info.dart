@@ -30,6 +30,7 @@ class _EventInfoState extends State<EventInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _timeFormat = DateFormat('EEE d MMMM y à HH:mm', 'fr-FR');
 
+  bool _initialJoinedState; // initialJoined state
   EventAction _action;
   int _eventId;
   Event _event;
@@ -51,6 +52,7 @@ class _EventInfoState extends State<EventInfo> {
     Event data = await EventService.getEventById(_eventId);
     setState(() {
       _event = data;
+      _initialJoinedState = _event.joined;
     });
   }
 
@@ -257,7 +259,7 @@ class _EventInfoState extends State<EventInfo> {
   bool _isOrganizer() {
     return _currentUser != null &&
         _event != null &&
-        _currentUser.id == _event.id;
+        _currentUser.id == _event.organizer;
   }
 
   /// Build a RaisedButton depending on the joined state
@@ -303,7 +305,10 @@ class _EventInfoState extends State<EventInfo> {
             if (code == 201) {
               infoMessage = 'Événement rejoint !';
               _event.joined = true;
-              _action = EventAction.JOINED;
+              _action = _initialJoinedState
+                  ? EventAction.NONE
+                  : EventAction
+                      .JOINED; // No changes if event was already joined
               _event.entrants.add(new Entrant(
                 id: _currentUser.id,
                 username: _currentUser.username,
