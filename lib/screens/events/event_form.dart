@@ -282,7 +282,7 @@ class _EventFormState extends State<EventForm> {
                         validator: (value) {
                           try {
                             int nb = int.parse(value);
-                            if (nb < 0) return 'Nombre incorrect';
+                            if (nb < 1) return 'Pas assez de participants';
                           } on FormatException {
                             return 'Nombre incorrect';
                           }
@@ -302,6 +302,22 @@ class _EventFormState extends State<EventForm> {
                 child: RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate() && !_isSending) {
+                        // Date checks
+                        if (_createdEvent.startDate.isBefore(DateTime.now())) {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'L\'évènement ne peut commencer dans le passé')));
+                          return;
+                        }
+                        if (_createdEvent.startDate
+                            .isAfter(_createdEvent.endDate)) {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'La date de fin doit être supérieure à la date de début')));
+                          return;
+                        }
+
+                        // Add event
                         _isSending = true;
                         _scaffoldKey.currentState.showSnackBar(
                             SnackBar(content: Text('Ajout en cours...')));

@@ -23,8 +23,7 @@ void main() {
   testWidgets('should build widget', (WidgetTester tester) async {
     await tester.pumpWidget(makeTestableWidget(
         child: EventInfo(
-      event: event,
-      joined: false,
+      eventId: event.id,
     )));
     expect(find.text('Événements'), findsOneWidget);
   });

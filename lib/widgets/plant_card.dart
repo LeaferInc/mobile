@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
-
 import 'package:leafer/services/plant_collection_service.dart';
 import 'package:leafer/services/sensor_service.dart';
 
@@ -19,6 +18,8 @@ class PlantCard extends StatefulWidget {
 }
 
 class _PlantCardState extends State<PlantCard> {
+  static const String _NO_SENSOR = "Pas de capteur associé";
+
   final Plant _plant;
   final VoidCallback _onTap;
 
@@ -35,63 +36,67 @@ class _PlantCardState extends State<PlantCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: _onTap,
-      child: Row(
-        children: <Widget>[
-          Column(children: <Widget>[
-            Image(
-              image: _plant.getPicture(),
-              height: 150,
-              fit: BoxFit.cover,
+      child: SizedBox(
+        height: 100.0,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Image(
+                image: _plant.getPicture(),
+                height: 100.0,
+                width: 100.0,
+                fit: BoxFit.contain,
+              ),
             ),
-          ]),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                child: Text(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
                   _plant.name,
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.black, fontSize: 35),
                 ),
-              ),
-              SizedBox(
-                child: Text(
+                Text(
                   "Difficulté : " + _plant.difficulty.toString(),
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
-              ),
-              SizedBox(
-                child: FutureBuilder<String>(
-                    future: this.getSensorData(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> value) {
-                      if (value.hasError) {
-                        return Text(
-                          'There was an error :(',
-                          style: Theme.of(context).textTheme.headline,
-                        );
-                      } else if (value.hasData) {
-                        if (value.data == "") {
+                SizedBox(
+                  child: FutureBuilder<String>(
+                      future: this.getSensorData(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<String> value) {
+                        if (value.hasError) {
                           return Text(
-                            value.data,
-                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                            'There was an error :(',
+                            style: Theme.of(context).textTheme.headline,
                           );
+                        } else if (value.hasData) {
+                          if (value.data == "" || value.data == _NO_SENSOR) {
+                            return Text(
+                              value.data,
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 15),
+                            );
+                          } else {
+                            return Text(
+                              "Capteur d'humidité : " +
+                                  jsonDecode(value.data)['humidity'].toString(),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 15),
+                            );
+                          }
                         } else {
-                          return Text(
-                            "Capteur d'humidité : " +
-                                jsonDecode(value.data)['humidity'].toString(),
-                            style: TextStyle(color: Colors.grey, fontSize: 15),
-                          );
+                          return CircularProgressIndicator();
                         }
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    }),
-              ),
-            ],
-          )
-        ],
+                      }),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -103,7 +108,7 @@ class _PlantCardState extends State<PlantCard> {
       String s = await SensorService.getSensorData(p.id);
       return s;
     } else {
-      return "Pas de capteur associé";
+      return _NO_SENSOR;
     }
   }
 }

@@ -55,10 +55,21 @@ void main() {
         'latitude': event.latitude,
         'longitude': event.longitude,
         'picture': base64,
+        'joined': true,
+        'organizer': 2,
+        'entrants': [
+          {
+            'id': 1,
+            'username': 'username',
+            'firstname': 'Firstname',
+            'lastname': 'Lastname'
+          }
+        ],
       };
 
       Event result = Event.fromMap(map);
-
+      print(map);
+      print(result);
       expect(result.id, 1);
       expect(result.name, 'Nom Test Flutter');
       expect(result.description, 'Description de l\'évènement');
@@ -70,6 +81,11 @@ void main() {
       expect(result.latitude, 48.2121);
       expect(result.longitude, 2.0654);
       expect(result.picture, base64Decode(base64));
+      expect(result.joined, true);
+      expect(result.organizer, 2);
+      expect(result.entrants.length, 1);
+      expect(result.entrants[0].id, 1);
+      expect(result.entrants[0].username, 'username');
     });
 
     test('it should json encode', () {

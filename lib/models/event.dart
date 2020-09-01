@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:leafer/models/entrant.dart';
 import 'package:leafer/models/image_model.dart';
 
 /// This class represents an Event
@@ -18,6 +19,9 @@ class Event implements IImageModel {
   double latitude;
   double longitude;
   Uint8List picture;
+  bool joined;
+  int organizer;
+  List<Entrant> entrants;
 
   Event({
     this.id,
@@ -31,7 +35,15 @@ class Event implements IImageModel {
     this.latitude,
     this.longitude,
     this.picture,
+    this.joined,
+    this.organizer,
+    this.entrants,
   });
+
+  /// Whether or not the event is over
+  bool isFinished() {
+    return this.endDate.isBefore(DateTime.now());
+  }
 
   /// Used to create a new Event
   Map<String, dynamic> toJson() {
@@ -62,6 +74,11 @@ class Event implements IImageModel {
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
       picture: map['picture'] != null ? base64Decode(map['picture']) : null,
+      joined: map['joined'] as bool,
+      organizer: map['organizer'] as int,
+      entrants: map['entrants'] == null
+          ? null
+          : (map['entrants'] as List).map((e) => Entrant.fromMap(e)).toList(),
     );
   }
 
@@ -80,6 +97,7 @@ class Event implements IImageModel {
         '\tname: $name,\n\tdescription: $description,\n'
         '\tlocation: $location,\n\tstartDate: $startDate,\n'
         '\tendDate: $endDate,\n\tprice: $price,\n\tmaxPeople: $maxPeople,\n'
-        '\tcoordinates: ($latitude, $longitude)\n\tpicture: $picture\n}';
+        '\tcoordinates: ($latitude, $longitude),\n\tjoined: $joined,\n'
+        '\torganizer: $organizer,\n\tentrants: $entrants\n\tpicture: $picture\n}';
   }
 }

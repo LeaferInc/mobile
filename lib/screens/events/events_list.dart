@@ -22,7 +22,7 @@ class _EventsListState extends State<EventsList> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _searchKey = GlobalKey();
 
-  List<Event> _events;
+  List<Event> _organizedEvents;
   List<Event> _incomingEvents;
   List<Event> _joinedEvents;
 
@@ -35,16 +35,16 @@ class _EventsListState extends State<EventsList> {
   @override
   void initState() {
     super.initState();
-    _getEvents();
+    _getOrganizedEvents();
     _getIncomingEvents();
     _getJoinedEvents();
   }
 
   /// Get all events
-  void _getEvents() async {
-    List<Event> data = await EventService.getEvents();
+  void _getOrganizedEvents() async {
+    List<Event> data = await EventService.getOrganizedEvents();
     setState(() {
-      _events = data;
+      _organizedEvents = data;
     });
   }
 
@@ -66,7 +66,9 @@ class _EventsListState extends State<EventsList> {
 
   /// True if the data have been loaded
   bool _isLoaded() {
-    return _incomingEvents != null && _joinedEvents != null && _events != null;
+    return _incomingEvents != null &&
+        _joinedEvents != null &&
+        _organizedEvents != null;
   }
 
   @override
@@ -88,7 +90,7 @@ class _EventsListState extends State<EventsList> {
                   MaterialPageRoute(builder: (context) => EventForm()));
 
               if (result != null) {
-                _events.add(result);
+                _organizedEvents.add(result);
                 _incomingEvents.add(result);
               }
             },
@@ -116,7 +118,7 @@ class _EventsListState extends State<EventsList> {
             _buildList(title: 'À venir', events: _incomingEvents),
             _buildList(
                 title: 'Je participe', events: _joinedEvents, joined: true),
-            _buildList(title: 'Tous les évènements', events: _events),
+            _buildList(title: 'Évènements organisés', events: _organizedEvents),
           ],
         ),
       );
@@ -171,8 +173,7 @@ class _EventsListState extends State<EventsList> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => EventInfo(
-                                event: events[index],
-                                joined: joined,
+                                eventId: events[index].id,
                               ),
                             ),
                           );
@@ -200,7 +201,8 @@ class _EventsListState extends State<EventsList> {
                                   eventId: events[index].id,
                                   list: _incomingEvents);
                               int deleteAllIndex = _indexOfEvent(
-                                  eventId: events[index].id, list: _events);
+                                  eventId: events[index].id,
+                                  list: _organizedEvents);
 
                               setState(() {
                                 if (deleteJoinedIndex >= 0)
@@ -208,7 +210,7 @@ class _EventsListState extends State<EventsList> {
                                 if (deleteIncomingIndex >= 0)
                                   _incomingEvents.removeAt(deleteIncomingIndex);
                                 if (deleteAllIndex >= 0)
-                                  _events.removeAt(deleteAllIndex);
+                                  _organizedEvents.removeAt(deleteAllIndex);
                               });
                               break;
                             case EventAction.NONE:

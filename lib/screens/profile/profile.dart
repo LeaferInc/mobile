@@ -6,7 +6,6 @@ import 'package:leafer/models/user.dart';
 import 'package:leafer/screens/profile/edit_profile.dart';
 import 'package:leafer/services/user_service.dart';
 import 'package:leafer/widgets/loading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   static const TITLE = "Profil";
@@ -64,45 +63,48 @@ class _ProfileState extends State<Profile> {
             },
           ),
           PopupMenuButton(
-            onSelected: (item) {
-              return showDialog<void>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Suppression du compte'),
-                  content: Text(
-                      'Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.'),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Annuler'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    FlatButton(
-                      child: Text('Supprimer'),
-                      onPressed: () async {
-                        int res = await UserService.deleteUser();
-                        Navigator.pop(context);
-                        if (res != 200) {
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text('Impossible de supprimer le compte'),
-                          ));
-                        } else {
-                          await RestDatasource.logout();
-                          Navigator.pushReplacementNamed(context, '/login');
-                        }
-                      },
-                    ),
-                    FlatButton(
-                      child: Text('Déconnecter'),
-                      onPressed: () async {
-                        await RestDatasource.logout();
-                        Navigator.pushReplacementNamed(context, '/login');
-                      },
-                    )
-                  ],
-                ),
-              );
+            onSelected: (item) async {
+              if (item == 0) {
+                // Account deletion
+                return showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Suppression du compte'),
+                    content: Text(
+                        'Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Annuler'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Supprimer'),
+                        onPressed: () async {
+                          int res = await UserService.deleteUser();
+                          Navigator.pop(context);
+                          if (res != 200) {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content:
+                                  Text('Impossible de supprimer le compte'),
+                            ));
+                          } else {
+                            await RestDatasource.logout();
+                            Navigator.pushReplacementNamed(context, '/login');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+              if (item == 1) {
+                // Logout
+                await RestDatasource.logout();
+                Navigator.pushReplacementNamed(context, '/login');
+              }
+              return null;
             },
             itemBuilder: (BuildContext context) {
               return [
@@ -111,6 +113,10 @@ class _ProfileState extends State<Profile> {
                   child: Text(
                     'Supprimer le compte',
                   ),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: Text('Déconnexion'),
                 ),
               ];
             },
