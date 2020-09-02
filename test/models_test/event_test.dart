@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:leafer/models/entrant.dart';
 import 'package:leafer/models/event.dart';
 
 void main() {
@@ -88,6 +89,20 @@ void main() {
 
     test('it should json encode', () {
       expect(jsonEncode(event), isNotNull);
+    });
+
+    test('it should determines if the event is full', () {
+      event.entrants = [
+        Entrant(id: 10, username: 'User', firstname: 'John', lastname: 'Doe')
+      ];
+      event.maxPeople = 1;
+      expect(event.isFull(), true);
+
+      event.maxPeople = 0;
+      expect(event.isFull(), true);
+
+      event.maxPeople = 10;
+      expect(event.isFull(), false);
     });
   });
 }

@@ -45,6 +45,11 @@ class Event implements IImageModel {
     return this.endDate.isBefore(DateTime.now());
   }
 
+  /// Whether or not the event is full
+  bool isFull() {
+    return this.entrants.length >= this.maxPeople;
+  }
+
   /// Used to create a new Event
   Map<String, dynamic> toJson() {
     return {

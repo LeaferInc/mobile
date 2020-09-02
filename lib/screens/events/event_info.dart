@@ -7,6 +7,7 @@ import 'package:leafer/services/entry_service.dart';
 import 'package:leafer/services/event_service.dart';
 import 'package:leafer/services/user_service.dart';
 import 'package:leafer/widgets/loading.dart';
+import 'package:random_string/random_string.dart';
 
 /// This class shows the details of a single Event
 class EventInfo extends StatefulWidget {
@@ -140,11 +141,13 @@ class _EventInfoState extends State<EventInfo> {
                 ]
               : null,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _event == null || _currentUser == null
-              ? Loading()
-              : Column(
+        body: _event == null || _currentUser == null
+            ? Center(
+                child: Loading(),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Padding(
@@ -233,10 +236,7 @@ class _EventInfoState extends State<EventInfo> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _buildJoining(),
-                    ),
+                    ..._buildJoining(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -246,11 +246,37 @@ class _EventInfoState extends State<EventInfo> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      // TODO: child: _event.entrants.length == 0 ? null : ,
+                      child: _event.entrants.length == 0
+                          ? null
+                          : ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: 300.0,
+                              ),
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  key: Key(randomString(20)),
+                                  itemCount: _event.entrants.length,
+                                  itemBuilder: (context, index) {
+                                    final Entrant e = _event.entrants[index];
+                                    return Card(
+                                      child: ListTile(
+                                        leading: Text(
+                                          '#${index + 1}',
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                          ),
+                                        ),
+                                        title: Text(
+                                            '${e.firstname} ${e.lastname}'),
+                                        subtitle: Text('Pseudo: ${e.username}'),
+                                      ),
+                                    );
+                                  }),
+                            ),
                     ),
                   ],
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -264,22 +290,47 @@ class _EventInfoState extends State<EventInfo> {
 
   /// Build a RaisedButton depending on the joined state
   /// No button if the current user is the organizer
-  Widget _buildJoining() {
+  List<Widget> _buildJoining() {
     if (_currentUser == null || _isOrganizer()) {
-      print(_currentUser);
-      return null;
-    } else if (_event.isFinished()) {
-      return Text(
-        'Cet évènement est terminé',
-        style: TextStyle(fontSize: 15.0),
-      );
-    } else if (_event.entrants.length == _event.maxPeople) {
-      return Text(
-        'Cet évènement est complet',
-        style: TextStyle(fontSize: 15.0),
-      );
-    } else {
-      return RaisedButton(
+      return [];
+    }
+
+    if (_event.isFinished()) {
+      // Can't join or unjoin
+      return [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Cet évènement est terminé',
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Colors.amber[700],
+            ),
+          ),
+        )
+      ];
+    }
+
+    // Can join/leave
+    List<Widget> res = [];
+    if (_event.isFull()) {
+      // Display info message
+      res.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Cet évènement est complet',
+          style: TextStyle(
+            fontSize: 15.0,
+            color: Colors.amber[700],
+          ),
+        ),
+      ));
+    }
+
+    // build button
+    res.add(Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: RaisedButton(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -300,6 +351,8 @@ class _EventInfoState extends State<EventInfo> {
             } else {
               infoMessage = 'Erreur...';
             }
+          } else if (_event.isFull()) {
+            infoMessage = 'Événement complet !';
           } else {
             int code = await EntryService.joinEvent(_event.id);
             if (code == 201) {
@@ -326,8 +379,10 @@ class _EventInfoState extends State<EventInfo> {
 
           setState(() {});
         },
-      );
-    }
+      ),
+    ));
+
+    return res;
   }
 
   /// Give back data to update joined events list
