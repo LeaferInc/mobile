@@ -68,8 +68,6 @@ void main() {
       };
 
       Event result = Event.fromMap(map);
-      print(map);
-      print(result);
       expect(result.id, 1);
       expect(result.name, 'Nom Test Flutter');
       expect(result.description, 'Description de l\'évènement');

@@ -43,6 +43,8 @@ class _EventsListState extends State<EventsList> {
   /// Get all events
   void _getOrganizedEvents() async {
     List<Event> data = await EventService.getOrganizedEvents();
+    print("Organized");
+    print(data);
     setState(() {
       _organizedEvents = data;
     });

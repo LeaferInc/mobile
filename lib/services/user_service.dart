@@ -33,6 +33,7 @@ class UserService {
   }
 
   static Future<User> updateUser(Map<String, dynamic> changes) async {
+    print(changes);
     final response = await put(_BASE_URL_USER,
             headers: await Utils.getAuthorizationHeaders(),
             body: jsonEncode(changes))

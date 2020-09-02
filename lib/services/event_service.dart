@@ -36,7 +36,8 @@ class EventService {
 
   /// Get organized events
   static Future<List<Event>> getOrganizedEvents() async {
-    final response = await get(_BASE_URL + 'organized', headers: Utils.headers)
+    final response = await get(_BASE_URL + 'organized',
+            headers: await Utils.getAuthorizationHeaders())
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseEvents, response.body);
@@ -94,6 +95,8 @@ class EventService {
             headers: await Utils.getAuthorizationHeaders(),
             body: jsonEncode(event))
         .timeout(RestDatasource.TIMEOUT);
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 201) {
       return compute(_parseEvent, response.body);
     }

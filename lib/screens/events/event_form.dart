@@ -34,20 +34,19 @@ class _EventFormState extends State<EventForm> {
     super.initState();
     _isSending = false;
 
-    DateTime tomorrow = DateTime.now().add(Duration(days: 1));
-    tomorrow = tomorrow.subtract(Duration(minutes: tomorrow.minute));
+    DateTime now = DateTime.now().add(Duration(hours: 1));
+    now = now.subtract(Duration(minutes: now.minute));
     _createdEvent = Event(
         name: '',
         description: '',
         location: '',
-        startDate: tomorrow,
-        endDate: tomorrow.add(Duration(hours: 4)),
+        startDate: now,
+        endDate: now.add(Duration(hours: 4)),
         price: 0,
         maxPeople: 10,
         latitude: 0,
         longitude: 0);
 
-    // Initial value
     _locationController = TextEditingController(text: _createdEvent.location);
   }
 
@@ -176,7 +175,7 @@ class _EventFormState extends State<EventForm> {
                     if (value.isEmpty ||
                         (Utils.equalsZero(_createdEvent.latitude) &&
                             Utils.equalsZero(_createdEvent.longitude)))
-                      return 'Aucune ville associée';
+                      return 'Aucune adresse sélectionnée';
                     return null;
                   },
                   onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -284,7 +283,7 @@ class _EventFormState extends State<EventForm> {
                             int nb = int.parse(value);
                             if (nb < 1) return 'Pas assez de participants';
                           } on FormatException {
-                            return 'Nombre incorrect';
+                            return 'Nombre de participants incorrect';
                           }
                           return null;
                         },
@@ -302,6 +301,16 @@ class _EventFormState extends State<EventForm> {
                 child: RaisedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate() && !_isSending) {
+                        // Image check
+                        if (_image == null) {
+                          _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(content: Text('Une image est requise')));
+                          return;
+                        }
+
+                        // Load field into object
+                        _formKey.currentState.save();
+
                         // Date checks
                         if (_createdEvent.startDate.isBefore(DateTime.now())) {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -322,7 +331,6 @@ class _EventFormState extends State<EventForm> {
                         _scaffoldKey.currentState.showSnackBar(
                             SnackBar(content: Text('Ajout en cours...')));
 
-                        _formKey.currentState.save();
                         _createdEvent.picture = _image.readAsBytesSync();
 
                         Event created =
@@ -407,10 +415,19 @@ class _EventFormState extends State<EventForm> {
             child: DateTimeField(
               format: Utils.dateFormat,
               initialValue: initialDate,
+              validator: (value) {
+                if (value == null) {
+                  return 'Date requise';
+                }
+                if (value.isBefore(DateTime.now())) {
+                  return 'Date dans le passé invalide';
+                }
+                return null;
+              },
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
                   context: context,
-                  firstDate: DateTime.now().add(Duration(hours: 4)),
+                  firstDate: DateTime.now(),
                   initialDate: currentValue ?? initialDate,
                   lastDate: DateTime.now().add(Duration(days: 365)),
                   locale: Locale('fr'),
@@ -441,6 +458,12 @@ class _EventFormState extends State<EventForm> {
             child: DateTimeField(
               initialValue: initialDate,
               format: Utils.timeFormat,
+              validator: (value) {
+                if (value == null) {
+                  return 'Horaire requis';
+                }
+                return null;
+              },
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                     context: context,
