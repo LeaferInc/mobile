@@ -8,6 +8,7 @@ import 'package:leafer/screens/events/event_form.dart';
 import 'package:leafer/screens/events/events_search.dart';
 import 'package:leafer/screens/home.dart';
 import 'package:leafer/screens/login/login_screen.dart';
+import 'package:leafer/screens/recognition/recognition_screen.dart';
 import 'package:leafer/screens/sensor/sensor_association.dart';
 import 'package:leafer/screens/signin/sign_in.dart';
 
@@ -30,6 +31,7 @@ class LeaferApp extends StatelessWidget {
         '/events/create': (BuildContext context) => new EventForm(),
         '/events/search': (BuildContext context) => new EventsSearch(),
         '/home': (BuildContext context) => new Home(),
+        '/identify': (BuildContext context) => new RecognitionScreen(),
         '/login': (BuildContext context) => new LoginScreen(),
         '/profile': (BuildContext context) => new Home(initialIndex: 2),
         '/signIn': (BuildContext context) => new SignIn(),

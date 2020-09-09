@@ -20,6 +20,12 @@ class PlantsHome extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Plantes'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () => Navigator.pushNamed(context, '/identify'),
+            ),
+          ],
           bottom: TabBar(
             tabs: tabs.map((PlantTab tab) {
               return Tab(text: tab.title, icon: Icon(tab.icon));

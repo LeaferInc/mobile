@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
     PlantsHome(),
     EventsList(),
     Profile(),
-    CuttingHome()
+    CuttingHome(),
   ];
   int _currentIndex = 0;
 
@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.store),
             title: Text(CuttingHome.TITLE),
-          )
+          ),
         ],
       ),
     );
