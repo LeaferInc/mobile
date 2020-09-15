@@ -45,15 +45,31 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: IconButton(
                     icon: Icon(
-                      Icons.image,
+                      Icons.collections,
                       color: Colors.green,
                     ),
                     onPressed: () async {
                       final pickedFile =
                           await _picker.getImage(source: ImageSource.gallery);
+                      setState(() {
+                        _image = File(pickedFile.path);
+                      });
+                    },
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.green,
+                    ),
+                    onPressed: () async {
+                      final pickedFile =
+                          await _picker.getImage(source: ImageSource.camera);
                       setState(() {
                         _image = File(pickedFile.path);
                       });

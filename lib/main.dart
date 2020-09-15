@@ -37,7 +37,7 @@ class LeaferApp extends StatelessWidget {
         '/signIn': (BuildContext context) => new SignIn(),
         '/cuttings/create': (BuildContext context) => new CuttingForm(),
         '/sensorAssociation': (BuildContext context) =>
-            new SensorAssociation(new Plant(), new PlantCollection())
+            new SensorAssociation(new Plant(), new PlantCollection()),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
