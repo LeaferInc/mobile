@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:leafer/screens/chat/conversations.dart';
+import 'package:leafer/screens/chat/chat_home.dart';
 import 'package:leafer/screens/collection/plants_home.dart';
 import 'package:leafer/screens/cuttings/cutting_home.dart';
 import 'package:leafer/screens/events/events_list.dart';
@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
     EventsList(),
     Profile(),
     CuttingHome(),
-    Conversations()
+    ChatHome()
   ];
   int _currentIndex = 0;
 
@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            title: Text("Conversations"),
+            title: Text(ChatHome.TITLE),
           ),
         ],
       ),

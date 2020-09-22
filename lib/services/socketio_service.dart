@@ -7,15 +7,26 @@ class SocketioService {
 
   static Future<Socket> initSocket() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('jwt');
+    String token = 'Bearer ' + prefs.getString('jwt');
     Socket socketIO = io("http://10.0.2.2:3000/chat", <String, dynamic>
       {
         'transports': ['websocket'],
         'extraHeaders': {
-          'Authorization': 'Bearer ' + token
+          'Authorization': token
         }
       }
     );
+
+    socketIO.on('init', (data) => print("[init]" + data.toString()));
+    socketIO.on('error', (data) => print("[error] " + data.toString()));
+    socketIO.on('disconnect', (data) => print("[disconnect] " + data.toString()));
+    socketIO.on('connecting', (data) => print("[connecting] " + data.toString()));
+    socketIO.on('connect', (data) => print("[connect] " + data.toString()));
+    socketIO.on('connect_error', (data) => print("[connect_error] " + data.toString()));
+    socketIO.on('connect_timeout', (data) => print("[connect_timeout] " + data.toString()));
+
     return socketIO;
   }
+
+
 }
