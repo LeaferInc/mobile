@@ -64,45 +64,49 @@ class _ProfileState extends State<Profile> {
           ),
           PopupMenuButton(
             onSelected: (item) async {
-              if (item == 0) {
-                // Account deletion
-                return showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Suppression du compte'),
-                    content: Text(
-                        'Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Annuler'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('Supprimer'),
-                        onPressed: () async {
-                          int res = await UserService.deleteUser();
-                          Navigator.pop(context);
-                          if (res != 200) {
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content:
-                                  Text('Impossible de supprimer le compte'),
-                            ));
-                          } else {
-                            await RestDatasource.logout();
-                            Navigator.pushReplacementNamed(context, '/login');
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }
-              if (item == 1) {
-                // Logout
-                await RestDatasource.logout();
-                Navigator.pushReplacementNamed(context, '/login');
+              switch (item) {
+                case 0:
+                  Navigator.pushNamed(context, '/best-plant');
+                  break;
+                case 1:
+                  // Account deletion
+                  return showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Suppression du compte'),
+                      content: Text(
+                          'Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Annuler'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('Supprimer'),
+                          onPressed: () async {
+                            int res = await UserService.deleteUser();
+                            Navigator.pop(context);
+                            if (res != 200) {
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                content:
+                                    Text('Impossible de supprimer le compte'),
+                              ));
+                            } else {
+                              await RestDatasource.logout();
+                              Navigator.pushReplacementNamed(context, '/login');
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                case 2:
+                  // Logout
+                  await RestDatasource.logout();
+                  Navigator.pushReplacementNamed(context, '/login');
+                  break;
               }
               return null;
             },
@@ -110,12 +114,14 @@ class _ProfileState extends State<Profile> {
               return [
                 PopupMenuItem(
                   value: 0,
-                  child: Text(
-                    'Supprimer le compte',
-                  ),
+                  child: Text('Quelle plante pour moi ?'),
                 ),
                 PopupMenuItem(
                   value: 1,
+                  child: Text('Supprimer le compte'),
+                ),
+                PopupMenuItem(
+                  value: 2,
                   child: Text('Déconnexion'),
                 ),
               ];

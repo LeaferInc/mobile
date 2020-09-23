@@ -107,7 +107,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
                   });
 
                   dynamic result = await RecognitionService.recognize(search);
-                  print(result);
+
                   if (result == 404) {
                     _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content:
