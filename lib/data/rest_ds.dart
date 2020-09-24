@@ -60,6 +60,8 @@ class RestDatasource {
 
   /// Removes token session of the user
   static Future<void> logout() async {
-    return (await SharedPreferences.getInstance()).remove('jwt');
+    final prefs = await SharedPreferences.getInstance(); 
+    prefs.remove('jwt');
+    prefs.remove('fcmToken');
   }
 }
