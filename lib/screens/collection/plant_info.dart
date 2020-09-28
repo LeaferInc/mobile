@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as Material;
 import 'package:flutter/widgets.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
+import 'package:leafer/models/sensor_settings.dart';
 import 'package:leafer/screens/sensor/sensor_association.dart';
 import 'package:leafer/services/plant_collection_service.dart';
 import 'package:leafer/services/sensor_service.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:wifi/wifi.dart';
 
 class PlantInfo extends StatefulWidget {
   final Plant plant;
@@ -20,7 +20,9 @@ class PlantInfo extends StatefulWidget {
 }
 
 class _PlantInfoState extends State<PlantInfo> {
+  final _editKey = GlobalKey();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  static const String _NO_SENSOR = "Pas de capteur associé";
 
   Plant _plant;
   String _sensorData;
@@ -84,8 +86,7 @@ class _PlantInfoState extends State<PlantInfo> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  SizedBox(
                     child: FutureBuilder<String>(
                         future: this.getSensorData(),
                         builder: (BuildContext context,
@@ -97,7 +98,7 @@ class _PlantInfoState extends State<PlantInfo> {
                             );
                           } else if (value.hasData) {
                             _sensorData = value.data;
-                            if (_sensorData == "") {
+                            if (_sensorData == _NO_SENSOR) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RaisedButton(
@@ -154,13 +155,20 @@ class _PlantInfoState extends State<PlantInfo> {
   }
 
   Future<String> getSensorData() async {
-    PlantCollection p =
-        await PlantCollectionService.findByPlantAndUser(_plant.id);
-    if (p != null) {
-      String s = await SensorService.getSensorData(p.id);
-      return s;
-    } else {
-      return "Pas de capteur associé";
+    if (Wifi.ssid != "leaferSensor") {
+      PlantCollection p =
+          await PlantCollectionService.findByPlantAndUser(_plant.id);
+      if (p != null) {
+        SensorSettings s = await SensorService.getSensorData(p.id);
+        if (s != null) {
+          return s.toString();
+        } else {
+          return _NO_SENSOR;
+        }
+      } else {
+        return _NO_SENSOR;
+      }
     }
+    else return _NO_SENSOR;
   }
 }

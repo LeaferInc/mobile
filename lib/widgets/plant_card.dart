@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
+import 'package:leafer/models/sensor_settings.dart';
 import 'package:leafer/services/plant_collection_service.dart';
 import 'package:leafer/services/sensor_service.dart';
 
@@ -105,8 +106,13 @@ class _PlantCardState extends State<PlantCard> {
     PlantCollection p =
         await PlantCollectionService.findByPlantAndUser(_plant.id);
     if (p != null) {
-      String s = await SensorService.getSensorData(p.id);
-      return s;
+      SensorSettings s = await SensorService.getSensorData(p.id);
+      if(s != null) {
+        return s.toString();
+      }
+      else{
+        return _NO_SENSOR;
+      }
     } else {
       return _NO_SENSOR;
     }

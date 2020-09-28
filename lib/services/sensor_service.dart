@@ -1,10 +1,11 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:leafer/data/rest_ds.dart';
 import 'package:leafer/models/sensor_settings.dart';
 import 'package:leafer/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wifi/wifi.dart';
 
 class SensorService {
   static const _BASE_URL_BACKEND = RestDatasource.HOST + '/sensor';
@@ -32,7 +33,7 @@ class SensorService {
       'ssid': settings.ssid,
       'pwd': settings.password,
       'token': prefs.getString('jwt'),
-      "plantCollectionId": settings.plantCollection.toString()
+      'plantCollectionId': settings.plantCollection.toString(),
     });
     final response = await get(uri).timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 201) {
@@ -41,15 +42,15 @@ class SensorService {
     return "connection failed";
   }
 
-  static Future<String> getSensorData(int plantCollectionId) async {
+  static Future<SensorSettings> getSensorData(int plantCollectionId) async {
     final response = await get(
             _BASE_URL_BACKEND +
                 '/findByCollectionId?plantCollectionId=' +
                 plantCollectionId.toString(),
             headers: Utils.headers)
         .timeout(RestDatasource.TIMEOUT);
-    if (response.statusCode == 200) {
-      return response.body;
+    if (response.statusCode == 200 && response.body.isNotEmpty) {
+      return compute(_parseSensor, response.body);
     }
     return null;
   }

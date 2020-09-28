@@ -88,4 +88,14 @@ class PlantService {
     }
     return [];
   }
+
+  static Future<Plant> deletePlant(int plantId) async {
+    final response = await delete(_BASE_URL + '/' + plantId.toString(),
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    if (response.statusCode == 200) {
+      return compute(_parsePlant, response.body);
+    }
+    return null;
+  }
 }
