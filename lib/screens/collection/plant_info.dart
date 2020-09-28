@@ -77,7 +77,17 @@ class _PlantInfoState extends State<PlantInfo> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Taux d'humidité minimum : " + _plant.humidity + "%",
+                      "Taux d'humidité minimum : " + _plant.humidityMin.toString() + "%",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Taux d'humidité maximum : " + _plant.humidityMax.toString() + "%",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0,

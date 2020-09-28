@@ -36,7 +36,8 @@ class _PlantFormState extends State<PlantForm> {
         name: 'Plant name',
         difficulty: "facile",
         exposure: 'exposure',
-        humidity: 'humidity',
+        humidityMax: 100,
+        humidityMin: 0,
         potting: 'potting',
         toxicity: false,
         wateringFrequencySpringToSummerNumber: 0,
@@ -128,6 +129,44 @@ class _PlantFormState extends State<PlantForm> {
                   ),
                   keyboardType: TextInputType.number,
                   onSaved: (value) => _createdPlant.height = int.parse(value),
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Humidité Max',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'En %',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) => _createdPlant.humidityMax = int.parse(value),
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Humidité Min',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'En %',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) => _createdPlant.humidityMin = int.parse(value),
                   onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(height: 10.0),
