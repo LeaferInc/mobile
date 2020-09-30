@@ -9,7 +9,6 @@ class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
   //static const HOST = "https://leafer-rest-api-prod.herokuapp.com";
-  // static const HOST = "http://10.0.2.2:3000";
   static const HOST = "http://192.168.1.29:3000";
   // static const HOST = "http://10.0.2.2:3000";
   // static const HOST = "http://localhost:3000";

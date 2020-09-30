@@ -55,13 +55,16 @@ class _ChatPageState extends State<ChatPage> {
       _socketIO.on('messageServerToClient', (data) {
         Message newMessage = Message.fromMap(data);
         messages.add(newMessage);
-      scrollController.jumpTo(scrollController.position.maxScrollExtent + height * 0.1);
+        scrollController.animateTo(scrollController.position.maxScrollExtent + height * 0.1, duration: Duration(milliseconds: 600), curve: Curves.ease);
       });
     });
   }
 
   void getMessages() async {
-    messages = await MessageService.getConversationById(this._interlocutor.roomId);
+    List<Message> m = await MessageService.getConversationById(this._interlocutor.roomId);
+    this.setState(() {
+      messages = m;
+    });
   }
 
   void scrollToEnd() async {
@@ -74,6 +77,7 @@ class _ChatPageState extends State<ChatPage> {
       width: width,
       child: ListView.builder(
         controller: scrollController,
+        shrinkWrap: true,
         itemCount: messages.length,
         itemBuilder: (BuildContext context, int index) {
             return buildSingleMessage(index);

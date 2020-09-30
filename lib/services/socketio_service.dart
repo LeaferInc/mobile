@@ -8,7 +8,7 @@ class SocketioService {
   static Future<Socket> initSocket() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = 'Bearer ' + prefs.getString('jwt');
-    Socket socketIO = io("http://10.0.2.2:3000/chat", <String, dynamic>
+    Socket socketIO = io(RestDatasource.HOST + "/chat", <String, dynamic>
       {
         'transports': ['websocket'],
         'extraHeaders': {
