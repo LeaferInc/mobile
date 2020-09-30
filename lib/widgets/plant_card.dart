@@ -134,7 +134,7 @@ class _PlantCardState extends State<PlantCard> {
         return null;
       }
     } else {
-      return null;
+    return null;
     }
   }
 }

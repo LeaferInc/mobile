@@ -42,7 +42,7 @@ class _PlantInfoExchangeState extends State<PlantInfoExchange> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image(
-                    image: NetworkImage("https://picsum.photos/200"),
+                    image: _plant.getPicture(),
                     fit: BoxFit.contain,
                   ),
                 ),

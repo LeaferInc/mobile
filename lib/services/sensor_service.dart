@@ -42,7 +42,7 @@ class SensorService {
       "plantCollectionId": settings.plantCollection.toString()
     });
     final response = await get(uri).timeout(RestDatasource.TIMEOUT);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return response.body;
     }
     return "connection failed";
