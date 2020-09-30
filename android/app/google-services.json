@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "167907629025",
+    "firebase_url": "https://leafer-c7fe2.firebaseio.com",
+    "project_id": "leafer-c7fe2",
+    "storage_bucket": "leafer-c7fe2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167907629025:android:3712a9cc6ff55ec816a4a0",
+        "android_client_info": {
+          "package_name": "com.leaferinc.leafer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167907629025-somtvkbqik68id0d7m62j6ks29gup6fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChvY5mkt-WhbyPh_SQOLZ4vqJuGzBesIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167907629025-somtvkbqik68id0d7m62j6ks29gup6fi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

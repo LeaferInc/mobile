@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:leafer/models/image_model.dart';
+import 'package:leafer/models/room.dart';
 
 class User implements IImageModel {
   int id;
@@ -14,6 +15,8 @@ class User implements IImageModel {
   DateTime birthdate;
   String biography;
   Uint8List picture;
+  Room room;
+  int roomId;
 
   User({
     this.id,
@@ -25,6 +28,8 @@ class User implements IImageModel {
     this.birthdate,
     this.biography,
     this.picture,
+    this.room,
+    this.roomId
   });
 
   User.map(dynamic obj) {
@@ -38,6 +43,8 @@ class User implements IImageModel {
         (obj['birthdate'] != null ? DateTime.parse(obj['birthdate']) : null);
     this.biography = obj["biography"] as String;
     this.picture = base64Decode(obj["picture"] as String);
+    this.room = obj["roomId"] as Room;
+    this.roomId = obj["roomId"] as int;
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +58,8 @@ class User implements IImageModel {
       'birthdate': birthdate?.toIso8601String(),
       'biography': biography,
       'picture': this.picture != null ? base64Encode(this.picture) : null,
+      'room': this.room,
+      'roomId': this.roomId
     };
   }
 
@@ -70,6 +79,8 @@ class User implements IImageModel {
       picture: map['picture'] != null
           ? base64Decode(map['picture'] as String)
           : null,
+      room: map['room'] as Room,
+      roomId: map['roomId'] as int
     );
   }
 
@@ -89,7 +100,7 @@ class User implements IImageModel {
   @override
   String toString() {
     return 'User(id: $id, email: $email, userName: $username, firstName: $firstname, '
-        'lastName: $lastname, birthDate: $birthdate, biography: $biography, picture: $picture)';
+        'lastName: $lastname, birthDate: $birthdate, biography: $biography, picture: $picture, room: $room, roomId: $roomId)';
   }
 
   @override
@@ -104,7 +115,9 @@ class User implements IImageModel {
         o.lastname == lastname &&
         o.birthdate == birthdate &&
         o.biography == biography &&
-        o.picture == picture;
+        o.picture == picture &&
+        o.room == room &&
+        o.roomId == roomId;
   }
 
   @override
@@ -116,6 +129,8 @@ class User implements IImageModel {
         lastname.hashCode ^
         birthdate.hashCode ^
         biography.hashCode ^
-        picture.hashCode;
+        picture.hashCode ^
+        room.hashCode ^
+        roomId.hashCode;
   }
 }
