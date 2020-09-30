@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
+import 'package:leafer/models/sensor.dart';
+import 'package:leafer/models/sensor_data.dart';
 import 'package:leafer/services/plant_collection_service.dart';
+import 'package:leafer/services/sensor_data_service.dart';
 import 'package:leafer/services/sensor_service.dart';
 
 class PlantCard extends StatefulWidget {
@@ -23,7 +26,9 @@ class _PlantCardState extends State<PlantCard> {
   final Plant _plant;
   final VoidCallback _onTap;
 
-  String _sensorData = "";
+  String _sensorGroundHumidity = "";
+  String _sensorAirHumidity = "";
+  String _sensorTemperature = "";
 
   @override
   void initState() {
@@ -64,10 +69,10 @@ class _PlantCardState extends State<PlantCard> {
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
                 SizedBox(
-                  child: FutureBuilder<String>(
-                      future: this.getSensorData(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<String> value) {
+                  child: FutureBuilder<SensorData>(
+                      future: this.getLastSensorData(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<SensorData> value) {
                         if (value.hasError) {
                           return Text(
                             'There was an error :(',
@@ -76,16 +81,29 @@ class _PlantCardState extends State<PlantCard> {
                         } else if (value.hasData) {
                           if (value.data == "" || value.data == _NO_SENSOR) {
                             return Text(
-                              value.data,
+                              "NO DATA",
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 15),
                             );
                           } else {
-                            return Text(
-                              "Capteur d'humidité : " +
-                                  jsonDecode(value.data)['humidity'].toString(),
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 15),
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Humidité de l'air : " +
+                                      value.data.airHumidity.toString(),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 15),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  "Humidité du sol : " +
+                                      value.data.groundHumidity.toString(),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 15),
+                                  textAlign: TextAlign.left,
+                                )
+                              ],
                             );
                           }
                         } else {
@@ -101,14 +119,15 @@ class _PlantCardState extends State<PlantCard> {
     );
   }
 
-  Future<String> getSensorData() async {
+  Future<SensorData> getLastSensorData() async {
     PlantCollection p =
         await PlantCollectionService.findByPlantAndUser(_plant.id);
     if (p != null) {
-      String s = await SensorService.getSensorData(p.id);
-      return s;
+      Sensor s = await SensorService.getSensor(p.id);
+      SensorData sd = await SensorDataService.getLastDataById(s);
+      return sd;
     } else {
-      return _NO_SENSOR;
+      return null;
     }
   }
 }

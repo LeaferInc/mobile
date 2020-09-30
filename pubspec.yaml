@@ -43,6 +43,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   firebase_messaging: ^7.0.0
   flutter_local_notifications: ^1.4.4+4
+  bezier_chart: ^1.0.17+1
 
 flutter_icons:
   android: true
