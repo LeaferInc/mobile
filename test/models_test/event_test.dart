@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:leafer/models/entrant.dart';
 import 'package:leafer/models/event.dart';
 
 void main() {
@@ -55,10 +56,19 @@ void main() {
         'latitude': event.latitude,
         'longitude': event.longitude,
         'picture': base64,
+        'joined': true,
+        'organizer': 2,
+        'entrants': [
+          {
+            'id': 1,
+            'username': 'username',
+            'firstname': 'Firstname',
+            'lastname': 'Lastname'
+          }
+        ],
       };
 
       Event result = Event.fromMap(map);
-
       expect(result.id, 1);
       expect(result.name, 'Nom Test Flutter');
       expect(result.description, 'Description de l\'évènement');
@@ -70,10 +80,29 @@ void main() {
       expect(result.latitude, 48.2121);
       expect(result.longitude, 2.0654);
       expect(result.picture, base64Decode(base64));
+      expect(result.joined, true);
+      expect(result.organizer, 2);
+      expect(result.entrants.length, 1);
+      expect(result.entrants[0].id, 1);
+      expect(result.entrants[0].username, 'username');
     });
 
     test('it should json encode', () {
       expect(jsonEncode(event), isNotNull);
+    });
+
+    test('it should determines if the event is full', () {
+      event.entrants = [
+        Entrant(id: 10, username: 'User', firstname: 'John', lastname: 'Doe')
+      ];
+      event.maxPeople = 1;
+      expect(event.isFull(), true);
+
+      event.maxPeople = 0;
+      expect(event.isFull(), true);
+
+      event.maxPeople = 10;
+      expect(event.isFull(), false);
     });
   });
 }

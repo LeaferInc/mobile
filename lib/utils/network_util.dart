@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class NetworkUtil {
@@ -28,7 +29,7 @@ class NetworkUtil {
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception(
-            "Error while fetching data" + statusCode.toString());
+            "Error while fetching data: " + statusCode.toString());
       }
       return _decoder.convert(res);
     });

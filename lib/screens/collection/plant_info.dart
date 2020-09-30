@@ -5,9 +5,13 @@ import 'package:flutter/material.dart' as Material;
 import 'package:flutter/widgets.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
+import 'package:leafer/models/sensor.dart';
+import 'package:leafer/models/sensor_data.dart';
 import 'package:leafer/screens/sensor/sensor_association.dart';
 import 'package:leafer/services/plant_collection_service.dart';
+import 'package:leafer/services/sensor_data_service.dart';
 import 'package:leafer/services/sensor_service.dart';
+import 'package:leafer/widgets/chart_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PlantInfo extends StatefulWidget {
@@ -23,7 +27,7 @@ class _PlantInfoState extends State<PlantInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Plant _plant;
-  String _sensorData;
+  SensorData _sensorData;
 
   _PlantInfoState(this._plant);
 
@@ -77,7 +81,9 @@ class _PlantInfoState extends State<PlantInfo> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Taux d'humidité minimum : " + _plant.humidity + "%",
+                      "Taux d'humidité minimum : " +
+                          _plant.humidityMin.toString() +
+                          "%",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0,
@@ -86,10 +92,22 @@ class _PlantInfoState extends State<PlantInfo> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FutureBuilder<String>(
-                        future: this.getSensorData(),
+                    child: Text(
+                      "Taux d'humidité maximum : " +
+                          _plant.humidityMax.toString() +
+                          "%",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder<SensorData>(
+                        future: this.getLastSensorData(),
                         builder: (BuildContext context,
-                            AsyncSnapshot<String> value) {
+                            AsyncSnapshot<SensorData> value) {
                           if (value.hasError) {
                             return Text(
                               'There was an error :(',
@@ -97,7 +115,7 @@ class _PlantInfoState extends State<PlantInfo> {
                             );
                           } else if (value.hasData) {
                             _sensorData = value.data;
-                            if (_sensorData == "") {
+                            if (_sensorData == null) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RaisedButton(
@@ -117,50 +135,76 @@ class _PlantInfoState extends State<PlantInfo> {
                                         'Associer un capteur d\'humidité')),
                               );
                             } else {
-                              return Text(
-                                "Capteur d'humidité : " +
-                                    jsonDecode(_sensorData)['humidity']
-                                        .toString() +
-                                    "%",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Humidité du sol : " +
+                                        _sensorData.groundHumidity.toString() +
+                                        "%",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  ),
+                                  Text(
+                                    "Humidité de l'air : " +
+                                        _sensorData.airHumidity.toString() +
+                                        "%",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  ),
+                                  Text(
+                                    "Température : " +
+                                        _sensorData.temperature.toString() +
+                                        "°C",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  )
+                                ],
                               );
                             }
-                          } else {
+                          } else if(value.data == null){
+                            return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RaisedButton(
+                                    onPressed: () async {
+                                      PlantCollection _plantCollection =
+                                          await PlantCollectionService
+                                              .findByPlantAndUser(_plant.id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SensorAssociation(_plant,
+                                                      _plantCollection)));
+                                    },
+                                    elevation: 0.0,
+                                    child: Text(
+                                        'Associer un capteur d\'humidité')),
+                              );
+                          }
+                           else {
                             return CircularProgressIndicator();
                           }
                         }),
-                  ),
-                  SizedBox(height: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                        onPressed: () async {
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content: Text('Suppression en cours...')));
-                          PlantCollection plantCollection =
-                              await PlantCollectionService.findByPlantAndUser(
-                                  _plant.id);
-                          await PlantCollectionService.deletePlantCollection(
-                              plantCollection);
-                          Navigator.pushNamed(context, "/collection");
-                        },
-                        elevation: 0.0,
-                        child: Text('Retirer de mon jardin')),
-                  ),
+                  )
                 ])),
       )),
     );
   }
 
-  Future<String> getSensorData() async {
+  Future<SensorData> getLastSensorData() async {
     PlantCollection p =
         await PlantCollectionService.findByPlantAndUser(_plant.id);
     if (p != null) {
-      String s = await SensorService.getSensorData(p.id);
-      return s;
+      Sensor s = await SensorService.getSensor(p.id);
+      if(s != null){
+        return await SensorDataService.getLastDataById(s);
+      }
+      else{
+        return null;
+      }
     } else {
-      return "Pas de capteur associé";
+      return null;
     }
   }
 }

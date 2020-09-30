@@ -9,9 +9,6 @@ class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
   static const HOST = "https://leafer-rest-api-prod.herokuapp.com";
-  //static const HOST = "http://192.168.1.29:3000";
-  //static const HOST = "http://10.0.2.2:3000";
-  //static const HOST = "http://192.168.43.200:3000";
   static const LOGIN_ROUTE = "/auth/login";
   static const SIGN_IN_ROUTE = "/user";
   static const COLLECTION_ROUTE = "/plant/search";
@@ -30,7 +27,6 @@ class RestDatasource {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt', res["token"]);
     }).catchError((dynamic res) {
-      print('Exception in RestDatasource');
       throw new Exception(res);
     });
   }
@@ -61,6 +57,8 @@ class RestDatasource {
 
   /// Removes token session of the user
   static Future<void> logout() async {
-    return (await SharedPreferences.getInstance()).remove('jwt');
+    final prefs = await SharedPreferences.getInstance(); 
+    prefs.remove('jwt');
+    prefs.remove('fcmToken');
   }
 }

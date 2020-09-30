@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:leafer/data/rest_ds.dart';
+import 'package:leafer/models/sensor.dart';
 import 'package:leafer/models/sensor_settings.dart';
 import 'package:leafer/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,20 +12,25 @@ class SensorService {
   static const _BASE_URL_BACKEND = RestDatasource.HOST + '/sensor';
   static const _BASE_URL_SENSOR = "192.168.4.1";
 
-  static List<SensorSettings> _parseSensors(String responseBody) {
+  static List<Sensor> _parseSensors(String responseBody) {
     if (jsonDecode(responseBody)["items"] != null) {
       final parsed =
           jsonDecode(responseBody)["items"].cast<Map<String, dynamic>>();
       return parsed
-          .map<SensorSettings>((json) => SensorSettings.fromMap(json))
+          .map<Sensor>((json) => Sensor.fromMap(json))
           .toList();
     } else {
       return [];
     }
   }
 
-  static SensorSettings _parseSensor(String responseBody) {
-    return SensorSettings.fromMap(jsonDecode(responseBody));
+  static Sensor _parseSensor(String responseBody) {
+    if(responseBody.isNotEmpty){
+      return Sensor.fromMap(jsonDecode(responseBody));
+    }
+    else{
+      return null;
+    }
   }
 
   static Future<String> connectToSensor(SensorSettings settings) async {
@@ -41,7 +48,7 @@ class SensorService {
     return "connection failed";
   }
 
-  static Future<String> getSensorData(int plantCollectionId) async {
+  static Future<Sensor> getSensor(int plantCollectionId) async {
     final response = await get(
             _BASE_URL_BACKEND +
                 '/findByCollectionId?plantCollectionId=' +
@@ -49,7 +56,7 @@ class SensorService {
             headers: Utils.headers)
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
-      return response.body;
+      return compute(_parseSensor, response.body);
     }
     return null;
   }

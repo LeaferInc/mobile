@@ -199,10 +199,11 @@ class _EditProfileState extends State<EditProfile> {
 
                         _formKey.currentState.save();
 
-                        // Remove unmodified fields
+                        // Remove unmodified or empty fields
                         Map<String, dynamic> userMap = _user.toJson();
                         for (String key in userMap.keys) {
-                          if (userMap[key] == _changes[key]) {
+                          if (userMap[key] == _changes[key] ||
+                              _changes[key] == '') {
                             _changes.remove(key);
                           }
                         }
@@ -211,6 +212,20 @@ class _EditProfileState extends State<EditProfile> {
                         if (Utils.isSameDate(
                             _user.birthdate, _changes[_BIRTHDATE_KEY])) {
                           _changes.remove(_BIRTHDATE_KEY);
+                        }
+
+                        // Check birthdate
+                        if ((_changes[_BIRTHDATE_KEY] as DateTime)
+                            .isAfter(DateTime.now())) {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'La date de naissance doit être dans le passé.')));
+                          return;
+                        } else {
+                          // Json parse
+                          _changes[_BIRTHDATE_KEY] =
+                              (_changes[_BIRTHDATE_KEY] as DateTime)
+                                  .toIso8601String();
                         }
 
                         // Check avatar update

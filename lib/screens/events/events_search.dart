@@ -304,7 +304,7 @@ class _EventsSearchState extends State<EventsSearch> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => EventInfo(
-                    event: _foundEvents[index],
+                    eventId: _foundEvents[index].id,
                   ),
                 ),
               );

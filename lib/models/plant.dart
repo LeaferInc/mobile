@@ -7,7 +7,8 @@ class Plant {
   int id;
   String name;
   int height;
-  String humidity;
+  int humidityMax;
+  int humidityMin;
   String difficulty;
   int wateringFrequencySpringToSummerNumber;
   int wateringFrequencyAutumnToWinterNumber;
@@ -24,7 +25,8 @@ class Plant {
       {this.id,
       this.name,
       this.height,
-      this.humidity,
+      this.humidityMax,
+      this.humidityMin,
       this.difficulty,
       this.wateringFrequencySpringToSummerNumber,
       this.wateringFrequencyAutumnToWinterNumber,
@@ -41,7 +43,8 @@ class Plant {
       {int id,
       String name,
       int height,
-      String humidity,
+      int humidityMax,
+      int humidityMin,
       String difficulty,
       int wateringFrequencySpringToSummerNumber,
       int wateringFrequencyAutumnToWinterNumber,
@@ -58,7 +61,8 @@ class Plant {
         id: id ?? this.id,
         name: name ?? this.name,
         height: height ?? this.height,
-        humidity: humidity ?? this.humidity,
+        humidityMax: humidityMax ?? this.humidityMax,
+        humidityMin: humidityMin ?? this.humidityMin,
         difficulty: difficulty ?? this.difficulty,
         wateringFrequencySpringToSummerNumber:
             wateringFrequencySpringToSummerNumber ??
@@ -83,7 +87,8 @@ class Plant {
       'id': id,
       'name': name,
       'height': height,
-      'humidity': humidity,
+      'humidityMax': humidityMax,
+      'humidityMin': humidityMin,
       'difficulty': difficulty,
       'wateringFrequencySpringToSummerNumber':
           wateringFrequencySpringToSummerNumber,
@@ -107,7 +112,8 @@ class Plant {
       id: map['id'],
       name: map['name'],
       height: map['height'],
-      humidity: map['humidity'],
+      humidityMax: map['humidityMax'],
+      humidityMin: map['humidityMin'],
       difficulty: map['difficulty'],
       wateringFrequencySpringToSummerNumber:
           map['wateringFrequencySpringToSummerNumber'],
@@ -139,7 +145,7 @@ class Plant {
 
   @override
   String toString() {
-    return 'Plant(id: $id, name: $name, height: $height, humidity: $humidity, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId)';
+    return 'Plant(id: $id, name: $name, height: $height, humidityMax: $humidityMax, humidityMin: $humidityMin, difficulty: $difficulty, wateringFrequencySpringToSummerNumber: $wateringFrequencySpringToSummerNumber, wateringFrequencyAutumnToWinterNumber: $wateringFrequencyAutumnToWinterNumber wateringFrequencySpringToSummer: $wateringFrequencySpringToSummer, wateringFrequencyAutumnToWinter: $wateringFrequencyAutumnToWinter,  exposure: $exposure, toxicity: $toxicity, potting: $potting, creationDate: $creationDate, ownerId: $ownerId)';
   }
 
   @override
@@ -150,7 +156,8 @@ class Plant {
         o.id == id &&
         o.name == name &&
         o.height == height &&
-        o.humidity == humidity &&
+        o.humidityMax == humidityMax &&
+        o.humidityMin == humidityMin &&
         o.difficulty == difficulty &&
         o.wateringFrequencySpringToSummerNumber ==
             wateringFrequencySpringToSummerNumber &&
@@ -171,7 +178,8 @@ class Plant {
     return id.hashCode ^
         name.hashCode ^
         height.hashCode ^
-        humidity.hashCode ^
+        humidityMax.hashCode ^
+        humidityMin.hashCode ^
         difficulty.hashCode ^
         wateringFrequencySpringToSummerNumber.hashCode ^
         wateringFrequencyAutumnToWinterNumber.hashCode ^

@@ -17,9 +17,9 @@ class _PlantFormState extends State<PlantForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = new ImagePicker();
-  final _difficulty = ["easy", "medium", "hard"];
-  final _wateringFrequencySpringToSummer = ["hour", "day", "week", "month"];
-  final _wateringFrequencyAutumnToWinter = ["hour", "day", "week", "month"];
+  final _difficulty = ["facile", "moyen", "difficile"];
+  final _wateringFrequencySpringToSummer = ["heure", "jour", "semaine", "mois"];
+  final _wateringFrequencyAutumnToWinter = ["heure", "jour", "semaine", "mois"];
 
   File _image;
   Plant _createdPlant;
@@ -34,15 +34,16 @@ class _PlantFormState extends State<PlantForm> {
         creationDate: DateTime.now(),
         height: 0,
         name: 'Plant name',
-        difficulty: "easy",
+        difficulty: "facile",
         exposure: 'exposure',
-        humidity: 'humidity',
+        humidityMax: 100,
+        humidityMin: 0,
         potting: 'potting',
         toxicity: false,
         wateringFrequencySpringToSummerNumber: 0,
         wateringFrequencyAutumnToWinterNumber: 0,
-        wateringFrequencyAutumnToWinter: "hour",
-        wateringFrequencySpringToSummer: "hour");
+        wateringFrequencyAutumnToWinter: "heure",
+        wateringFrequencySpringToSummer: "heure");
   }
 
   @override
@@ -128,6 +129,44 @@ class _PlantFormState extends State<PlantForm> {
                   ),
                   keyboardType: TextInputType.number,
                   onSaved: (value) => _createdPlant.height = int.parse(value),
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Humidité Max',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'En %',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) => _createdPlant.humidityMax = int.parse(value),
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Humidité Min',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    hintText: 'En %',
+                    hintStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) => _createdPlant.humidityMin = int.parse(value),
                   onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
                 SizedBox(height: 10.0),

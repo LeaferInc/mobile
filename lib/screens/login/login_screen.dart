@@ -137,7 +137,11 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void onLoginError(String errorTxt) {
-    _showSnackBar(errorTxt);
+    if (errorTxt.endsWith('401')) {
+      _showSnackBar('Identifiants incorrects');
+    } else {
+      _showSnackBar(errorTxt);
+    }
   }
 
   @override

@@ -34,6 +34,17 @@ class EventService {
     return [];
   }
 
+  /// Get organized events
+  static Future<List<Event>> getOrganizedEvents() async {
+    final response = await get(_BASE_URL + 'organized',
+            headers: await Utils.getAuthorizationHeaders())
+        .timeout(RestDatasource.TIMEOUT);
+    if (response.statusCode == 200) {
+      return compute(_parseEvents, response.body);
+    }
+    return [];
+  }
+
   /// Get incoming events
   static Future<List<Event>> getIncomingEvents() async {
     final response = await get(_BASE_URL + 'incoming', headers: Utils.headers)

@@ -98,7 +98,7 @@ class _SignInState extends State<SignIn> implements SignInContract {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Entrez vore prénom',
+                  hintText: 'Entrez votre prénom',
                 ),
                 validator: (value) {
                   if (value.isEmpty) {

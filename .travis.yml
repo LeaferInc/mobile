@@ -12,6 +12,9 @@ addons:
       - libstdc++6
       - fonts-droid-fallback
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_ee748fb75df5_key -iv $encrypted_ee748fb75df5_iv -in google-services.json.enc -out android/app/google-services.json -d
+
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - ./flutter/bin/flutter doctor

@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:leafer/models/plant.dart';
 import 'package:leafer/models/plant_collection.dart';
 import 'package:leafer/models/user.dart';
-import 'package:leafer/screens/sensor/sensor_association.dart';
 import 'package:leafer/services/plant_collection_service.dart';
 import 'package:leafer/services/user_service.dart';
 
@@ -70,7 +69,17 @@ class _PlantInfoExchangeState extends State<PlantInfoExchange> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    _plant.humidity,
+                    _plant.humidityMin.toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    _plant.humidityMax.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12.0,
