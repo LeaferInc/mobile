@@ -33,7 +33,7 @@ class _ChatPageState extends State<ChatPage> {
   _ChatPageState(this._interlocutor);
 
   @override
-  void initState() { 
+  void initState() {
     this.setState(() {
       messages = List<Message>();
       textController = TextEditingController();
@@ -55,20 +55,27 @@ class _ChatPageState extends State<ChatPage> {
       _socketIO.on('messageServerToClient', (data) {
         Message newMessage = Message.fromMap(data);
         messages.add(newMessage);
-        scrollController.animateTo(scrollController.position.maxScrollExtent + height * 0.1, duration: Duration(milliseconds: 600), curve: Curves.ease);
+        scrollController.animateTo(
+            scrollController.position.maxScrollExtent + height * 0.1,
+            duration: Duration(milliseconds: 600),
+            curve: Curves.ease);
       });
     });
   }
 
   void getMessages() async {
-    List<Message> m = await MessageService.getConversationById(this._interlocutor.roomId);
+    List<Message> m =
+        await MessageService.getConversationById(this._interlocutor.roomId);
     this.setState(() {
       messages = m;
     });
   }
 
   void scrollToEnd() async {
-    scrollController.animateTo(scrollController.position.maxScrollExtent + height * 0.1, duration: Duration(milliseconds: 600), curve: Curves.ease);
+    scrollController.animateTo(
+        scrollController.position.maxScrollExtent + height * 0.1,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.ease);
   }
 
   Widget buildMessageList() {
@@ -80,51 +87,55 @@ class _ChatPageState extends State<ChatPage> {
         shrinkWrap: true,
         itemCount: messages.length,
         itemBuilder: (BuildContext context, int index) {
-            return buildSingleMessage(index);
+          return buildSingleMessage(index);
         },
       ),
     );
   }
 
   Widget buildSingleMessage(int index) {
-
-    if(messages[index].user.id == _currentUser.id){
+    if (messages[index].user.id != _currentUser.id) {
       return Container(
-        alignment: Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.all(20.0),
-          margin: const EdgeInsets.only(bottom: 20.0, right: 20.0),
-          
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Text(
-            messages[index].messageContent,
-            style: TextStyle(color: Colors.white, fontSize: 15.0),
-          ),
-        ),
-      );
-    }
-    else{
+          alignment: Alignment.centerRight,
+          child: 
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.only(bottom: 20.0, right: 20.0),
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Row(children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: _interlocutor.getPicture(),
+                    radius: 20,
+                  ),
+                  Text(messages[index].messageContent,
+                      style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                ]),
+              ));
+    } else {
       return Container(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          padding: const EdgeInsets.all(20.0),
-          margin: const EdgeInsets.only(bottom: 20.0, left: 20.0),
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Text(
-            messages[index].messageContent,
-            style: TextStyle(color: Colors.white, fontSize: 15.0),
-          ),
-        ),
-      );
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: const EdgeInsets.all(20.0),
+            margin: const EdgeInsets.only(bottom: 20.0, left: 20.0),
+            decoration: BoxDecoration(
+              color: Colors.purple,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Row(
+              textDirection: TextDirection.rtl,
+              children: <Widget>[
+              CircleAvatar(
+                backgroundImage: _currentUser.getPicture(),
+                radius: 20,
+              ),
+              Text(messages[index].messageContent,
+                  style: TextStyle(color: Colors.white, fontSize: 15.0)),
+            ]),
+          ));
     }
-
-    
   }
 
   Widget buildChatInput() {
@@ -150,7 +161,8 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: Colors.deepPurple,
       onPressed: () {
         if (textController.text.isNotEmpty) {
-          Message newMessage = Message(DateTime.now(), textController.text, _currentUser, _currentUser.room, _currentUser.roomId);
+          Message newMessage = Message(DateTime.now(), textController.text,
+              _currentUser, _currentUser.room, _currentUser.roomId);
           sendMessage(newMessage);
           _socketIO.emit(
               'send_message', jsonEncode({'message': textController.text}));
@@ -198,8 +210,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void onBackPress(){
+  void onBackPress() {
     Navigator.pop(context);
   }
-
 }

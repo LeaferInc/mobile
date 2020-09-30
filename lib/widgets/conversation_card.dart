@@ -35,6 +35,10 @@ class _ConversationCardState extends State<ConversationCard> {
         child: 
           Row(
             children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: _user.getPicture(),
+              ),
               Text(
                   _user.username,
                   textAlign: TextAlign.left,
