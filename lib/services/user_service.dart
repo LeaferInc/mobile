@@ -9,6 +9,16 @@ import 'package:leafer/utils/utils.dart';
 class UserService {
   static const _BASE_URL_USER = RestDatasource.HOST + '/user/';
 
+  static List<User> _parseUsers(String responseBody) {
+    if(jsonDecode(responseBody) != null) {
+      final parsed =
+        jsonDecode(responseBody).cast<Map<String, dynamic>>();
+      return parsed.map<User>((json) => User.fromMap(json)).toList();
+    } else {
+      return [];
+    }
+  }
+
   static User _parseUser(String responseBody) {
     return User.fromMap(jsonDecode(responseBody));
   }
@@ -39,6 +49,16 @@ class UserService {
         .timeout(RestDatasource.TIMEOUT);
     if (response.statusCode == 200) {
       return compute(_parseUser, response.body);
+    }
+    return null;
+  }
+
+  static Future<List<User>> getTalkTo() async {
+    final response = await get(_BASE_URL_USER + 'talkTo',
+            headers: await Utils.getAuthorizationHeaders())
+      .timeout(RestDatasource.TIMEOUT);
+    if(response.statusCode == 200) {
+      return compute(_parseUsers, response.body);
     }
     return null;
   }
