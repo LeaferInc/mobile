@@ -25,7 +25,12 @@ class SensorService {
   }
 
   static Sensor _parseSensor(String responseBody) {
-    return Sensor.fromMap(jsonDecode(responseBody));
+    if(responseBody.isNotEmpty){
+      return Sensor.fromMap(jsonDecode(responseBody));
+    }
+    else{
+      return null;
+    }
   }
 
   static Future<String> connectToSensor(SensorSettings settings) async {

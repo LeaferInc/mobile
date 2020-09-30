@@ -26,10 +26,6 @@ class _PlantCardState extends State<PlantCard> {
   final Plant _plant;
   final VoidCallback _onTap;
 
-  String _sensorGroundHumidity = "";
-  String _sensorAirHumidity = "";
-  String _sensorTemperature = "";
-
   @override
   void initState() {
     super.initState();
@@ -106,7 +102,14 @@ class _PlantCardState extends State<PlantCard> {
                               ],
                             );
                           }
-                        } else {
+                        } else if(value.data == null){
+                          return Text(
+                              "NO DATA",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 15),
+                            );
+                        }
+                         else {
                           return CircularProgressIndicator();
                         }
                       }),
@@ -124,8 +127,12 @@ class _PlantCardState extends State<PlantCard> {
         await PlantCollectionService.findByPlantAndUser(_plant.id);
     if (p != null) {
       Sensor s = await SensorService.getSensor(p.id);
-      SensorData sd = await SensorDataService.getLastDataById(s);
-      return sd;
+      if(s != null){
+        return await SensorDataService.getLastDataById(s);
+      }
+      else{
+        return null;
+      }
     } else {
       return null;
     }

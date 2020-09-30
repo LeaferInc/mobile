@@ -24,7 +24,12 @@ class SensorDataService {
   }
 
   static SensorData _parseSensorData(String responseBody) {
-    return SensorData.fromMap(jsonDecode(responseBody));
+    if(responseBody.isNotEmpty){
+      return SensorData.fromMap(jsonDecode(responseBody));
+    }
+    else{
+      return null;
+    }
   }
 
   static Future<SensorData> getLastDataById(Sensor sensor) async {

@@ -115,7 +115,7 @@ class _PlantInfoState extends State<PlantInfo> {
                             );
                           } else if (value.hasData) {
                             _sensorData = value.data;
-                            if (_sensorData == "") {
+                            if (_sensorData == null) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RaisedButton(
@@ -162,7 +162,27 @@ class _PlantInfoState extends State<PlantInfo> {
                                 ],
                               );
                             }
-                          } else {
+                          } else if(value.data == null){
+                            return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RaisedButton(
+                                    onPressed: () async {
+                                      PlantCollection _plantCollection =
+                                          await PlantCollectionService
+                                              .findByPlantAndUser(_plant.id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SensorAssociation(_plant,
+                                                      _plantCollection)));
+                                    },
+                                    elevation: 0.0,
+                                    child: Text(
+                                        'Associer un capteur d\'humidité')),
+                              );
+                          }
+                           else {
                             return CircularProgressIndicator();
                           }
                         }),
@@ -177,7 +197,12 @@ class _PlantInfoState extends State<PlantInfo> {
         await PlantCollectionService.findByPlantAndUser(_plant.id);
     if (p != null) {
       Sensor s = await SensorService.getSensor(p.id);
-      return await SensorDataService.getLastDataById(s);
+      if(s != null){
+        return await SensorDataService.getLastDataById(s);
+      }
+      else{
+        return null;
+      }
     } else {
       return null;
     }
