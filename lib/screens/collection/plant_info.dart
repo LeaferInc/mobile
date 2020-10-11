@@ -28,12 +28,14 @@ class _PlantInfoState extends State<PlantInfo> {
 
   Plant _plant;
   SensorData _sensorData;
+  Sensor _sensor;
 
   _PlantInfoState(this._plant);
 
   @override
   void initState() {
     super.initState();
+    getSensor();
   }
 
   @override
@@ -115,7 +117,7 @@ class _PlantInfoState extends State<PlantInfo> {
                             );
                           } else if (value.hasData) {
                             _sensorData = value.data;
-                            if (_sensorData == null) {
+                            if (_sensorData == null || !_sensor.enabled) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RaisedButton(
@@ -158,6 +160,17 @@ class _PlantInfoState extends State<PlantInfo> {
                                         "°C",
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 15),
+                                  ),
+                                  RaisedButton(
+                                    onPressed: () async {
+                                      Sensor s = await SensorService.desyncSensor(_sensor.id);
+                                      this.setState(() {
+                                        _sensor = s;
+                                      });
+                                    },
+                                    child: Text(
+                                      "Dissocier le capteur"
+                                    ),
                                   )
                                 ],
                               );
@@ -206,5 +219,14 @@ class _PlantInfoState extends State<PlantInfo> {
     } else {
       return null;
     }
+  }
+
+  void getSensor() async {
+    PlantCollection p =
+      await PlantCollectionService.findByPlantAndUser(_plant.id);
+    Sensor s = await SensorService.getSensor(p.id);
+    this.setState(() {
+      _sensor = s;
+    });
   }
 }
