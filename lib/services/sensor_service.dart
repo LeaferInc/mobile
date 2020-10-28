@@ -60,4 +60,15 @@ class SensorService {
     }
     return null;
   }
+
+  static Future<Sensor> desyncSensor(int sensorId) async {
+    final response = await put(
+            _BASE_URL_BACKEND + '/desync/' + sensorId.toString(),
+            headers: Utils.headers)
+        .timeout(RestDatasource.TIMEOUT);
+    if(response.statusCode == 200) {
+      return compute(_parseSensor, response.body);
+    }
+    return null;
+  }
 }

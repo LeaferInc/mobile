@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
-  static const HOST = "https://leafer-rest-api-prod.herokuapp.com";
+  // static const HOST = "https://leafer-rest-api-prod.herokuapp.com";
+  static const HOST = "http://192.168.1.29:3000";
   static const LOGIN_ROUTE = "/auth/login";
   static const SIGN_IN_ROUTE = "/user";
   static const COLLECTION_ROUTE = "/plant/search";
